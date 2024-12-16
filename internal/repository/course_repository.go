@@ -1,0 +1,71 @@
+package repository
+
+import (
+	"GoEdu/internal/models"
+	"context"
+	"errors"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type CourseRepository interface {
+	CreateCourse(ctx context.Context, course *models.Course) (int, error)
+	GetAllCourses(ctx context.Context) ([]*models.Course, error)
+	GetCourseByID(ctx context.Context, id int64) (*models.Course, error)
+}
+
+type courseRepository struct {
+	db *pgxpool.Pool
+}
+
+func NewCourseRepository(db *pgxpool.Pool) CourseRepository {
+	return &courseRepository{db: db}
+}
+
+func (r *courseRepository) CreateCourse(ctx context.Context, course *models.Course) (int, error) {
+	query := `
+        INSERT INTO courses (name, description)
+        VALUES ($1, $2)
+        RETURNING id;
+    `
+	var id int
+	err := r.db.QueryRow(ctx, query, course.Name, course.Description).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}
+
+func (r *courseRepository) GetAllCourses(ctx context.Context) ([]*models.Course, error) {
+	query := `SELECT id, name, description FROM courses;`
+	rows, err := r.db.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var courses []*models.Course
+	for rows.Next() {
+		var course models.Course
+		if err := rows.Scan(&course.ID, &course.Name, &course.Description); err != nil {
+			return nil, err
+		}
+		courses = append(courses, &course)
+	}
+	return courses, nil
+}
+
+func (r *courseRepository) GetCourseByID(ctx context.Context, id int64) (*models.Course, error) {
+	query := `SELECT id, name, description FROM courses WHERE id = $1;`
+
+	var course models.Course
+	err := r.db.QueryRow(ctx, query, id).Scan(&course.ID, &course.Name, &course.Description)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &course, nil
+}
