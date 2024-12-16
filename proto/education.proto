@@ -9,6 +9,8 @@ service EducationService {
   rpc GetCourses (Empty) returns (CourseList);
   rpc GetCourseByID (CourseIDRequest) returns (Course);
   rpc CreateCourse (NewCourseRequest) returns (Course);
+  rpc UpdateCourse (UpdateCourseRequest) returns (Course);
+  rpc DeleteCourse (CourseIDRequest) returns (Empty);
 }
 
 message Empty {}
@@ -32,3 +34,8 @@ message NewCourseRequest {
   string description = 2;
 }
 
+message UpdateCourseRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+}

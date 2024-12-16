@@ -73,3 +73,33 @@ func (s *EducationService) GetCourseByID(ctx context.Context, req *proto.CourseI
 		Description: course.Description,
 	}, nil
 }
+
+func (s *EducationService) UpdateCourse(ctx context.Context, req *proto.UpdateCourseRequest) (*proto.Course, error) {
+	updatedCourse, err := s.courseRepo.UpdateCourse(ctx, req.Id, req.Name, req.Description)
+	if err != nil {
+		return nil, err
+	}
+
+	if updatedCourse == nil {
+		return nil, status.Errorf(codes.NotFound, "Курс с ID %d не найден", req.Id)
+	}
+
+	return &proto.Course{
+		Id:          strconv.FormatInt(int64(updatedCourse.ID), 10),
+		Name:        updatedCourse.Name,
+		Description: updatedCourse.Description,
+	}, nil
+}
+
+func (s *EducationService) DeleteCourse(ctx context.Context, req *proto.CourseIDRequest) (*proto.Empty, error) {
+	deleted, err := s.courseRepo.DeleteCourse(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	if !deleted {
+		return nil, status.Errorf(codes.NotFound, "Курс с ID %d не найден", req.Id)
+	}
+
+	return &proto.Empty{}, nil
+}

@@ -12,6 +12,8 @@ type CourseRepository interface {
 	CreateCourse(ctx context.Context, course *models.Course) (int, error)
 	GetAllCourses(ctx context.Context) ([]*models.Course, error)
 	GetCourseByID(ctx context.Context, id int64) (*models.Course, error)
+	UpdateCourse(ctx context.Context, id int64, name, description string) (*models.Course, error)
+	DeleteCourse(ctx context.Context, id int64) (bool, error)
 }
 
 type courseRepository struct {
@@ -68,4 +70,43 @@ func (r *courseRepository) GetCourseByID(ctx context.Context, id int64) (*models
 	}
 
 	return &course, nil
+}
+
+func (r *courseRepository) UpdateCourse(ctx context.Context, id int64, name, description string) (*models.Course, error) {
+	query := `
+        UPDATE courses
+        SET name = $1, description = $2
+        WHERE id = $3
+        RETURNING id, name, description;
+    `
+
+	var course models.Course
+	err := r.db.QueryRow(ctx, query, name, description, id).Scan(
+		&course.ID,
+		&course.Name,
+		&course.Description,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &course, nil
+}
+
+func (r *courseRepository) DeleteCourse(ctx context.Context, id int64) (bool, error) {
+	query := `DELETE FROM courses WHERE id = $1;`
+
+	commandTag, err := r.db.Exec(ctx, query, id)
+	if err != nil {
+		return false, err
+	}
+
+	if commandTag.RowsAffected() == 0 {
+		return false, nil
+	}
+
+	return true, nil
 }
