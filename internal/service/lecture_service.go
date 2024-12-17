@@ -42,3 +42,26 @@ func (s *LectureService) AddLectureToCourse(ctx context.Context, req *proto.Lect
 		Content:  newLecture.Content,
 	}, nil
 }
+
+func (s *LectureService) GetLecturesByCourse(ctx context.Context, req *proto.CourseIDRequest) (*proto.LectureList, error) {
+	if req.CourseId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID курса должен быть указан")
+	}
+
+	lectures, err := s.lectureRepo.GetLecturesByCourse(ctx, req.CourseId)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении лекций: %v", err)
+	}
+
+	var grpcLectures []*proto.Lecture
+	for _, lecture := range lectures {
+		grpcLectures = append(grpcLectures, &proto.Lecture{
+			Id:       lecture.ID,
+			CourseId: lecture.CourseID,
+			Title:    lecture.Title,
+			Content:  lecture.Content,
+		})
+	}
+
+	return &proto.LectureList{Lectures: grpcLectures}, nil
+}

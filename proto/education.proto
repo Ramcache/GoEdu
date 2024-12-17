@@ -28,6 +28,7 @@ service EnrollmentService {
 
 service LectureService {
   rpc AddLectureToCourse (LectureRequest) returns (Lecture);
+  rpc GetLecturesByCourse (CourseIDRequest) returns (LectureList);
 }
 
 
@@ -117,5 +118,9 @@ message Lecture {
   int64 course_id = 2;
   string title = 3;
   string content = 4;
+}
+
+message LectureList {
+  repeated Lecture lectures = 1;
 }
 

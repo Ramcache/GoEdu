@@ -705,7 +705,8 @@ var EnrollmentService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	LectureService_AddLectureToCourse_FullMethodName = "/education.LectureService/AddLectureToCourse"
+	LectureService_AddLectureToCourse_FullMethodName  = "/education.LectureService/AddLectureToCourse"
+	LectureService_GetLecturesByCourse_FullMethodName = "/education.LectureService/GetLecturesByCourse"
 )
 
 // LectureServiceClient is the client API for LectureService service.
@@ -713,6 +714,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LectureServiceClient interface {
 	AddLectureToCourse(ctx context.Context, in *LectureRequest, opts ...grpc.CallOption) (*Lecture, error)
+	GetLecturesByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*LectureList, error)
 }
 
 type lectureServiceClient struct {
@@ -733,11 +735,22 @@ func (c *lectureServiceClient) AddLectureToCourse(ctx context.Context, in *Lectu
 	return out, nil
 }
 
+func (c *lectureServiceClient) GetLecturesByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*LectureList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LectureList)
+	err := c.cc.Invoke(ctx, LectureService_GetLecturesByCourse_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LectureServiceServer is the server API for LectureService service.
 // All implementations must embed UnimplementedLectureServiceServer
 // for forward compatibility.
 type LectureServiceServer interface {
 	AddLectureToCourse(context.Context, *LectureRequest) (*Lecture, error)
+	GetLecturesByCourse(context.Context, *CourseIDRequest) (*LectureList, error)
 	mustEmbedUnimplementedLectureServiceServer()
 }
 
@@ -750,6 +763,9 @@ type UnimplementedLectureServiceServer struct{}
 
 func (UnimplementedLectureServiceServer) AddLectureToCourse(context.Context, *LectureRequest) (*Lecture, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddLectureToCourse not implemented")
+}
+func (UnimplementedLectureServiceServer) GetLecturesByCourse(context.Context, *CourseIDRequest) (*LectureList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLecturesByCourse not implemented")
 }
 func (UnimplementedLectureServiceServer) mustEmbedUnimplementedLectureServiceServer() {}
 func (UnimplementedLectureServiceServer) testEmbeddedByValue()                        {}
@@ -790,6 +806,24 @@ func _LectureService_AddLectureToCourse_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LectureService_GetLecturesByCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CourseIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LectureServiceServer).GetLecturesByCourse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LectureService_GetLecturesByCourse_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LectureServiceServer).GetLecturesByCourse(ctx, req.(*CourseIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LectureService_ServiceDesc is the grpc.ServiceDesc for LectureService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -800,6 +834,10 @@ var LectureService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddLectureToCourse",
 			Handler:    _LectureService_AddLectureToCourse_Handler,
+		},
+		{
+			MethodName: "GetLecturesByCourse",
+			Handler:    _LectureService_GetLecturesByCourse_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

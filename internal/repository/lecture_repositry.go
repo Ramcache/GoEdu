@@ -9,6 +9,7 @@ import (
 
 type LectureRepository interface {
 	AddLectureToCourse(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
+	GetLecturesByCourse(ctx context.Context, courseID int64) ([]*models.Lecture, error)
 }
 
 type lectureRepository struct {
@@ -34,4 +35,28 @@ func (r *lectureRepository) AddLectureToCourse(ctx context.Context, lecture *mod
 	}
 
 	return &newLecture, nil
+}
+
+func (r *lectureRepository) GetLecturesByCourse(ctx context.Context, courseID int64) ([]*models.Lecture, error) {
+	query := `
+        SELECT id, course_id, title, content
+        FROM lectures
+        WHERE course_id = $1;
+    `
+
+	rows, err := r.db.Query(ctx, query, courseID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var lectures []*models.Lecture
+	for rows.Next() {
+		var lecture models.Lecture
+		if err := rows.Scan(&lecture.ID, &lecture.CourseID, &lecture.Title, &lecture.Content); err != nil {
+			return nil, err
+		}
+		lectures = append(lectures, &lecture)
+	}
+	return lectures, nil
 }
