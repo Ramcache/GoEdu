@@ -17,6 +17,7 @@ type LectureRepository interface {
 	UpdateLecture(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
 	DeleteLecture(ctx context.Context, lectureID int64) error
 	MarkLectureAsCompleted(ctx context.Context, studentID, lectureID int64) error
+	GetCourseProgress(ctx context.Context, studentID, courseID int64) (int32, error)
 }
 
 type lectureRepository struct {
@@ -144,4 +145,32 @@ func (r *lectureRepository) MarkLectureAsCompleted(ctx context.Context, studentI
     `
 	_, err = r.db.Exec(ctx, query, studentID, lectureID)
 	return err
+}
+
+func (r *lectureRepository) GetCourseProgress(ctx context.Context, studentID, courseID int64) (int32, error) {
+	var totalLectures int
+	var completedLectures int
+
+	err := r.db.QueryRow(ctx, `
+        SELECT COUNT(*) FROM lectures WHERE course_id = $1;
+    `, courseID).Scan(&totalLectures)
+	if err != nil {
+		return 0, err
+	}
+
+	if totalLectures == 0 {
+		return 0, fmt.Errorf("в курсе нет лекций")
+	}
+
+	err = r.db.QueryRow(ctx, `
+        SELECT COUNT(*) FROM lecture_completions lc
+        JOIN lectures l ON lc.lecture_id = l.id
+        WHERE lc.student_id = $1 AND l.course_id = $2;
+    `, studentID, courseID).Scan(&completedLectures)
+	if err != nil {
+		return 0, err
+	}
+
+	progress := (float64(completedLectures) / float64(totalLectures)) * 100
+	return int32(progress), nil
 }

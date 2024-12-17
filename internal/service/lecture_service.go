@@ -142,3 +142,20 @@ func (s *LectureService) MarkLectureAsCompleted(ctx context.Context, req *proto.
 
 	return &proto.Empty{}, nil
 }
+
+func (s *LectureService) GetCourseProgress(ctx context.Context, req *proto.CourseProgressRequest) (*proto.CourseProgress, error) {
+	if req.StudentId == 0 || req.CourseId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID студента и ID курса должны быть указаны")
+	}
+
+	progress, err := s.lectureRepo.GetCourseProgress(ctx, req.StudentId, req.CourseId)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении прогресса: %v", err)
+	}
+
+	return &proto.CourseProgress{
+		CourseId:         req.CourseId,
+		StudentId:        req.StudentId,
+		CompletedPercent: progress,
+	}, nil
+}

@@ -34,8 +34,12 @@ service LectureService {
   rpc UpdateLecture (UpdateLectureRequest) returns (Lecture);
   rpc DeleteLecture (LectureIDRequest) returns (Empty);
   rpc MarkLectureAsCompleted (LectureCompletionRequest) returns (Empty);
+  rpc GetCourseProgress (CourseProgressRequest) returns (CourseProgress);
 }
 
+service InstructorService {
+  rpc RegisterInstructor (RegisterInstructorRequest) returns (Instructor);
+}
 
 message Empty {}
 
@@ -148,5 +152,28 @@ message UpdateLectureRequest {
 message LectureCompletionRequest {
   int64 student_id = 1;
   int64 lecture_id = 2;
+}
+
+message CourseProgressRequest {
+  int64 student_id = 1;
+  int64 course_id = 2;
+}
+
+message CourseProgress {
+  int64 course_id = 1;
+  int64 student_id = 2;
+  int32 completed_percent = 3;
+}
+
+message RegisterInstructorRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message Instructor {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
 }
 

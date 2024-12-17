@@ -711,6 +711,7 @@ const (
 	LectureService_UpdateLecture_FullMethodName          = "/education.LectureService/UpdateLecture"
 	LectureService_DeleteLecture_FullMethodName          = "/education.LectureService/DeleteLecture"
 	LectureService_MarkLectureAsCompleted_FullMethodName = "/education.LectureService/MarkLectureAsCompleted"
+	LectureService_GetCourseProgress_FullMethodName      = "/education.LectureService/GetCourseProgress"
 )
 
 // LectureServiceClient is the client API for LectureService service.
@@ -723,6 +724,7 @@ type LectureServiceClient interface {
 	UpdateLecture(ctx context.Context, in *UpdateLectureRequest, opts ...grpc.CallOption) (*Lecture, error)
 	DeleteLecture(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*Empty, error)
 	MarkLectureAsCompleted(ctx context.Context, in *LectureCompletionRequest, opts ...grpc.CallOption) (*Empty, error)
+	GetCourseProgress(ctx context.Context, in *CourseProgressRequest, opts ...grpc.CallOption) (*CourseProgress, error)
 }
 
 type lectureServiceClient struct {
@@ -793,6 +795,16 @@ func (c *lectureServiceClient) MarkLectureAsCompleted(ctx context.Context, in *L
 	return out, nil
 }
 
+func (c *lectureServiceClient) GetCourseProgress(ctx context.Context, in *CourseProgressRequest, opts ...grpc.CallOption) (*CourseProgress, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CourseProgress)
+	err := c.cc.Invoke(ctx, LectureService_GetCourseProgress_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LectureServiceServer is the server API for LectureService service.
 // All implementations must embed UnimplementedLectureServiceServer
 // for forward compatibility.
@@ -803,6 +815,7 @@ type LectureServiceServer interface {
 	UpdateLecture(context.Context, *UpdateLectureRequest) (*Lecture, error)
 	DeleteLecture(context.Context, *LectureIDRequest) (*Empty, error)
 	MarkLectureAsCompleted(context.Context, *LectureCompletionRequest) (*Empty, error)
+	GetCourseProgress(context.Context, *CourseProgressRequest) (*CourseProgress, error)
 	mustEmbedUnimplementedLectureServiceServer()
 }
 
@@ -830,6 +843,9 @@ func (UnimplementedLectureServiceServer) DeleteLecture(context.Context, *Lecture
 }
 func (UnimplementedLectureServiceServer) MarkLectureAsCompleted(context.Context, *LectureCompletionRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MarkLectureAsCompleted not implemented")
+}
+func (UnimplementedLectureServiceServer) GetCourseProgress(context.Context, *CourseProgressRequest) (*CourseProgress, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCourseProgress not implemented")
 }
 func (UnimplementedLectureServiceServer) mustEmbedUnimplementedLectureServiceServer() {}
 func (UnimplementedLectureServiceServer) testEmbeddedByValue()                        {}
@@ -960,6 +976,24 @@ func _LectureService_MarkLectureAsCompleted_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LectureService_GetCourseProgress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CourseProgressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LectureServiceServer).GetCourseProgress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LectureService_GetCourseProgress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LectureServiceServer).GetCourseProgress(ctx, req.(*CourseProgressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LectureService_ServiceDesc is the grpc.ServiceDesc for LectureService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -990,6 +1024,112 @@ var LectureService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MarkLectureAsCompleted",
 			Handler:    _LectureService_MarkLectureAsCompleted_Handler,
+		},
+		{
+			MethodName: "GetCourseProgress",
+			Handler:    _LectureService_GetCourseProgress_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/education.proto",
+}
+
+const (
+	InstructorService_RegisterInstructor_FullMethodName = "/education.InstructorService/RegisterInstructor"
+)
+
+// InstructorServiceClient is the client API for InstructorService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type InstructorServiceClient interface {
+	RegisterInstructor(ctx context.Context, in *RegisterInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
+}
+
+type instructorServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewInstructorServiceClient(cc grpc.ClientConnInterface) InstructorServiceClient {
+	return &instructorServiceClient{cc}
+}
+
+func (c *instructorServiceClient) RegisterInstructor(ctx context.Context, in *RegisterInstructorRequest, opts ...grpc.CallOption) (*Instructor, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Instructor)
+	err := c.cc.Invoke(ctx, InstructorService_RegisterInstructor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// InstructorServiceServer is the server API for InstructorService service.
+// All implementations must embed UnimplementedInstructorServiceServer
+// for forward compatibility.
+type InstructorServiceServer interface {
+	RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error)
+	mustEmbedUnimplementedInstructorServiceServer()
+}
+
+// UnimplementedInstructorServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedInstructorServiceServer struct{}
+
+func (UnimplementedInstructorServiceServer) RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterInstructor not implemented")
+}
+func (UnimplementedInstructorServiceServer) mustEmbedUnimplementedInstructorServiceServer() {}
+func (UnimplementedInstructorServiceServer) testEmbeddedByValue()                           {}
+
+// UnsafeInstructorServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to InstructorServiceServer will
+// result in compilation errors.
+type UnsafeInstructorServiceServer interface {
+	mustEmbedUnimplementedInstructorServiceServer()
+}
+
+func RegisterInstructorServiceServer(s grpc.ServiceRegistrar, srv InstructorServiceServer) {
+	// If the following call pancis, it indicates UnimplementedInstructorServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&InstructorService_ServiceDesc, srv)
+}
+
+func _InstructorService_RegisterInstructor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterInstructorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstructorServiceServer).RegisterInstructor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InstructorService_RegisterInstructor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstructorServiceServer).RegisterInstructor(ctx, req.(*RegisterInstructorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// InstructorService_ServiceDesc is the grpc.ServiceDesc for InstructorService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var InstructorService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "education.InstructorService",
+	HandlerType: (*InstructorServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "RegisterInstructor",
+			Handler:    _InstructorService_RegisterInstructor_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
