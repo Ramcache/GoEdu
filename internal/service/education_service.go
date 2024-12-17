@@ -102,3 +102,50 @@ func (s *EducationService) DeleteCourse(ctx context.Context, req *proto.CourseID
 
 	return &proto.Empty{}, nil
 }
+
+func (s *EducationService) CreateCourseByInstructor(ctx context.Context, req *proto.InstructorCourseRequest) (*proto.Course, error) {
+	if req.InstructorId == 0 || req.Name == "" || req.Description == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "ID преподавателя, название и описание курса должны быть указаны")
+	}
+
+	course := &models.Course{
+		Name:         req.Name,
+		Description:  req.Description,
+		InstructorID: req.InstructorId,
+	}
+
+	courseID, err := s.courseRepo.CreateCourse(ctx, course)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при создании курса: %v", err)
+	}
+
+	return &proto.Course{
+		Id:           int64(courseID),
+		Name:         req.Name,
+		Description:  req.Description,
+		InstructorId: req.InstructorId,
+	}, nil
+}
+
+func (s *EducationService) GetCoursesByInstructor(ctx context.Context, req *proto.InstructorIDRequest) (*proto.CourseList, error) {
+	if req.InstructorId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID преподавателя должен быть указан")
+	}
+
+	courses, err := s.courseRepo.GetCoursesByInstructor(ctx, req.InstructorId)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении курсов: %v", err)
+	}
+
+	var grpcCourses []*proto.Course
+	for _, course := range courses {
+		grpcCourses = append(grpcCourses, &proto.Course{
+			Id:           course.ID,
+			Name:         course.Name,
+			Description:  course.Description,
+			InstructorId: course.InstructorID,
+		})
+	}
+
+	return &proto.CourseList{Courses: grpcCourses}, nil
+}

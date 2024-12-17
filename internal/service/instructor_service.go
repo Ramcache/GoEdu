@@ -1,44 +1,51 @@
-package repository
+package service
 
 import (
 	"GoEdu/internal/models"
+	"GoEdu/internal/repository"
+	"GoEdu/proto"
 	"context"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-type InstructorRepository interface {
-	RegisterInstructor(ctx context.Context, instructor *models.Instructor) (int64, error)
-	GetInstructorByEmail(ctx context.Context, email string) (*models.Instructor, error)
+type InstructorService struct {
+	proto.UnimplementedInstructorServiceServer
+	repo repository.InstructorRepository
 }
 
-type instructorRepository struct {
-	db *pgxpool.Pool
+func NewInstructorService(repo repository.InstructorRepository) *InstructorService {
+	return &InstructorService{repo: repo}
 }
 
-func NewInstructorRepository(db *pgxpool.Pool) InstructorRepository {
-	return &instructorRepository{db: db}
-}
-
-func (r *instructorRepository) RegisterInstructor(ctx context.Context, instructor *models.Instructor) (int64, error) {
-	query := `
-        INSERT INTO instructors (name, email, password)
-        VALUES ($1, $2, $3)
-        RETURNING id;
-    `
-
-	var id int64
-	err := r.db.QueryRow(ctx, query, instructor.Name, instructor.Email, instructor.Password).Scan(&id)
-	return id, err
-}
-
-func (r *instructorRepository) GetInstructorByEmail(ctx context.Context, email string) (*models.Instructor, error) {
-	query := `SELECT id, name, email, password FROM instructors WHERE email = $1;`
-
-	var instructor models.Instructor
-	err := r.db.QueryRow(ctx, query, email).Scan(&instructor.ID, &instructor.Name, &instructor.Email, &instructor.Password)
-	if err != nil {
-		return nil, err
+// RegisterInstructor регистрирует нового преподавателя
+func (s *InstructorService) RegisterInstructor(ctx context.Context, req *proto.RegisterInstructorRequest) (*proto.Instructor, error) {
+	existingInstructor, _ := s.repo.GetInstructorByEmail(ctx, req.Email)
+	if existingInstructor != nil {
+		return nil, status.Errorf(codes.AlreadyExists, "Преподаватель с таким email уже существует")
 	}
-	return &instructor, nil
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при хэшировании пароля")
+	}
+
+	instructor := &models.Instructor{
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: string(hashedPassword),
+	}
+
+	id, err := s.repo.RegisterInstructor(ctx, instructor)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при регистрации преподавателя: %v", err)
+	}
+
+	return &proto.Instructor{
+		Id:    id,
+		Name:  req.Name,
+		Email: req.Email,
+	}, nil
 }

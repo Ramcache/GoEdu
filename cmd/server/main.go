@@ -24,23 +24,27 @@ func main() {
 	}
 	defer dbpool.Close()
 
+	// Репозитории
 	enrollmentRepo := repository.NewEnrollmentRepository(dbpool)
-	enrollmentService := service.NewEnrollmentService(enrollmentRepo)
-
 	courseRepo := repository.NewCourseRepository(dbpool)
-	educationService := service.NewEducationService(courseRepo)
-
 	studentRepo := repository.NewStudentRepository(dbpool)
-	studentService := service.NewStudentService(studentRepo, cfg)
-
 	lectureRepo := repository.NewLectureRepository(dbpool)
-	lectureService := service.NewLectureService(lectureRepo)
+	instructorRepo := repository.NewInstructorRepository(dbpool)
 
+	// Сервисы
+	enrollmentService := service.NewEnrollmentService(enrollmentRepo)
+	educationService := service.NewEducationService(courseRepo)
+	studentService := service.NewStudentService(studentRepo, cfg)
+	lectureService := service.NewLectureService(lectureRepo)
+	instructorService := service.NewInstructorService(instructorRepo)
+
+	// gRPC сервер
 	server := grpc.NewServer()
 	proto.RegisterEducationServiceServer(server, educationService)
 	proto.RegisterStudentServiceServer(server, studentService)
 	proto.RegisterEnrollmentServiceServer(server, enrollmentService)
 	proto.RegisterLectureServiceServer(server, lectureService)
+	proto.RegisterInstructorServiceServer(server, instructorService)
 
 	listener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {

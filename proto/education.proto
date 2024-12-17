@@ -11,6 +11,7 @@ service EducationService {
   rpc CreateCourse (NewCourseRequest) returns (Course);
   rpc UpdateCourse (UpdateCourseRequest) returns (Course);
   rpc DeleteCourse (CourseIDRequest) returns (Empty);
+  rpc CreateCourseByInstructor (InstructorCourseRequest) returns (Course);
 }
 
 service StudentService {
@@ -39,6 +40,8 @@ service LectureService {
 
 service InstructorService {
   rpc RegisterInstructor (RegisterInstructorRequest) returns (Instructor);
+  rpc GetCoursesByInstructor (InstructorIDRequest) returns (CourseList);
+
 }
 
 message Empty {}
@@ -47,6 +50,7 @@ message Course {
   int64 id = 1;
   string name = 2;
   string description = 3;
+  int64 instructor_id = 4;
 }
 
 message CourseList {
@@ -175,5 +179,18 @@ message Instructor {
   int64 id = 1;
   string name = 2;
   string email = 3;
+}
+
+
+message InstructorCourseRequest {
+  int64 instructor_id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+
+
+message InstructorIDRequest {
+  int64 instructor_id = 1;
 }
 

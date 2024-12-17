@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	EducationService_GetCourses_FullMethodName    = "/education.EducationService/GetCourses"
-	EducationService_GetCourseByID_FullMethodName = "/education.EducationService/GetCourseByID"
-	EducationService_CreateCourse_FullMethodName  = "/education.EducationService/CreateCourse"
-	EducationService_UpdateCourse_FullMethodName  = "/education.EducationService/UpdateCourse"
-	EducationService_DeleteCourse_FullMethodName  = "/education.EducationService/DeleteCourse"
+	EducationService_GetCourses_FullMethodName               = "/education.EducationService/GetCourses"
+	EducationService_GetCourseByID_FullMethodName            = "/education.EducationService/GetCourseByID"
+	EducationService_CreateCourse_FullMethodName             = "/education.EducationService/CreateCourse"
+	EducationService_UpdateCourse_FullMethodName             = "/education.EducationService/UpdateCourse"
+	EducationService_DeleteCourse_FullMethodName             = "/education.EducationService/DeleteCourse"
+	EducationService_CreateCourseByInstructor_FullMethodName = "/education.EducationService/CreateCourseByInstructor"
 )
 
 // EducationServiceClient is the client API for EducationService service.
@@ -35,6 +36,7 @@ type EducationServiceClient interface {
 	CreateCourse(ctx context.Context, in *NewCourseRequest, opts ...grpc.CallOption) (*Course, error)
 	UpdateCourse(ctx context.Context, in *UpdateCourseRequest, opts ...grpc.CallOption) (*Course, error)
 	DeleteCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*Empty, error)
+	CreateCourseByInstructor(ctx context.Context, in *InstructorCourseRequest, opts ...grpc.CallOption) (*Course, error)
 }
 
 type educationServiceClient struct {
@@ -95,6 +97,16 @@ func (c *educationServiceClient) DeleteCourse(ctx context.Context, in *CourseIDR
 	return out, nil
 }
 
+func (c *educationServiceClient) CreateCourseByInstructor(ctx context.Context, in *InstructorCourseRequest, opts ...grpc.CallOption) (*Course, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Course)
+	err := c.cc.Invoke(ctx, EducationService_CreateCourseByInstructor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EducationServiceServer is the server API for EducationService service.
 // All implementations must embed UnimplementedEducationServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type EducationServiceServer interface {
 	CreateCourse(context.Context, *NewCourseRequest) (*Course, error)
 	UpdateCourse(context.Context, *UpdateCourseRequest) (*Course, error)
 	DeleteCourse(context.Context, *CourseIDRequest) (*Empty, error)
+	CreateCourseByInstructor(context.Context, *InstructorCourseRequest) (*Course, error)
 	mustEmbedUnimplementedEducationServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedEducationServiceServer) UpdateCourse(context.Context, *Update
 }
 func (UnimplementedEducationServiceServer) DeleteCourse(context.Context, *CourseIDRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCourse not implemented")
+}
+func (UnimplementedEducationServiceServer) CreateCourseByInstructor(context.Context, *InstructorCourseRequest) (*Course, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCourseByInstructor not implemented")
 }
 func (UnimplementedEducationServiceServer) mustEmbedUnimplementedEducationServiceServer() {}
 func (UnimplementedEducationServiceServer) testEmbeddedByValue()                          {}
@@ -240,6 +256,24 @@ func _EducationService_DeleteCourse_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EducationService_CreateCourseByInstructor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstructorCourseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EducationServiceServer).CreateCourseByInstructor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EducationService_CreateCourseByInstructor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EducationServiceServer).CreateCourseByInstructor(ctx, req.(*InstructorCourseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EducationService_ServiceDesc is the grpc.ServiceDesc for EducationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +300,10 @@ var EducationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCourse",
 			Handler:    _EducationService_DeleteCourse_Handler,
+		},
+		{
+			MethodName: "CreateCourseByInstructor",
+			Handler:    _EducationService_CreateCourseByInstructor_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1035,7 +1073,8 @@ var LectureService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	InstructorService_RegisterInstructor_FullMethodName = "/education.InstructorService/RegisterInstructor"
+	InstructorService_RegisterInstructor_FullMethodName     = "/education.InstructorService/RegisterInstructor"
+	InstructorService_GetCoursesByInstructor_FullMethodName = "/education.InstructorService/GetCoursesByInstructor"
 )
 
 // InstructorServiceClient is the client API for InstructorService service.
@@ -1043,6 +1082,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InstructorServiceClient interface {
 	RegisterInstructor(ctx context.Context, in *RegisterInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
+	GetCoursesByInstructor(ctx context.Context, in *InstructorIDRequest, opts ...grpc.CallOption) (*CourseList, error)
 }
 
 type instructorServiceClient struct {
@@ -1063,11 +1103,22 @@ func (c *instructorServiceClient) RegisterInstructor(ctx context.Context, in *Re
 	return out, nil
 }
 
+func (c *instructorServiceClient) GetCoursesByInstructor(ctx context.Context, in *InstructorIDRequest, opts ...grpc.CallOption) (*CourseList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CourseList)
+	err := c.cc.Invoke(ctx, InstructorService_GetCoursesByInstructor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InstructorServiceServer is the server API for InstructorService service.
 // All implementations must embed UnimplementedInstructorServiceServer
 // for forward compatibility.
 type InstructorServiceServer interface {
 	RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error)
+	GetCoursesByInstructor(context.Context, *InstructorIDRequest) (*CourseList, error)
 	mustEmbedUnimplementedInstructorServiceServer()
 }
 
@@ -1080,6 +1131,9 @@ type UnimplementedInstructorServiceServer struct{}
 
 func (UnimplementedInstructorServiceServer) RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterInstructor not implemented")
+}
+func (UnimplementedInstructorServiceServer) GetCoursesByInstructor(context.Context, *InstructorIDRequest) (*CourseList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCoursesByInstructor not implemented")
 }
 func (UnimplementedInstructorServiceServer) mustEmbedUnimplementedInstructorServiceServer() {}
 func (UnimplementedInstructorServiceServer) testEmbeddedByValue()                           {}
@@ -1120,6 +1174,24 @@ func _InstructorService_RegisterInstructor_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InstructorService_GetCoursesByInstructor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstructorIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstructorServiceServer).GetCoursesByInstructor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InstructorService_GetCoursesByInstructor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstructorServiceServer).GetCoursesByInstructor(ctx, req.(*InstructorIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InstructorService_ServiceDesc is the grpc.ServiceDesc for InstructorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1130,6 +1202,10 @@ var InstructorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterInstructor",
 			Handler:    _InstructorService_RegisterInstructor_Handler,
+		},
+		{
+			MethodName: "GetCoursesByInstructor",
+			Handler:    _InstructorService_GetCoursesByInstructor_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
