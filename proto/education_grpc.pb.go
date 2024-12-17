@@ -788,6 +788,7 @@ const (
 	LectureService_DeleteLecture_FullMethodName          = "/education.LectureService/DeleteLecture"
 	LectureService_MarkLectureAsCompleted_FullMethodName = "/education.LectureService/MarkLectureAsCompleted"
 	LectureService_GetCourseProgress_FullMethodName      = "/education.LectureService/GetCourseProgress"
+	LectureService_GetRecommendedCourses_FullMethodName  = "/education.LectureService/GetRecommendedCourses"
 )
 
 // LectureServiceClient is the client API for LectureService service.
@@ -801,6 +802,7 @@ type LectureServiceClient interface {
 	DeleteLecture(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*Empty, error)
 	MarkLectureAsCompleted(ctx context.Context, in *LectureCompletionRequest, opts ...grpc.CallOption) (*Empty, error)
 	GetCourseProgress(ctx context.Context, in *CourseProgressRequest, opts ...grpc.CallOption) (*CourseProgress, error)
+	GetRecommendedCourses(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*CourseList, error)
 }
 
 type lectureServiceClient struct {
@@ -881,6 +883,16 @@ func (c *lectureServiceClient) GetCourseProgress(ctx context.Context, in *Course
 	return out, nil
 }
 
+func (c *lectureServiceClient) GetRecommendedCourses(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*CourseList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CourseList)
+	err := c.cc.Invoke(ctx, LectureService_GetRecommendedCourses_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LectureServiceServer is the server API for LectureService service.
 // All implementations must embed UnimplementedLectureServiceServer
 // for forward compatibility.
@@ -892,6 +904,7 @@ type LectureServiceServer interface {
 	DeleteLecture(context.Context, *LectureIDRequest) (*Empty, error)
 	MarkLectureAsCompleted(context.Context, *LectureCompletionRequest) (*Empty, error)
 	GetCourseProgress(context.Context, *CourseProgressRequest) (*CourseProgress, error)
+	GetRecommendedCourses(context.Context, *StudentIDRequest) (*CourseList, error)
 	mustEmbedUnimplementedLectureServiceServer()
 }
 
@@ -922,6 +935,9 @@ func (UnimplementedLectureServiceServer) MarkLectureAsCompleted(context.Context,
 }
 func (UnimplementedLectureServiceServer) GetCourseProgress(context.Context, *CourseProgressRequest) (*CourseProgress, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCourseProgress not implemented")
+}
+func (UnimplementedLectureServiceServer) GetRecommendedCourses(context.Context, *StudentIDRequest) (*CourseList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRecommendedCourses not implemented")
 }
 func (UnimplementedLectureServiceServer) mustEmbedUnimplementedLectureServiceServer() {}
 func (UnimplementedLectureServiceServer) testEmbeddedByValue()                        {}
@@ -1070,6 +1086,24 @@ func _LectureService_GetCourseProgress_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LectureService_GetRecommendedCourses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StudentIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LectureServiceServer).GetRecommendedCourses(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LectureService_GetRecommendedCourses_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LectureServiceServer).GetRecommendedCourses(ctx, req.(*StudentIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LectureService_ServiceDesc is the grpc.ServiceDesc for LectureService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1104,6 +1138,10 @@ var LectureService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCourseProgress",
 			Handler:    _LectureService_GetCourseProgress_Handler,
+		},
+		{
+			MethodName: "GetRecommendedCourses",
+			Handler:    _LectureService_GetRecommendedCourses_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

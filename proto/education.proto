@@ -37,6 +37,7 @@ service LectureService {
   rpc DeleteLecture (LectureIDRequest) returns (Empty);
   rpc MarkLectureAsCompleted (LectureCompletionRequest) returns (Empty);
   rpc GetCourseProgress (CourseProgressRequest) returns (CourseProgress);
+  rpc GetRecommendedCourses (StudentIDRequest) returns (CourseList);
 }
 
 service InstructorService {
