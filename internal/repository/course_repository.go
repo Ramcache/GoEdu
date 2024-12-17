@@ -16,6 +16,7 @@ type CourseRepository interface {
 	DeleteCourse(ctx context.Context, id int64) (bool, error)
 	GetCoursesByInstructor(ctx context.Context, instructorID int64) ([]*models.Course, error)
 	SearchCourses(ctx context.Context, keyword string) ([]*models.Course, error)
+	GetRecommendedCourses(ctx context.Context, studentID int64) ([]*models.Course, error)
 }
 
 type courseRepository struct {
@@ -146,6 +147,37 @@ func (r *courseRepository) SearchCourses(ctx context.Context, keyword string) ([
     `
 
 	rows, err := r.db.Query(ctx, query, "%"+keyword+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var courses []*models.Course
+	for rows.Next() {
+		var course models.Course
+		if err := rows.Scan(&course.ID, &course.Name, &course.Description, &course.InstructorID); err != nil {
+			return nil, err
+		}
+		courses = append(courses, &course)
+	}
+
+	return courses, nil
+}
+
+func (r *courseRepository) GetRecommendedCourses(ctx context.Context, studentID int64) ([]*models.Course, error) {
+	query := `
+        SELECT DISTINCT c.id, c.name, c.description, c.instructor_id
+        FROM courses c
+        WHERE c.id NOT IN (
+            SELECT e.course_id
+            FROM enrollments e
+            WHERE e.student_id = $1
+        )
+        ORDER BY RANDOM()
+        LIMIT 5;
+    `
+
+	rows, err := r.db.Query(ctx, query, studentID)
 	if err != nil {
 		return nil, err
 	}

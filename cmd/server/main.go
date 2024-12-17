@@ -12,7 +12,8 @@ import (
 )
 
 func main() {
-	cfg := config.LoadConfig()
+	loader := &config.EnvConfigLoader{}
+	cfg := config.NewConfig(loader)
 
 	dbConfig := repository.Config{
 		ConnectionString: cfg.DatabaseURL,

@@ -16,10 +16,10 @@ import (
 type StudentService struct {
 	proto.UnimplementedStudentServiceServer
 	studentRepo repository.StudentRepository
-	cfg         config.Config
+	cfg         *config.Config
 }
 
-func NewStudentService(studentRepo repository.StudentRepository, cfg config.Config) *StudentService {
+func NewStudentService(studentRepo repository.StudentRepository, cfg *config.Config) *StudentService {
 	return &StudentService{
 		studentRepo: studentRepo,
 		cfg:         cfg,

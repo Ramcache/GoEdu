@@ -172,3 +172,26 @@ func (s *EducationService) SearchCourses(ctx context.Context, req *proto.SearchR
 
 	return &proto.CourseList{Courses: grpcCourses}, nil
 }
+
+func (s *EducationService) GetRecommendedCourses(ctx context.Context, req *proto.StudentIDRequest) (*proto.CourseList, error) {
+	if req.Id == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID студента должен быть указан")
+	}
+
+	courses, err := s.courseRepo.GetRecommendedCourses(ctx, req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении рекомендованных курсов: %v", err)
+	}
+
+	var grpcCourses []*proto.Course
+	for _, course := range courses {
+		grpcCourses = append(grpcCourses, &proto.Course{
+			Id:           course.ID,
+			Name:         course.Name,
+			Description:  course.Description,
+			InstructorId: course.InstructorID,
+		})
+	}
+
+	return &proto.CourseList{Courses: grpcCourses}, nil
+}
