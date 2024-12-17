@@ -15,6 +15,7 @@ service EducationService {
 service StudentService {
   rpc RegisterStudent (RegisterStudentRequest) returns (Student);
   rpc LoginStudent (LoginRequest) returns (AuthResponse);
+  rpc GetStudentProfile (StudentIDRequest) returns (Student);
 }
 message Empty {}
 
@@ -66,5 +67,10 @@ message AuthResponse {
   string name = 2;
   string email = 3;
   string token = 4;
+}
+
+
+message StudentIDRequest {
+  int64 id = 1;
 }
 

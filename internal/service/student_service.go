@@ -95,3 +95,21 @@ func (s *StudentService) LoginStudent(ctx context.Context, req *proto.LoginReque
 		Token: token,
 	}, nil
 }
+
+func (s *StudentService) GetStudentProfile(ctx context.Context, req *proto.StudentIDRequest) (*proto.Student, error) {
+	student, err := s.studentRepo.GetStudentByID(ctx, req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении профиля студента: %v", err)
+	}
+
+	if student == nil {
+		return nil, status.Errorf(codes.NotFound, "Студент с ID %d не найден", req.Id)
+	}
+
+	return &proto.Student{
+		Id:    student.ID,
+		Name:  student.Name,
+		Email: student.Email,
+		Token: "",
+	}, nil
+}

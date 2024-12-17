@@ -273,8 +273,9 @@ var EducationService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	StudentService_RegisterStudent_FullMethodName = "/education.StudentService/RegisterStudent"
-	StudentService_LoginStudent_FullMethodName    = "/education.StudentService/LoginStudent"
+	StudentService_RegisterStudent_FullMethodName   = "/education.StudentService/RegisterStudent"
+	StudentService_LoginStudent_FullMethodName      = "/education.StudentService/LoginStudent"
+	StudentService_GetStudentProfile_FullMethodName = "/education.StudentService/GetStudentProfile"
 )
 
 // StudentServiceClient is the client API for StudentService service.
@@ -283,6 +284,7 @@ const (
 type StudentServiceClient interface {
 	RegisterStudent(ctx context.Context, in *RegisterStudentRequest, opts ...grpc.CallOption) (*Student, error)
 	LoginStudent(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
+	GetStudentProfile(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*Student, error)
 }
 
 type studentServiceClient struct {
@@ -313,12 +315,23 @@ func (c *studentServiceClient) LoginStudent(ctx context.Context, in *LoginReques
 	return out, nil
 }
 
+func (c *studentServiceClient) GetStudentProfile(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*Student, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Student)
+	err := c.cc.Invoke(ctx, StudentService_GetStudentProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StudentServiceServer is the server API for StudentService service.
 // All implementations must embed UnimplementedStudentServiceServer
 // for forward compatibility.
 type StudentServiceServer interface {
 	RegisterStudent(context.Context, *RegisterStudentRequest) (*Student, error)
 	LoginStudent(context.Context, *LoginRequest) (*AuthResponse, error)
+	GetStudentProfile(context.Context, *StudentIDRequest) (*Student, error)
 	mustEmbedUnimplementedStudentServiceServer()
 }
 
@@ -334,6 +347,9 @@ func (UnimplementedStudentServiceServer) RegisterStudent(context.Context, *Regis
 }
 func (UnimplementedStudentServiceServer) LoginStudent(context.Context, *LoginRequest) (*AuthResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginStudent not implemented")
+}
+func (UnimplementedStudentServiceServer) GetStudentProfile(context.Context, *StudentIDRequest) (*Student, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStudentProfile not implemented")
 }
 func (UnimplementedStudentServiceServer) mustEmbedUnimplementedStudentServiceServer() {}
 func (UnimplementedStudentServiceServer) testEmbeddedByValue()                        {}
@@ -392,6 +408,24 @@ func _StudentService_LoginStudent_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StudentService_GetStudentProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StudentIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StudentServiceServer).GetStudentProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StudentService_GetStudentProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StudentServiceServer).GetStudentProfile(ctx, req.(*StudentIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StudentService_ServiceDesc is the grpc.ServiceDesc for StudentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -406,6 +440,10 @@ var StudentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginStudent",
 			Handler:    _StudentService_LoginStudent_Handler,
+		},
+		{
+			MethodName: "GetStudentProfile",
+			Handler:    _StudentService_GetStudentProfile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
