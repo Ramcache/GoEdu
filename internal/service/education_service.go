@@ -58,13 +58,13 @@ func (s *EducationService) GetCourses(ctx context.Context, req *proto.Empty) (*p
 }
 
 func (s *EducationService) GetCourseByID(ctx context.Context, req *proto.CourseIDRequest) (*proto.Course, error) {
-	course, err := s.courseRepo.GetCourseByID(ctx, req.Id)
+	course, err := s.courseRepo.GetCourseByID(ctx, req.CourseId)
 	if err != nil {
 		return nil, err
 	}
 
 	if course == nil {
-		return nil, status.Errorf(codes.NotFound, "Курс с ID %d не найден", req.Id)
+		return nil, status.Errorf(codes.NotFound, "Курс с ID %d не найден", req.CourseId)
 	}
 
 	return &proto.Course{
@@ -92,13 +92,13 @@ func (s *EducationService) UpdateCourse(ctx context.Context, req *proto.UpdateCo
 }
 
 func (s *EducationService) DeleteCourse(ctx context.Context, req *proto.CourseIDRequest) (*proto.Empty, error) {
-	deleted, err := s.courseRepo.DeleteCourse(ctx, req.Id)
+	deleted, err := s.courseRepo.DeleteCourse(ctx, req.CourseId)
 	if err != nil {
 		return nil, err
 	}
 
 	if !deleted {
-		return nil, status.Errorf(codes.NotFound, "Курс с ID %d не найден", req.Id)
+		return nil, status.Errorf(codes.NotFound, "Курс с ID %d не найден", req.CourseId)
 	}
 
 	return &proto.Empty{}, nil

@@ -18,6 +18,13 @@ service StudentService {
   rpc GetStudentProfile (StudentIDRequest) returns (Student);
   rpc UpdateStudentProfile (UpdateStudentRequest) returns (Student);
 }
+
+service EnrollmentService {
+  rpc EnrollStudent (EnrollmentRequest) returns (Empty);
+  rpc GetStudentsByCourse (CourseIDRequest) returns (StudentList);
+}
+
+
 message Empty {}
 
 message Course {
@@ -31,7 +38,7 @@ message CourseList {
 }
 
 message CourseIDRequest{
-  int64 id = 1;
+  int64 course_id = 1;
 }
 
 message NewCourseRequest {
@@ -82,3 +89,11 @@ message UpdateStudentRequest {
   string password = 4;
 }
 
+message EnrollmentRequest {
+  int64 student_id = 1;
+  int64 course_id = 2;
+}
+
+message StudentList {
+  repeated Student students = 1;
+}

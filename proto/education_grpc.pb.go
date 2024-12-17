@@ -487,3 +487,143 @@ var StudentService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/education.proto",
 }
+
+const (
+	EnrollmentService_EnrollStudent_FullMethodName       = "/education.EnrollmentService/EnrollStudent"
+	EnrollmentService_GetStudentsByCourse_FullMethodName = "/education.EnrollmentService/GetStudentsByCourse"
+)
+
+// EnrollmentServiceClient is the client API for EnrollmentService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type EnrollmentServiceClient interface {
+	EnrollStudent(ctx context.Context, in *EnrollmentRequest, opts ...grpc.CallOption) (*Empty, error)
+	GetStudentsByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*StudentList, error)
+}
+
+type enrollmentServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewEnrollmentServiceClient(cc grpc.ClientConnInterface) EnrollmentServiceClient {
+	return &enrollmentServiceClient{cc}
+}
+
+func (c *enrollmentServiceClient) EnrollStudent(ctx context.Context, in *EnrollmentRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, EnrollmentService_EnrollStudent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *enrollmentServiceClient) GetStudentsByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*StudentList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(StudentList)
+	err := c.cc.Invoke(ctx, EnrollmentService_GetStudentsByCourse_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// EnrollmentServiceServer is the server API for EnrollmentService service.
+// All implementations must embed UnimplementedEnrollmentServiceServer
+// for forward compatibility.
+type EnrollmentServiceServer interface {
+	EnrollStudent(context.Context, *EnrollmentRequest) (*Empty, error)
+	GetStudentsByCourse(context.Context, *CourseIDRequest) (*StudentList, error)
+	mustEmbedUnimplementedEnrollmentServiceServer()
+}
+
+// UnimplementedEnrollmentServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedEnrollmentServiceServer struct{}
+
+func (UnimplementedEnrollmentServiceServer) EnrollStudent(context.Context, *EnrollmentRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EnrollStudent not implemented")
+}
+func (UnimplementedEnrollmentServiceServer) GetStudentsByCourse(context.Context, *CourseIDRequest) (*StudentList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStudentsByCourse not implemented")
+}
+func (UnimplementedEnrollmentServiceServer) mustEmbedUnimplementedEnrollmentServiceServer() {}
+func (UnimplementedEnrollmentServiceServer) testEmbeddedByValue()                           {}
+
+// UnsafeEnrollmentServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to EnrollmentServiceServer will
+// result in compilation errors.
+type UnsafeEnrollmentServiceServer interface {
+	mustEmbedUnimplementedEnrollmentServiceServer()
+}
+
+func RegisterEnrollmentServiceServer(s grpc.ServiceRegistrar, srv EnrollmentServiceServer) {
+	// If the following call pancis, it indicates UnimplementedEnrollmentServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&EnrollmentService_ServiceDesc, srv)
+}
+
+func _EnrollmentService_EnrollStudent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EnrollmentServiceServer).EnrollStudent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EnrollmentService_EnrollStudent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EnrollmentServiceServer).EnrollStudent(ctx, req.(*EnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EnrollmentService_GetStudentsByCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CourseIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EnrollmentServiceServer).GetStudentsByCourse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EnrollmentService_GetStudentsByCourse_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EnrollmentServiceServer).GetStudentsByCourse(ctx, req.(*CourseIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// EnrollmentService_ServiceDesc is the grpc.ServiceDesc for EnrollmentService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var EnrollmentService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "education.EnrollmentService",
+	HandlerType: (*EnrollmentServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "EnrollStudent",
+			Handler:    _EnrollmentService_EnrollStudent_Handler,
+		},
+		{
+			MethodName: "GetStudentsByCourse",
+			Handler:    _EnrollmentService_GetStudentsByCourse_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/education.proto",
+}

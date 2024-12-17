@@ -24,6 +24,9 @@ func main() {
 	}
 	defer dbpool.Close()
 
+	enrollmentRepo := repository.NewEnrollmentRepository(dbpool)
+	enrollmentService := service.NewEnrollmentService(enrollmentRepo)
+
 	courseRepo := repository.NewCourseRepository(dbpool)
 	educationService := service.NewEducationService(courseRepo)
 
@@ -33,6 +36,7 @@ func main() {
 	server := grpc.NewServer()
 	proto.RegisterEducationServiceServer(server, educationService)
 	proto.RegisterStudentServiceServer(server, studentService)
+	proto.RegisterEnrollmentServiceServer(server, enrollmentService)
 
 	listener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {
