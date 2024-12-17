@@ -12,6 +12,7 @@ service EducationService {
   rpc UpdateCourse (UpdateCourseRequest) returns (Course);
   rpc DeleteCourse (CourseIDRequest) returns (Empty);
 }
+
 service StudentService {
   rpc RegisterStudent (RegisterStudentRequest) returns (Student);
   rpc LoginStudent (LoginRequest) returns (AuthResponse);
@@ -32,6 +33,7 @@ service LectureService {
   rpc GetLectureContent (LectureIDRequest) returns (LectureContent);
   rpc UpdateLecture (UpdateLectureRequest) returns (Lecture);
   rpc DeleteLecture (LectureIDRequest) returns (Empty);
+  rpc MarkLectureAsCompleted (LectureCompletionRequest) returns (Empty);
 }
 
 
@@ -141,5 +143,10 @@ message UpdateLectureRequest {
   int64 id = 1;
   string title = 2;
   string content = 3;
+}
+
+message LectureCompletionRequest {
+  int64 student_id = 1;
+  int64 lecture_id = 2;
 }
 

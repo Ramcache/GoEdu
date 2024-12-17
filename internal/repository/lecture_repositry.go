@@ -4,6 +4,7 @@ import (
 	"GoEdu/internal/models"
 	"context"
 	"errors"
+	"fmt"
 	"github.com/jackc/pgx/v5"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -15,6 +16,7 @@ type LectureRepository interface {
 	GetLectureContent(ctx context.Context, lectureID int64) (*models.Lecture, error)
 	UpdateLecture(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
 	DeleteLecture(ctx context.Context, lectureID int64) error
+	MarkLectureAsCompleted(ctx context.Context, studentID, lectureID int64) error
 }
 
 type lectureRepository struct {
@@ -121,4 +123,25 @@ func (r *lectureRepository) DeleteLecture(ctx context.Context, lectureID int64) 
 	}
 
 	return nil
+}
+
+func (r *lectureRepository) MarkLectureAsCompleted(ctx context.Context, studentID, lectureID int64) error {
+	var exists bool
+	err := r.db.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM lectures WHERE id = $1)`, lectureID).Scan(&exists)
+	if err != nil || !exists {
+		return fmt.Errorf("лекция с ID %d не найдена", lectureID)
+	}
+
+	err = r.db.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM students WHERE id = $1)`, studentID).Scan(&exists)
+	if err != nil || !exists {
+		return fmt.Errorf("студент с ID %d не найден", studentID)
+	}
+
+	query := `
+        INSERT INTO lecture_completions (student_id, lecture_id)
+        VALUES ($1, $2)
+        ON CONFLICT (student_id, lecture_id) DO NOTHING;
+    `
+	_, err = r.db.Exec(ctx, query, studentID, lectureID)
+	return err
 }

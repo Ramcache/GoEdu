@@ -129,3 +129,16 @@ func (s *LectureService) DeleteLecture(ctx context.Context, req *proto.LectureID
 
 	return &proto.Empty{}, nil
 }
+
+func (s *LectureService) MarkLectureAsCompleted(ctx context.Context, req *proto.LectureCompletionRequest) (*proto.Empty, error) {
+	if req.StudentId == 0 || req.LectureId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID студента и ID лекции должны быть указаны")
+	}
+
+	err := s.lectureRepo.MarkLectureAsCompleted(ctx, req.StudentId, req.LectureId)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "Ошибка при отметке лекции как завершенной: %v", err)
+	}
+
+	return &proto.Empty{}, nil
+}

@@ -705,11 +705,12 @@ var EnrollmentService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	LectureService_AddLectureToCourse_FullMethodName  = "/education.LectureService/AddLectureToCourse"
-	LectureService_GetLecturesByCourse_FullMethodName = "/education.LectureService/GetLecturesByCourse"
-	LectureService_GetLectureContent_FullMethodName   = "/education.LectureService/GetLectureContent"
-	LectureService_UpdateLecture_FullMethodName       = "/education.LectureService/UpdateLecture"
-	LectureService_DeleteLecture_FullMethodName       = "/education.LectureService/DeleteLecture"
+	LectureService_AddLectureToCourse_FullMethodName     = "/education.LectureService/AddLectureToCourse"
+	LectureService_GetLecturesByCourse_FullMethodName    = "/education.LectureService/GetLecturesByCourse"
+	LectureService_GetLectureContent_FullMethodName      = "/education.LectureService/GetLectureContent"
+	LectureService_UpdateLecture_FullMethodName          = "/education.LectureService/UpdateLecture"
+	LectureService_DeleteLecture_FullMethodName          = "/education.LectureService/DeleteLecture"
+	LectureService_MarkLectureAsCompleted_FullMethodName = "/education.LectureService/MarkLectureAsCompleted"
 )
 
 // LectureServiceClient is the client API for LectureService service.
@@ -721,6 +722,7 @@ type LectureServiceClient interface {
 	GetLectureContent(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*LectureContent, error)
 	UpdateLecture(ctx context.Context, in *UpdateLectureRequest, opts ...grpc.CallOption) (*Lecture, error)
 	DeleteLecture(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*Empty, error)
+	MarkLectureAsCompleted(ctx context.Context, in *LectureCompletionRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type lectureServiceClient struct {
@@ -781,6 +783,16 @@ func (c *lectureServiceClient) DeleteLecture(ctx context.Context, in *LectureIDR
 	return out, nil
 }
 
+func (c *lectureServiceClient) MarkLectureAsCompleted(ctx context.Context, in *LectureCompletionRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, LectureService_MarkLectureAsCompleted_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LectureServiceServer is the server API for LectureService service.
 // All implementations must embed UnimplementedLectureServiceServer
 // for forward compatibility.
@@ -790,6 +802,7 @@ type LectureServiceServer interface {
 	GetLectureContent(context.Context, *LectureIDRequest) (*LectureContent, error)
 	UpdateLecture(context.Context, *UpdateLectureRequest) (*Lecture, error)
 	DeleteLecture(context.Context, *LectureIDRequest) (*Empty, error)
+	MarkLectureAsCompleted(context.Context, *LectureCompletionRequest) (*Empty, error)
 	mustEmbedUnimplementedLectureServiceServer()
 }
 
@@ -814,6 +827,9 @@ func (UnimplementedLectureServiceServer) UpdateLecture(context.Context, *UpdateL
 }
 func (UnimplementedLectureServiceServer) DeleteLecture(context.Context, *LectureIDRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteLecture not implemented")
+}
+func (UnimplementedLectureServiceServer) MarkLectureAsCompleted(context.Context, *LectureCompletionRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MarkLectureAsCompleted not implemented")
 }
 func (UnimplementedLectureServiceServer) mustEmbedUnimplementedLectureServiceServer() {}
 func (UnimplementedLectureServiceServer) testEmbeddedByValue()                        {}
@@ -926,6 +942,24 @@ func _LectureService_DeleteLecture_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LectureService_MarkLectureAsCompleted_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LectureCompletionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LectureServiceServer).MarkLectureAsCompleted(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LectureService_MarkLectureAsCompleted_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LectureServiceServer).MarkLectureAsCompleted(ctx, req.(*LectureCompletionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LectureService_ServiceDesc is the grpc.ServiceDesc for LectureService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -952,6 +986,10 @@ var LectureService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteLecture",
 			Handler:    _LectureService_DeleteLecture_Handler,
+		},
+		{
+			MethodName: "MarkLectureAsCompleted",
+			Handler:    _LectureService_MarkLectureAsCompleted_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
