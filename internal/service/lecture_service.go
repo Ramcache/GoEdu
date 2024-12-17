@@ -1,37 +1,44 @@
-package repository
+package service
 
 import (
 	"GoEdu/internal/models"
+	"GoEdu/internal/repository"
+	"GoEdu/proto"
 	"context"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-type LectureRepository interface {
-	AddLectureToCourse(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
+type LectureService struct {
+	proto.UnimplementedLectureServiceServer
+	lectureRepo repository.LectureRepository
 }
 
-type lectureRepository struct {
-	db *pgxpool.Pool
+func NewLectureService(lectureRepo repository.LectureRepository) *LectureService {
+	return &LectureService{lectureRepo: lectureRepo}
 }
 
-func NewLectureRepository(db *pgxpool.Pool) LectureRepository {
-	return &lectureRepository{db: db}
-}
-
-func (r *lectureRepository) AddLectureToCourse(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error) {
-	query := `
-        INSERT INTO lectures (course_id, title, content)
-        VALUES ($1, $2, $3)
-        RETURNING id, course_id, title, content;
-    `
-
-	var newLecture models.Lecture
-	err := r.db.QueryRow(ctx, query, lecture.CourseID, lecture.Title, lecture.Content).
-		Scan(&newLecture.ID, &newLecture.CourseID, &newLecture.Title, &newLecture.Content)
-	if err != nil {
-		return nil, err
+func (s *LectureService) AddLectureToCourse(ctx context.Context, req *proto.LectureRequest) (*proto.Lecture, error) {
+	if req.CourseId == 0 || req.Title == "" || req.Content == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "Все поля должны быть заполнены")
 	}
 
-	return &newLecture, nil
+	lecture := &models.Lecture{
+		CourseID: req.CourseId,
+		Title:    req.Title,
+		Content:  req.Content,
+	}
+
+	newLecture, err := s.lectureRepo.AddLectureToCourse(ctx, lecture)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при добавлении лекции: %v", err)
+	}
+
+	return &proto.Lecture{
+		Id:       newLecture.ID,
+		CourseId: newLecture.CourseID,
+		Title:    newLecture.Title,
+		Content:  newLecture.Content,
+	}, nil
 }

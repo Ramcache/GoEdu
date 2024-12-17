@@ -22,14 +22,20 @@ service StudentService {
 service EnrollmentService {
   rpc EnrollStudent (EnrollmentRequest) returns (Empty);
   rpc GetStudentsByCourse (CourseIDRequest) returns (StudentList);
+  rpc GetCoursesByStudent (StudentIDRequest) returns (CourseList);
   rpc UnEnrollStudent (EnrollmentRequest) returns (Empty);
 }
+
+service LectureService {
+  rpc AddLectureToCourse (LectureRequest) returns (Lecture);
+}
+
 
 
 message Empty {}
 
 message Course {
-  string id = 1;
+  int64 id = 1;
   string name = 2;
   string description = 3;
 }
@@ -98,3 +104,18 @@ message EnrollmentRequest {
 message StudentList {
   repeated Student students = 1;
 }
+
+
+message LectureRequest {
+  int64 course_id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+message Lecture {
+  int64 id = 1;
+  int64 course_id = 2;
+  string title = 3;
+  string content = 4;
+}
+

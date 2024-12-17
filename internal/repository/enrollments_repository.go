@@ -11,6 +11,7 @@ type EnrollmentRepository interface {
 	EnrollStudent(ctx context.Context, studentID, courseID int64) error
 	GetStudentsByCourse(ctx context.Context, courseID int64) ([]*models.Student, error)
 	UnEnrollStudent(ctx context.Context, studentID, courseID int64) error
+	GetCoursesByStudent(ctx context.Context, studentID int64) ([]*models.Course, error)
 }
 
 type enrollmentRepository struct {
@@ -64,4 +65,29 @@ func (r *enrollmentRepository) UnEnrollStudent(ctx context.Context, studentID, c
     `
 	_, err := r.db.Exec(ctx, query, studentID, courseID)
 	return err
+}
+
+func (r *enrollmentRepository) GetCoursesByStudent(ctx context.Context, studentID int64) ([]*models.Course, error) {
+	query := `
+        SELECT c.id, c.name, c.description
+        FROM courses c
+        JOIN enrollments e ON c.id = e.course_id
+        WHERE e.student_id = $1;
+    `
+
+	rows, err := r.db.Query(ctx, query, studentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var courses []*models.Course
+	for rows.Next() {
+		var course models.Course
+		if err := rows.Scan(&course.ID, &course.Name, &course.Description); err != nil {
+			return nil, err
+		}
+		courses = append(courses, &course)
+	}
+	return courses, nil
 }

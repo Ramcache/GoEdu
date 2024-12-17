@@ -7,7 +7,6 @@ import (
 	"context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"strconv"
 )
 
 type EducationService struct {
@@ -33,7 +32,7 @@ func (s *EducationService) CreateCourse(ctx context.Context, req *proto.NewCours
 	}
 
 	return &proto.Course{
-		Id:          strconv.FormatInt(int64(id), 10),
+		Id:          int64(id),
 		Name:        course.Name,
 		Description: course.Description,
 	}, nil
@@ -48,7 +47,7 @@ func (s *EducationService) GetCourses(ctx context.Context, req *proto.Empty) (*p
 	var grpcCourses []*proto.Course
 	for _, c := range courses {
 		grpcCourses = append(grpcCourses, &proto.Course{
-			Id:          strconv.Itoa(c.ID),
+			Id:          c.ID,
 			Name:        c.Name,
 			Description: c.Description,
 		})
@@ -68,7 +67,7 @@ func (s *EducationService) GetCourseByID(ctx context.Context, req *proto.CourseI
 	}
 
 	return &proto.Course{
-		Id:          strconv.FormatInt(int64(course.ID), 10),
+		Id:          course.ID,
 		Name:        course.Name,
 		Description: course.Description,
 	}, nil
@@ -85,7 +84,7 @@ func (s *EducationService) UpdateCourse(ctx context.Context, req *proto.UpdateCo
 	}
 
 	return &proto.Course{
-		Id:          strconv.FormatInt(int64(updatedCourse.ID), 10),
+		Id:          updatedCourse.ID,
 		Name:        updatedCourse.Name,
 		Description: updatedCourse.Description,
 	}, nil
