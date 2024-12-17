@@ -87,3 +87,27 @@ func (s *LectureService) GetLectureContent(ctx context.Context, req *proto.Lectu
 		Content:  lecture.Content,
 	}, nil
 }
+
+func (s *LectureService) UpdateLecture(ctx context.Context, req *proto.UpdateLectureRequest) (*proto.Lecture, error) {
+	if req.Id == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID лекции должен быть указан")
+	}
+
+	lectureToUpdate := &models.Lecture{
+		ID:      req.Id,
+		Title:   req.Title,
+		Content: req.Content,
+	}
+
+	updatedLecture, err := s.lectureRepo.UpdateLecture(ctx, lectureToUpdate)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при обновлении лекции: %v", err)
+	}
+
+	return &proto.Lecture{
+		Id:       updatedLecture.ID,
+		CourseId: updatedLecture.CourseID,
+		Title:    updatedLecture.Title,
+		Content:  updatedLecture.Content,
+	}, nil
+}

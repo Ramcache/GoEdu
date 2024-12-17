@@ -30,7 +30,7 @@ service LectureService {
   rpc AddLectureToCourse (LectureRequest) returns (Lecture);
   rpc GetLecturesByCourse (CourseIDRequest) returns (LectureList);
   rpc GetLectureContent (LectureIDRequest) returns (LectureContent);
-
+  rpc UpdateLecture (UpdateLectureRequest) returns (Lecture);
 }
 
 
@@ -135,3 +135,10 @@ message LectureContent {
   string title = 3;
   string content = 4;
 }
+
+message UpdateLectureRequest {
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+}
+

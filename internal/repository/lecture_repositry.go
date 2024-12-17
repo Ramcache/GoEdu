@@ -13,6 +13,7 @@ type LectureRepository interface {
 	AddLectureToCourse(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
 	GetLecturesByCourse(ctx context.Context, courseID int64) ([]*models.Lecture, error)
 	GetLectureContent(ctx context.Context, lectureID int64) (*models.Lecture, error)
+	UpdateLecture(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
 }
 
 type lectureRepository struct {
@@ -82,4 +83,23 @@ func (r *lectureRepository) GetLectureContent(ctx context.Context, lectureID int
 		return nil, err
 	}
 	return &lecture, nil
+}
+
+func (r *lectureRepository) UpdateLecture(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error) {
+	query := `
+        UPDATE lectures
+        SET title = COALESCE(NULLIF($1, ''), title),
+            content = COALESCE(NULLIF($2, ''), content)
+        WHERE id = $3
+        RETURNING id, course_id, title, content;
+    `
+
+	var updatedLecture models.Lecture
+	err := r.db.QueryRow(ctx, query, lecture.Title, lecture.Content, lecture.ID).
+		Scan(&updatedLecture.ID, &updatedLecture.CourseID, &updatedLecture.Title, &updatedLecture.Content)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedLecture, nil
 }
