@@ -113,3 +113,40 @@ func (s *StudentService) GetStudentProfile(ctx context.Context, req *proto.Stude
 		Token: "",
 	}, nil
 }
+
+func (s *StudentService) UpdateStudentProfile(ctx context.Context, req *proto.UpdateStudentRequest) (*proto.Student, error) {
+	existingStudent, err := s.studentRepo.GetStudentByID(ctx, req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении студента: %v", err)
+	}
+
+	if existingStudent == nil {
+		return nil, status.Errorf(codes.NotFound, "Студент с ID %d не найден", req.Id)
+	}
+
+	if req.Name != "" {
+		existingStudent.Name = req.Name
+	}
+	if req.Email != "" {
+		existingStudent.Email = req.Email
+	}
+	if req.Password != "" {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "Не удалось хэшировать пароль")
+		}
+		existingStudent.Password = string(hashedPassword)
+	}
+
+	updatedStudent, err := s.studentRepo.UpdateStudent(ctx, existingStudent)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при обновлении профиля: %v", err)
+	}
+
+	return &proto.Student{
+		Id:    updatedStudent.ID,
+		Name:  updatedStudent.Name,
+		Email: updatedStudent.Email,
+		Token: "",
+	}, nil
+}

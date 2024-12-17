@@ -273,9 +273,10 @@ var EducationService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	StudentService_RegisterStudent_FullMethodName   = "/education.StudentService/RegisterStudent"
-	StudentService_LoginStudent_FullMethodName      = "/education.StudentService/LoginStudent"
-	StudentService_GetStudentProfile_FullMethodName = "/education.StudentService/GetStudentProfile"
+	StudentService_RegisterStudent_FullMethodName      = "/education.StudentService/RegisterStudent"
+	StudentService_LoginStudent_FullMethodName         = "/education.StudentService/LoginStudent"
+	StudentService_GetStudentProfile_FullMethodName    = "/education.StudentService/GetStudentProfile"
+	StudentService_UpdateStudentProfile_FullMethodName = "/education.StudentService/UpdateStudentProfile"
 )
 
 // StudentServiceClient is the client API for StudentService service.
@@ -285,6 +286,7 @@ type StudentServiceClient interface {
 	RegisterStudent(ctx context.Context, in *RegisterStudentRequest, opts ...grpc.CallOption) (*Student, error)
 	LoginStudent(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	GetStudentProfile(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*Student, error)
+	UpdateStudentProfile(ctx context.Context, in *UpdateStudentRequest, opts ...grpc.CallOption) (*Student, error)
 }
 
 type studentServiceClient struct {
@@ -325,6 +327,16 @@ func (c *studentServiceClient) GetStudentProfile(ctx context.Context, in *Studen
 	return out, nil
 }
 
+func (c *studentServiceClient) UpdateStudentProfile(ctx context.Context, in *UpdateStudentRequest, opts ...grpc.CallOption) (*Student, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Student)
+	err := c.cc.Invoke(ctx, StudentService_UpdateStudentProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StudentServiceServer is the server API for StudentService service.
 // All implementations must embed UnimplementedStudentServiceServer
 // for forward compatibility.
@@ -332,6 +344,7 @@ type StudentServiceServer interface {
 	RegisterStudent(context.Context, *RegisterStudentRequest) (*Student, error)
 	LoginStudent(context.Context, *LoginRequest) (*AuthResponse, error)
 	GetStudentProfile(context.Context, *StudentIDRequest) (*Student, error)
+	UpdateStudentProfile(context.Context, *UpdateStudentRequest) (*Student, error)
 	mustEmbedUnimplementedStudentServiceServer()
 }
 
@@ -350,6 +363,9 @@ func (UnimplementedStudentServiceServer) LoginStudent(context.Context, *LoginReq
 }
 func (UnimplementedStudentServiceServer) GetStudentProfile(context.Context, *StudentIDRequest) (*Student, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStudentProfile not implemented")
+}
+func (UnimplementedStudentServiceServer) UpdateStudentProfile(context.Context, *UpdateStudentRequest) (*Student, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateStudentProfile not implemented")
 }
 func (UnimplementedStudentServiceServer) mustEmbedUnimplementedStudentServiceServer() {}
 func (UnimplementedStudentServiceServer) testEmbeddedByValue()                        {}
@@ -426,6 +442,24 @@ func _StudentService_GetStudentProfile_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StudentService_UpdateStudentProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStudentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StudentServiceServer).UpdateStudentProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StudentService_UpdateStudentProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StudentServiceServer).UpdateStudentProfile(ctx, req.(*UpdateStudentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StudentService_ServiceDesc is the grpc.ServiceDesc for StudentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -444,6 +478,10 @@ var StudentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStudentProfile",
 			Handler:    _StudentService_GetStudentProfile_Handler,
+		},
+		{
+			MethodName: "UpdateStudentProfile",
+			Handler:    _StudentService_UpdateStudentProfile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

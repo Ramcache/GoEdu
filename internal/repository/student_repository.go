@@ -12,6 +12,7 @@ type StudentRepository interface {
 	RegisterStudent(ctx context.Context, student *models.Student) (int64, error)
 	GetStudentByEmail(ctx context.Context, email string) (*models.Student, error)
 	GetStudentByID(ctx context.Context, id int64) (*models.Student, error)
+	UpdateStudent(ctx context.Context, student *models.Student) (*models.Student, error)
 }
 
 type studentRepository struct {
@@ -61,4 +62,22 @@ func (r *studentRepository) GetStudentByID(ctx context.Context, id int64) (*mode
 	}
 
 	return &student, nil
+}
+
+func (r *studentRepository) UpdateStudent(ctx context.Context, student *models.Student) (*models.Student, error) {
+	query := `
+        UPDATE students
+        SET name = $1, email = $2, password = $3
+        WHERE id = $4
+        RETURNING id, name, email;
+    `
+
+	var updatedStudent models.Student
+	err := r.db.QueryRow(ctx, query, student.Name, student.Email, student.Password, student.ID).
+		Scan(&updatedStudent.ID, &updatedStudent.Name, &updatedStudent.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedStudent, nil
 }
