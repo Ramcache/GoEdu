@@ -1213,7 +1213,8 @@ var InstructorService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	ReviewService_AddReviewToCourse_FullMethodName = "/education.ReviewService/AddReviewToCourse"
+	ReviewService_AddReviewToCourse_FullMethodName  = "/education.ReviewService/AddReviewToCourse"
+	ReviewService_GetReviewsByCourse_FullMethodName = "/education.ReviewService/GetReviewsByCourse"
 )
 
 // ReviewServiceClient is the client API for ReviewService service.
@@ -1221,6 +1222,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReviewServiceClient interface {
 	AddReviewToCourse(ctx context.Context, in *ReviewRequest, opts ...grpc.CallOption) (*Empty, error)
+	GetReviewsByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*ReviewList, error)
 }
 
 type reviewServiceClient struct {
@@ -1241,11 +1243,22 @@ func (c *reviewServiceClient) AddReviewToCourse(ctx context.Context, in *ReviewR
 	return out, nil
 }
 
+func (c *reviewServiceClient) GetReviewsByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*ReviewList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReviewList)
+	err := c.cc.Invoke(ctx, ReviewService_GetReviewsByCourse_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReviewServiceServer is the server API for ReviewService service.
 // All implementations must embed UnimplementedReviewServiceServer
 // for forward compatibility.
 type ReviewServiceServer interface {
 	AddReviewToCourse(context.Context, *ReviewRequest) (*Empty, error)
+	GetReviewsByCourse(context.Context, *CourseIDRequest) (*ReviewList, error)
 	mustEmbedUnimplementedReviewServiceServer()
 }
 
@@ -1258,6 +1271,9 @@ type UnimplementedReviewServiceServer struct{}
 
 func (UnimplementedReviewServiceServer) AddReviewToCourse(context.Context, *ReviewRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddReviewToCourse not implemented")
+}
+func (UnimplementedReviewServiceServer) GetReviewsByCourse(context.Context, *CourseIDRequest) (*ReviewList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReviewsByCourse not implemented")
 }
 func (UnimplementedReviewServiceServer) mustEmbedUnimplementedReviewServiceServer() {}
 func (UnimplementedReviewServiceServer) testEmbeddedByValue()                       {}
@@ -1298,6 +1314,24 @@ func _ReviewService_AddReviewToCourse_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReviewService_GetReviewsByCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CourseIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReviewServiceServer).GetReviewsByCourse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReviewService_GetReviewsByCourse_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReviewServiceServer).GetReviewsByCourse(ctx, req.(*CourseIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReviewService_ServiceDesc is the grpc.ServiceDesc for ReviewService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1308,6 +1342,10 @@ var ReviewService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddReviewToCourse",
 			Handler:    _ReviewService_AddReviewToCourse_Handler,
+		},
+		{
+			MethodName: "GetReviewsByCourse",
+			Handler:    _ReviewService_GetReviewsByCourse_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

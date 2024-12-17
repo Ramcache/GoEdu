@@ -45,6 +45,7 @@ service InstructorService {
 
 service ReviewService{
   rpc AddReviewToCourse (ReviewRequest) returns (Empty);
+  rpc GetReviewsByCourse (CourseIDRequest) returns (ReviewList);
 }
 
 message Empty {}
@@ -200,5 +201,18 @@ message ReviewRequest {
   int64 course_id = 2;
   string comment = 3;
   int32 rating = 4;
+}
+
+message Review {
+  int64 id = 1;
+  int64 student_id = 2;
+  int64 course_id = 3;
+  string comment = 4;
+  int32 rating = 5;
+  string created_at = 6;
+}
+
+message ReviewList {
+  repeated Review reviews = 1;
 }
 
