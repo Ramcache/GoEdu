@@ -1293,7 +1293,7 @@ var file_proto_education_proto_rawDesc = []byte{
 	0x72, 0x6f, 0x6c, 0x6c, 0x53, 0x74, 0x75, 0x64, 0x65, 0x6e, 0x74, 0x12, 0x1c, 0x2e, 0x65, 0x64,
 	0x75, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x45, 0x6e, 0x72, 0x6f, 0x6c, 0x6c, 0x6d, 0x65,
 	0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x10, 0x2e, 0x65, 0x64, 0x75, 0x63,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x32, 0xb3, 0x02, 0x0a, 0x0e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x32, 0xf3, 0x02, 0x0a, 0x0e,
 	0x4c, 0x65, 0x63, 0x74, 0x75, 0x72, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x43,
 	0x0a, 0x12, 0x41, 0x64, 0x64, 0x4c, 0x65, 0x63, 0x74, 0x75, 0x72, 0x65, 0x54, 0x6f, 0x43, 0x6f,
 	0x75, 0x72, 0x73, 0x65, 0x12, 0x19, 0x2e, 0x65, 0x64, 0x75, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
@@ -1313,7 +1313,11 @@ var file_proto_education_proto_rawDesc = []byte{
 	0x64, 0x75, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4c,
 	0x65, 0x63, 0x74, 0x75, 0x72, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e,
 	0x65, 0x64, 0x75, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x65, 0x63, 0x74, 0x75, 0x72,
-	0x65, 0x42, 0x0e, 0x5a, 0x0c, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x70, 0x72, 0x6f, 0x74,
+	0x65, 0x12, 0x3e, 0x0a, 0x0d, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4c, 0x65, 0x63, 0x74, 0x75,
+	0x72, 0x65, 0x12, 0x1b, 0x2e, 0x65, 0x64, 0x75, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c,
+	0x65, 0x63, 0x74, 0x75, 0x72, 0x65, 0x49, 0x44, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x10, 0x2e, 0x65, 0x64, 0x75, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x42, 0x0e, 0x5a, 0x0c, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
@@ -1373,25 +1377,27 @@ var file_proto_education_proto_depIdxs = []int32{
 	3,  // 17: education.LectureService.GetLecturesByCourse:input_type -> education.CourseIDRequest
 	17, // 18: education.LectureService.GetLectureContent:input_type -> education.LectureIDRequest
 	19, // 19: education.LectureService.UpdateLecture:input_type -> education.UpdateLectureRequest
-	2,  // 20: education.EducationService.GetCourses:output_type -> education.CourseList
-	1,  // 21: education.EducationService.GetCourseByID:output_type -> education.Course
-	1,  // 22: education.EducationService.CreateCourse:output_type -> education.Course
-	1,  // 23: education.EducationService.UpdateCourse:output_type -> education.Course
-	0,  // 24: education.EducationService.DeleteCourse:output_type -> education.Empty
-	7,  // 25: education.StudentService.RegisterStudent:output_type -> education.Student
-	9,  // 26: education.StudentService.LoginStudent:output_type -> education.AuthResponse
-	7,  // 27: education.StudentService.GetStudentProfile:output_type -> education.Student
-	7,  // 28: education.StudentService.UpdateStudentProfile:output_type -> education.Student
-	0,  // 29: education.EnrollmentService.EnrollStudent:output_type -> education.Empty
-	13, // 30: education.EnrollmentService.GetStudentsByCourse:output_type -> education.StudentList
-	2,  // 31: education.EnrollmentService.GetCoursesByStudent:output_type -> education.CourseList
-	0,  // 32: education.EnrollmentService.UnEnrollStudent:output_type -> education.Empty
-	15, // 33: education.LectureService.AddLectureToCourse:output_type -> education.Lecture
-	16, // 34: education.LectureService.GetLecturesByCourse:output_type -> education.LectureList
-	18, // 35: education.LectureService.GetLectureContent:output_type -> education.LectureContent
-	15, // 36: education.LectureService.UpdateLecture:output_type -> education.Lecture
-	20, // [20:37] is the sub-list for method output_type
-	3,  // [3:20] is the sub-list for method input_type
+	17, // 20: education.LectureService.DeleteLecture:input_type -> education.LectureIDRequest
+	2,  // 21: education.EducationService.GetCourses:output_type -> education.CourseList
+	1,  // 22: education.EducationService.GetCourseByID:output_type -> education.Course
+	1,  // 23: education.EducationService.CreateCourse:output_type -> education.Course
+	1,  // 24: education.EducationService.UpdateCourse:output_type -> education.Course
+	0,  // 25: education.EducationService.DeleteCourse:output_type -> education.Empty
+	7,  // 26: education.StudentService.RegisterStudent:output_type -> education.Student
+	9,  // 27: education.StudentService.LoginStudent:output_type -> education.AuthResponse
+	7,  // 28: education.StudentService.GetStudentProfile:output_type -> education.Student
+	7,  // 29: education.StudentService.UpdateStudentProfile:output_type -> education.Student
+	0,  // 30: education.EnrollmentService.EnrollStudent:output_type -> education.Empty
+	13, // 31: education.EnrollmentService.GetStudentsByCourse:output_type -> education.StudentList
+	2,  // 32: education.EnrollmentService.GetCoursesByStudent:output_type -> education.CourseList
+	0,  // 33: education.EnrollmentService.UnEnrollStudent:output_type -> education.Empty
+	15, // 34: education.LectureService.AddLectureToCourse:output_type -> education.Lecture
+	16, // 35: education.LectureService.GetLecturesByCourse:output_type -> education.LectureList
+	18, // 36: education.LectureService.GetLectureContent:output_type -> education.LectureContent
+	15, // 37: education.LectureService.UpdateLecture:output_type -> education.Lecture
+	0,  // 38: education.LectureService.DeleteLecture:output_type -> education.Empty
+	21, // [21:39] is the sub-list for method output_type
+	3,  // [3:21] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name

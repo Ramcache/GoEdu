@@ -5,6 +5,8 @@ import (
 	"GoEdu/internal/repository"
 	"GoEdu/proto"
 	"context"
+	"errors"
+	"github.com/jackc/pgx/v5"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -110,4 +112,20 @@ func (s *LectureService) UpdateLecture(ctx context.Context, req *proto.UpdateLec
 		Title:    updatedLecture.Title,
 		Content:  updatedLecture.Content,
 	}, nil
+}
+
+func (s *LectureService) DeleteLecture(ctx context.Context, req *proto.LectureIDRequest) (*proto.Empty, error) {
+	if req.LectureId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID лекции должен быть указан")
+	}
+
+	err := s.lectureRepo.DeleteLecture(ctx, req.LectureId)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, status.Errorf(codes.NotFound, "Лекция с ID %d не найдена", req.LectureId)
+		}
+		return nil, status.Errorf(codes.Internal, "Ошибка при удалении лекции: %v", err)
+	}
+
+	return &proto.Empty{}, nil
 }

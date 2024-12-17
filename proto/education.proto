@@ -31,6 +31,7 @@ service LectureService {
   rpc GetLecturesByCourse (CourseIDRequest) returns (LectureList);
   rpc GetLectureContent (LectureIDRequest) returns (LectureContent);
   rpc UpdateLecture (UpdateLectureRequest) returns (Lecture);
+  rpc DeleteLecture (LectureIDRequest) returns (Empty);
 }
 
 

@@ -14,6 +14,7 @@ type LectureRepository interface {
 	GetLecturesByCourse(ctx context.Context, courseID int64) ([]*models.Lecture, error)
 	GetLectureContent(ctx context.Context, lectureID int64) (*models.Lecture, error)
 	UpdateLecture(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
+	DeleteLecture(ctx context.Context, lectureID int64) error
 }
 
 type lectureRepository struct {
@@ -102,4 +103,22 @@ func (r *lectureRepository) UpdateLecture(ctx context.Context, lecture *models.L
 	}
 
 	return &updatedLecture, nil
+}
+
+func (r *lectureRepository) DeleteLecture(ctx context.Context, lectureID int64) error {
+	query := `
+        DELETE FROM lectures
+        WHERE id = $1;
+    `
+
+	commandTag, err := r.db.Exec(ctx, query, lectureID)
+	if err != nil {
+		return err
+	}
+
+	if commandTag.RowsAffected() == 0 {
+		return pgx.ErrNoRows
+	}
+
+	return nil
 }

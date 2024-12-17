@@ -709,6 +709,7 @@ const (
 	LectureService_GetLecturesByCourse_FullMethodName = "/education.LectureService/GetLecturesByCourse"
 	LectureService_GetLectureContent_FullMethodName   = "/education.LectureService/GetLectureContent"
 	LectureService_UpdateLecture_FullMethodName       = "/education.LectureService/UpdateLecture"
+	LectureService_DeleteLecture_FullMethodName       = "/education.LectureService/DeleteLecture"
 )
 
 // LectureServiceClient is the client API for LectureService service.
@@ -719,6 +720,7 @@ type LectureServiceClient interface {
 	GetLecturesByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*LectureList, error)
 	GetLectureContent(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*LectureContent, error)
 	UpdateLecture(ctx context.Context, in *UpdateLectureRequest, opts ...grpc.CallOption) (*Lecture, error)
+	DeleteLecture(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type lectureServiceClient struct {
@@ -769,6 +771,16 @@ func (c *lectureServiceClient) UpdateLecture(ctx context.Context, in *UpdateLect
 	return out, nil
 }
 
+func (c *lectureServiceClient) DeleteLecture(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, LectureService_DeleteLecture_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LectureServiceServer is the server API for LectureService service.
 // All implementations must embed UnimplementedLectureServiceServer
 // for forward compatibility.
@@ -777,6 +789,7 @@ type LectureServiceServer interface {
 	GetLecturesByCourse(context.Context, *CourseIDRequest) (*LectureList, error)
 	GetLectureContent(context.Context, *LectureIDRequest) (*LectureContent, error)
 	UpdateLecture(context.Context, *UpdateLectureRequest) (*Lecture, error)
+	DeleteLecture(context.Context, *LectureIDRequest) (*Empty, error)
 	mustEmbedUnimplementedLectureServiceServer()
 }
 
@@ -798,6 +811,9 @@ func (UnimplementedLectureServiceServer) GetLectureContent(context.Context, *Lec
 }
 func (UnimplementedLectureServiceServer) UpdateLecture(context.Context, *UpdateLectureRequest) (*Lecture, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateLecture not implemented")
+}
+func (UnimplementedLectureServiceServer) DeleteLecture(context.Context, *LectureIDRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteLecture not implemented")
 }
 func (UnimplementedLectureServiceServer) mustEmbedUnimplementedLectureServiceServer() {}
 func (UnimplementedLectureServiceServer) testEmbeddedByValue()                        {}
@@ -892,6 +908,24 @@ func _LectureService_UpdateLecture_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LectureService_DeleteLecture_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LectureIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LectureServiceServer).DeleteLecture(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LectureService_DeleteLecture_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LectureServiceServer).DeleteLecture(ctx, req.(*LectureIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LectureService_ServiceDesc is the grpc.ServiceDesc for LectureService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -914,6 +948,10 @@ var LectureService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateLecture",
 			Handler:    _LectureService_UpdateLecture_Handler,
+		},
+		{
+			MethodName: "DeleteLecture",
+			Handler:    _LectureService_DeleteLecture_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
