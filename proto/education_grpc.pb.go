@@ -274,6 +274,7 @@ var EducationService_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	StudentService_RegisterStudent_FullMethodName = "/education.StudentService/RegisterStudent"
+	StudentService_LoginStudent_FullMethodName    = "/education.StudentService/LoginStudent"
 )
 
 // StudentServiceClient is the client API for StudentService service.
@@ -281,6 +282,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StudentServiceClient interface {
 	RegisterStudent(ctx context.Context, in *RegisterStudentRequest, opts ...grpc.CallOption) (*Student, error)
+	LoginStudent(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 }
 
 type studentServiceClient struct {
@@ -301,11 +303,22 @@ func (c *studentServiceClient) RegisterStudent(ctx context.Context, in *Register
 	return out, nil
 }
 
+func (c *studentServiceClient) LoginStudent(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AuthResponse)
+	err := c.cc.Invoke(ctx, StudentService_LoginStudent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StudentServiceServer is the server API for StudentService service.
 // All implementations must embed UnimplementedStudentServiceServer
 // for forward compatibility.
 type StudentServiceServer interface {
 	RegisterStudent(context.Context, *RegisterStudentRequest) (*Student, error)
+	LoginStudent(context.Context, *LoginRequest) (*AuthResponse, error)
 	mustEmbedUnimplementedStudentServiceServer()
 }
 
@@ -318,6 +331,9 @@ type UnimplementedStudentServiceServer struct{}
 
 func (UnimplementedStudentServiceServer) RegisterStudent(context.Context, *RegisterStudentRequest) (*Student, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterStudent not implemented")
+}
+func (UnimplementedStudentServiceServer) LoginStudent(context.Context, *LoginRequest) (*AuthResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginStudent not implemented")
 }
 func (UnimplementedStudentServiceServer) mustEmbedUnimplementedStudentServiceServer() {}
 func (UnimplementedStudentServiceServer) testEmbeddedByValue()                        {}
@@ -358,6 +374,24 @@ func _StudentService_RegisterStudent_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StudentService_LoginStudent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StudentServiceServer).LoginStudent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StudentService_LoginStudent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StudentServiceServer).LoginStudent(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StudentService_ServiceDesc is the grpc.ServiceDesc for StudentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -368,6 +402,10 @@ var StudentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterStudent",
 			Handler:    _StudentService_RegisterStudent_Handler,
+		},
+		{
+			MethodName: "LoginStudent",
+			Handler:    _StudentService_LoginStudent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

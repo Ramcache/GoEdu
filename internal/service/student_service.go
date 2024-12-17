@@ -71,3 +71,27 @@ func (s *StudentService) generateJWTToken(studentID int64, email string) (string
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(s.cfg.JWTSecretKey))
 }
+
+func (s *StudentService) LoginStudent(ctx context.Context, req *proto.LoginRequest) (*proto.AuthResponse, error) {
+	student, err := s.studentRepo.GetStudentByEmail(ctx, req.Email)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "Студент с таким email не найден")
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(student.Password), []byte(req.Password))
+	if err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, "Неверный пароль")
+	}
+
+	token, err := s.generateJWTToken(student.ID, student.Email)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Не удалось создать JWT-токен")
+	}
+
+	return &proto.AuthResponse{
+		Id:    student.ID,
+		Name:  student.Name,
+		Email: student.Email,
+		Token: token,
+	}, nil
+}
