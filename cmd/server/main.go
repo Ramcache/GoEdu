@@ -27,8 +27,12 @@ func main() {
 	courseRepo := repository.NewCourseRepository(dbpool)
 	educationService := service.NewEducationService(courseRepo)
 
+	studentRepo := repository.NewStudentRepository(dbpool)
+	studentService := service.NewStudentService(studentRepo, cfg)
+
 	server := grpc.NewServer()
 	proto.RegisterEducationServiceServer(server, educationService)
+	proto.RegisterStudentServiceServer(server, studentService)
 
 	listener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {

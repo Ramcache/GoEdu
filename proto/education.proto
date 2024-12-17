@@ -12,7 +12,9 @@ service EducationService {
   rpc UpdateCourse (UpdateCourseRequest) returns (Course);
   rpc DeleteCourse (CourseIDRequest) returns (Empty);
 }
-
+service StudentService {
+  rpc RegisterStudent (RegisterStudentRequest) returns (Student);
+}
 message Empty {}
 
 message Course {
@@ -38,4 +40,17 @@ message UpdateCourseRequest {
   int64 id = 1;
   string name = 2;
   string description = 3;
+}
+
+message RegisterStudentRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message Student {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  string token = 4;
 }

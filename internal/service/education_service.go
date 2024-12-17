@@ -48,7 +48,7 @@ func (s *EducationService) GetCourses(ctx context.Context, req *proto.Empty) (*p
 	var grpcCourses []*proto.Course
 	for _, c := range courses {
 		grpcCourses = append(grpcCourses, &proto.Course{
-			Id:          strconv.FormatInt(int64(c.ID), 10),
+			Id:          strconv.Itoa(c.ID),
 			Name:        c.Name,
 			Description: c.Description,
 		})
