@@ -41,7 +41,10 @@ service LectureService {
 service InstructorService {
   rpc RegisterInstructor (RegisterInstructorRequest) returns (Instructor);
   rpc GetCoursesByInstructor (InstructorIDRequest) returns (CourseList);
+}
 
+service ReviewService{
+  rpc AddReviewToCourse (ReviewRequest) returns (Empty);
 }
 
 message Empty {}
@@ -188,9 +191,14 @@ message InstructorCourseRequest {
   string description = 3;
 }
 
-
-
 message InstructorIDRequest {
   int64 instructor_id = 1;
+}
+
+message ReviewRequest {
+  int64 student_id = 1;
+  int64 course_id = 2;
+  string comment = 3;
+  int32 rating = 4;
 }
 

@@ -30,6 +30,7 @@ func main() {
 	studentRepo := repository.NewStudentRepository(dbpool)
 	lectureRepo := repository.NewLectureRepository(dbpool)
 	instructorRepo := repository.NewInstructorRepository(dbpool)
+	reviewRepo := repository.NewReviewRepository(dbpool)
 
 	// Сервисы
 	enrollmentService := service.NewEnrollmentService(enrollmentRepo)
@@ -37,6 +38,7 @@ func main() {
 	studentService := service.NewStudentService(studentRepo, cfg)
 	lectureService := service.NewLectureService(lectureRepo)
 	instructorService := service.NewInstructorService(instructorRepo)
+	reviewService := service.NewReviewService(reviewRepo)
 
 	// gRPC сервер
 	server := grpc.NewServer()
@@ -45,6 +47,7 @@ func main() {
 	proto.RegisterEnrollmentServiceServer(server, enrollmentService)
 	proto.RegisterLectureServiceServer(server, lectureService)
 	proto.RegisterInstructorServiceServer(server, instructorService)
+	proto.RegisterReviewServiceServer(server, reviewService)
 
 	listener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {
