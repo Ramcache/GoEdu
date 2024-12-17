@@ -1,13 +1,14 @@
 package main
 
 import (
-	"log"
-	"net"
-
 	"GoEdu/internal/config"
+	"GoEdu/internal/middleware"
 	"GoEdu/internal/repository"
 	"GoEdu/internal/service"
 	"GoEdu/proto"
+	"log"
+	"net"
+
 	"google.golang.org/grpc"
 )
 
@@ -18,12 +19,15 @@ func main() {
 	dbConfig := repository.Config{
 		ConnectionString: cfg.DatabaseURL,
 	}
-
 	dbpool, err := repository.NewDBPool(dbConfig)
 	if err != nil {
 		log.Fatalf("Не удалось подключиться к базе данных: %v", err)
 	}
 	defer dbpool.Close()
+
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(middleware.AuthInterceptor([]byte(cfg.JWTSecretKey))),
+	)
 
 	// Репозитории
 	enrollmentRepo := repository.NewEnrollmentRepository(dbpool)
@@ -38,25 +42,25 @@ func main() {
 	educationService := service.NewEducationService(courseRepo)
 	studentService := service.NewStudentService(studentRepo, cfg)
 	lectureService := service.NewLectureService(lectureRepo)
-	instructorService := service.NewInstructorService(instructorRepo)
+	instructorService := service.NewInstructorService(instructorRepo, cfg)
 	reviewService := service.NewReviewService(reviewRepo)
 
-	// gRPC сервер
-	server := grpc.NewServer()
-	proto.RegisterEducationServiceServer(server, educationService)
-	proto.RegisterStudentServiceServer(server, studentService)
-	proto.RegisterEnrollmentServiceServer(server, enrollmentService)
-	proto.RegisterLectureServiceServer(server, lectureService)
-	proto.RegisterInstructorServiceServer(server, instructorService)
-	proto.RegisterReviewServiceServer(server, reviewService)
+	// Регистрация сервисов
+	proto.RegisterEducationServiceServer(grpcServer, educationService)
+	proto.RegisterStudentServiceServer(grpcServer, studentService)
+	proto.RegisterEnrollmentServiceServer(grpcServer, enrollmentService)
+	proto.RegisterLectureServiceServer(grpcServer, lectureService)
+	proto.RegisterInstructorServiceServer(grpcServer, instructorService)
+	proto.RegisterReviewServiceServer(grpcServer, reviewService)
 
+	// Запуск сервера
 	listener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {
 		log.Fatalf("Не удалось запустить сервер: %v", err)
 	}
 
 	log.Printf("gRPC сервер запущен на :%s\n", cfg.GRPCPort)
-	if err := server.Serve(listener); err != nil {
+	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("Ошибка запуска сервера: %v", err)
 	}
 }

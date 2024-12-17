@@ -1,6 +1,8 @@
 package service
 
 import (
+	"GoEdu/internal/config"
+	"GoEdu/internal/middleware"
 	"GoEdu/internal/models"
 	"GoEdu/internal/repository"
 	"GoEdu/proto"
@@ -14,13 +16,15 @@ import (
 type InstructorService struct {
 	proto.UnimplementedInstructorServiceServer
 	repo repository.InstructorRepository
+	cfg  *config.Config
 }
 
-func NewInstructorService(repo repository.InstructorRepository) *InstructorService {
-	return &InstructorService{repo: repo}
+func NewInstructorService(repo repository.InstructorRepository, cfg *config.Config) *InstructorService {
+	return &InstructorService{
+		repo: repo,
+		cfg:  cfg}
 }
 
-// RegisterInstructor регистрирует нового преподавателя
 func (s *InstructorService) RegisterInstructor(ctx context.Context, req *proto.RegisterInstructorRequest) (*proto.Instructor, error) {
 	existingInstructor, _ := s.repo.GetInstructorByEmail(ctx, req.Email)
 	if existingInstructor != nil {
@@ -43,9 +47,15 @@ func (s *InstructorService) RegisterInstructor(ctx context.Context, req *proto.R
 		return nil, status.Errorf(codes.Internal, "Ошибка при регистрации преподавателя: %v", err)
 	}
 
+	token, err := middleware.GenerateJWTToken(id, req.Email, "instructor", []byte(s.cfg.JWTSecretKey))
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при создании JWT-токена")
+	}
+
 	return &proto.Instructor{
 		Id:    id,
 		Name:  req.Name,
 		Email: req.Email,
+		Token: token,
 	}, nil
 }

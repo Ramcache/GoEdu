@@ -2,15 +2,14 @@ package service
 
 import (
 	"GoEdu/internal/config"
+	"GoEdu/internal/middleware"
 	"GoEdu/internal/models"
 	"GoEdu/internal/repository"
 	"GoEdu/proto"
 	"context"
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"time"
 )
 
 type StudentService struct {
@@ -48,7 +47,7 @@ func (s *StudentService) RegisterStudent(ctx context.Context, req *proto.Registe
 		return nil, status.Errorf(codes.Internal, "Ошибка регистрации студента: %v", err)
 	}
 
-	token, err := s.generateJWTToken(id, req.Email)
+	token, err := middleware.GenerateJWTToken(id, req.Email, "student", []byte(s.cfg.JWTSecretKey))
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Не удалось создать JWT токен")
 	}
@@ -59,17 +58,6 @@ func (s *StudentService) RegisterStudent(ctx context.Context, req *proto.Registe
 		Email: req.Email,
 		Token: token,
 	}, nil
-}
-
-func (s *StudentService) generateJWTToken(studentID int64, email string) (string, error) {
-	claims := jwt.MapClaims{
-		"id":    studentID,
-		"email": email,
-		"exp":   time.Now().Add(time.Duration(s.cfg.TokenExpiryHours) * time.Hour).Unix(),
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(s.cfg.JWTSecretKey))
 }
 
 func (s *StudentService) LoginStudent(ctx context.Context, req *proto.LoginRequest) (*proto.AuthResponse, error) {
@@ -83,11 +71,10 @@ func (s *StudentService) LoginStudent(ctx context.Context, req *proto.LoginReque
 		return nil, status.Errorf(codes.Unauthenticated, "Неверный пароль")
 	}
 
-	token, err := s.generateJWTToken(student.ID, student.Email)
+	token, err := middleware.GenerateJWTToken(student.ID, student.Email, "student", []byte(s.cfg.JWTSecretKey))
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Не удалось создать JWT-токен")
 	}
-
 	return &proto.AuthResponse{
 		Id:    student.ID,
 		Name:  student.Name,
