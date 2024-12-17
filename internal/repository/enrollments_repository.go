@@ -10,6 +10,7 @@ import (
 type EnrollmentRepository interface {
 	EnrollStudent(ctx context.Context, studentID, courseID int64) error
 	GetStudentsByCourse(ctx context.Context, courseID int64) ([]*models.Student, error)
+	UnEnrollStudent(ctx context.Context, studentID, courseID int64) error
 }
 
 type enrollmentRepository struct {
@@ -54,4 +55,13 @@ func (r *enrollmentRepository) GetStudentsByCourse(ctx context.Context, courseID
 		students = append(students, &student)
 	}
 	return students, nil
+}
+
+func (r *enrollmentRepository) UnEnrollStudent(ctx context.Context, studentID, courseID int64) error {
+	query := `
+        DELETE FROM enrollments
+        WHERE student_id = $1 AND course_id = $2;
+    `
+	_, err := r.db.Exec(ctx, query, studentID, courseID)
+	return err
 }

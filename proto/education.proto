@@ -22,6 +22,7 @@ service StudentService {
 service EnrollmentService {
   rpc EnrollStudent (EnrollmentRequest) returns (Empty);
   rpc GetStudentsByCourse (CourseIDRequest) returns (StudentList);
+  rpc UnEnrollStudent (EnrollmentRequest) returns (Empty);
 }
 
 

@@ -491,6 +491,7 @@ var StudentService_ServiceDesc = grpc.ServiceDesc{
 const (
 	EnrollmentService_EnrollStudent_FullMethodName       = "/education.EnrollmentService/EnrollStudent"
 	EnrollmentService_GetStudentsByCourse_FullMethodName = "/education.EnrollmentService/GetStudentsByCourse"
+	EnrollmentService_UnEnrollStudent_FullMethodName     = "/education.EnrollmentService/UnEnrollStudent"
 )
 
 // EnrollmentServiceClient is the client API for EnrollmentService service.
@@ -499,6 +500,7 @@ const (
 type EnrollmentServiceClient interface {
 	EnrollStudent(ctx context.Context, in *EnrollmentRequest, opts ...grpc.CallOption) (*Empty, error)
 	GetStudentsByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*StudentList, error)
+	UnEnrollStudent(ctx context.Context, in *EnrollmentRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type enrollmentServiceClient struct {
@@ -529,12 +531,23 @@ func (c *enrollmentServiceClient) GetStudentsByCourse(ctx context.Context, in *C
 	return out, nil
 }
 
+func (c *enrollmentServiceClient) UnEnrollStudent(ctx context.Context, in *EnrollmentRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, EnrollmentService_UnEnrollStudent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EnrollmentServiceServer is the server API for EnrollmentService service.
 // All implementations must embed UnimplementedEnrollmentServiceServer
 // for forward compatibility.
 type EnrollmentServiceServer interface {
 	EnrollStudent(context.Context, *EnrollmentRequest) (*Empty, error)
 	GetStudentsByCourse(context.Context, *CourseIDRequest) (*StudentList, error)
+	UnEnrollStudent(context.Context, *EnrollmentRequest) (*Empty, error)
 	mustEmbedUnimplementedEnrollmentServiceServer()
 }
 
@@ -550,6 +563,9 @@ func (UnimplementedEnrollmentServiceServer) EnrollStudent(context.Context, *Enro
 }
 func (UnimplementedEnrollmentServiceServer) GetStudentsByCourse(context.Context, *CourseIDRequest) (*StudentList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStudentsByCourse not implemented")
+}
+func (UnimplementedEnrollmentServiceServer) UnEnrollStudent(context.Context, *EnrollmentRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnEnrollStudent not implemented")
 }
 func (UnimplementedEnrollmentServiceServer) mustEmbedUnimplementedEnrollmentServiceServer() {}
 func (UnimplementedEnrollmentServiceServer) testEmbeddedByValue()                           {}
@@ -608,6 +624,24 @@ func _EnrollmentService_GetStudentsByCourse_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EnrollmentService_UnEnrollStudent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EnrollmentServiceServer).UnEnrollStudent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EnrollmentService_UnEnrollStudent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EnrollmentServiceServer).UnEnrollStudent(ctx, req.(*EnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EnrollmentService_ServiceDesc is the grpc.ServiceDesc for EnrollmentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -622,6 +656,10 @@ var EnrollmentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStudentsByCourse",
 			Handler:    _EnrollmentService_GetStudentsByCourse_Handler,
+		},
+		{
+			MethodName: "UnEnrollStudent",
+			Handler:    _EnrollmentService_UnEnrollStudent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

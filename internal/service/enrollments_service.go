@@ -55,3 +55,16 @@ func (s *EnrollmentService) GetStudentsByCourse(ctx context.Context, req *proto.
 
 	return &proto.StudentList{Students: grpcStudents}, nil
 }
+
+func (s *EnrollmentService) UnEnrollStudent(ctx context.Context, req *proto.EnrollmentRequest) (*proto.Empty, error) {
+	if req.StudentId == 0 || req.CourseId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID студента и курса должны быть указаны")
+	}
+
+	err := s.enrollmentRepo.UnEnrollStudent(ctx, req.StudentId, req.CourseId)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при удалении студента с курса: %v", err)
+	}
+
+	return &proto.Empty{}, nil
+}
