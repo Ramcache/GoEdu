@@ -65,3 +65,25 @@ func (s *LectureService) GetLecturesByCourse(ctx context.Context, req *proto.Cou
 
 	return &proto.LectureList{Lectures: grpcLectures}, nil
 }
+
+func (s *LectureService) GetLectureContent(ctx context.Context, req *proto.LectureIDRequest) (*proto.LectureContent, error) {
+	if req.LectureId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID лекции должен быть указан")
+	}
+
+	lecture, err := s.lectureRepo.GetLectureContent(ctx, req.LectureId)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении содержания лекции: %v", err)
+	}
+
+	if lecture == nil {
+		return nil, status.Errorf(codes.NotFound, "Лекция с ID %d не найдена", req.LectureId)
+	}
+
+	return &proto.LectureContent{
+		Id:       lecture.ID,
+		CourseId: lecture.CourseID,
+		Title:    lecture.Title,
+		Content:  lecture.Content,
+	}, nil
+}

@@ -3,6 +3,8 @@ package repository
 import (
 	"GoEdu/internal/models"
 	"context"
+	"errors"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -10,6 +12,7 @@ import (
 type LectureRepository interface {
 	AddLectureToCourse(ctx context.Context, lecture *models.Lecture) (*models.Lecture, error)
 	GetLecturesByCourse(ctx context.Context, courseID int64) ([]*models.Lecture, error)
+	GetLectureContent(ctx context.Context, lectureID int64) (*models.Lecture, error)
 }
 
 type lectureRepository struct {
@@ -59,4 +62,24 @@ func (r *lectureRepository) GetLecturesByCourse(ctx context.Context, courseID in
 		lectures = append(lectures, &lecture)
 	}
 	return lectures, nil
+}
+
+func (r *lectureRepository) GetLectureContent(ctx context.Context, lectureID int64) (*models.Lecture, error) {
+	query := `
+        SELECT id, course_id, title, content
+        FROM lectures
+        WHERE id = $1;
+    `
+
+	var lecture models.Lecture
+	err := r.db.QueryRow(ctx, query, lectureID).Scan(
+		&lecture.ID, &lecture.CourseID, &lecture.Title, &lecture.Content,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &lecture, nil
 }
