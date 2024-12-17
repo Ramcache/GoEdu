@@ -25,6 +25,7 @@ const (
 	EducationService_UpdateCourse_FullMethodName             = "/education.EducationService/UpdateCourse"
 	EducationService_DeleteCourse_FullMethodName             = "/education.EducationService/DeleteCourse"
 	EducationService_CreateCourseByInstructor_FullMethodName = "/education.EducationService/CreateCourseByInstructor"
+	EducationService_SearchCourses_FullMethodName            = "/education.EducationService/SearchCourses"
 )
 
 // EducationServiceClient is the client API for EducationService service.
@@ -37,6 +38,7 @@ type EducationServiceClient interface {
 	UpdateCourse(ctx context.Context, in *UpdateCourseRequest, opts ...grpc.CallOption) (*Course, error)
 	DeleteCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*Empty, error)
 	CreateCourseByInstructor(ctx context.Context, in *InstructorCourseRequest, opts ...grpc.CallOption) (*Course, error)
+	SearchCourses(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*CourseList, error)
 }
 
 type educationServiceClient struct {
@@ -107,6 +109,16 @@ func (c *educationServiceClient) CreateCourseByInstructor(ctx context.Context, i
 	return out, nil
 }
 
+func (c *educationServiceClient) SearchCourses(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*CourseList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CourseList)
+	err := c.cc.Invoke(ctx, EducationService_SearchCourses_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EducationServiceServer is the server API for EducationService service.
 // All implementations must embed UnimplementedEducationServiceServer
 // for forward compatibility.
@@ -117,6 +129,7 @@ type EducationServiceServer interface {
 	UpdateCourse(context.Context, *UpdateCourseRequest) (*Course, error)
 	DeleteCourse(context.Context, *CourseIDRequest) (*Empty, error)
 	CreateCourseByInstructor(context.Context, *InstructorCourseRequest) (*Course, error)
+	SearchCourses(context.Context, *SearchRequest) (*CourseList, error)
 	mustEmbedUnimplementedEducationServiceServer()
 }
 
@@ -144,6 +157,9 @@ func (UnimplementedEducationServiceServer) DeleteCourse(context.Context, *Course
 }
 func (UnimplementedEducationServiceServer) CreateCourseByInstructor(context.Context, *InstructorCourseRequest) (*Course, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCourseByInstructor not implemented")
+}
+func (UnimplementedEducationServiceServer) SearchCourses(context.Context, *SearchRequest) (*CourseList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchCourses not implemented")
 }
 func (UnimplementedEducationServiceServer) mustEmbedUnimplementedEducationServiceServer() {}
 func (UnimplementedEducationServiceServer) testEmbeddedByValue()                          {}
@@ -274,6 +290,24 @@ func _EducationService_CreateCourseByInstructor_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EducationService_SearchCourses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EducationServiceServer).SearchCourses(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EducationService_SearchCourses_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EducationServiceServer).SearchCourses(ctx, req.(*SearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EducationService_ServiceDesc is the grpc.ServiceDesc for EducationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +338,10 @@ var EducationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateCourseByInstructor",
 			Handler:    _EducationService_CreateCourseByInstructor_Handler,
+		},
+		{
+			MethodName: "SearchCourses",
+			Handler:    _EducationService_SearchCourses_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

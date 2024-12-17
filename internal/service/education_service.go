@@ -149,3 +149,26 @@ func (s *EducationService) GetCoursesByInstructor(ctx context.Context, req *prot
 
 	return &proto.CourseList{Courses: grpcCourses}, nil
 }
+
+func (s *EducationService) SearchCourses(ctx context.Context, req *proto.SearchRequest) (*proto.CourseList, error) {
+	if req.Keyword == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "Ключевое слово для поиска не может быть пустым")
+	}
+
+	courses, err := s.courseRepo.SearchCourses(ctx, req.Keyword)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка при поиске курсов: %v", err)
+	}
+
+	var grpcCourses []*proto.Course
+	for _, course := range courses {
+		grpcCourses = append(grpcCourses, &proto.Course{
+			Id:           course.ID,
+			Name:         course.Name,
+			Description:  course.Description,
+			InstructorId: course.InstructorID,
+		})
+	}
+
+	return &proto.CourseList{Courses: grpcCourses}, nil
+}

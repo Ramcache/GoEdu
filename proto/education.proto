@@ -12,6 +12,7 @@ service EducationService {
   rpc UpdateCourse (UpdateCourseRequest) returns (Course);
   rpc DeleteCourse (CourseIDRequest) returns (Empty);
   rpc CreateCourseByInstructor (InstructorCourseRequest) returns (Course);
+  rpc SearchCourses (SearchRequest) returns (CourseList);
 }
 
 service StudentService {
@@ -214,5 +215,9 @@ message Review {
 
 message ReviewList {
   repeated Review reviews = 1;
+}
+
+message SearchRequest {
+  string keyword = 1;
 }
 

@@ -15,6 +15,7 @@ type CourseRepository interface {
 	UpdateCourse(ctx context.Context, id int64, name, description string) (*models.Course, error)
 	DeleteCourse(ctx context.Context, id int64) (bool, error)
 	GetCoursesByInstructor(ctx context.Context, instructorID int64) ([]*models.Course, error)
+	SearchCourses(ctx context.Context, keyword string) ([]*models.Course, error)
 }
 
 type courseRepository struct {
@@ -120,6 +121,31 @@ func (r *courseRepository) GetCoursesByInstructor(ctx context.Context, instructo
     `
 
 	rows, err := r.db.Query(ctx, query, instructorID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var courses []*models.Course
+	for rows.Next() {
+		var course models.Course
+		if err := rows.Scan(&course.ID, &course.Name, &course.Description, &course.InstructorID); err != nil {
+			return nil, err
+		}
+		courses = append(courses, &course)
+	}
+
+	return courses, nil
+}
+
+func (r *courseRepository) SearchCourses(ctx context.Context, keyword string) ([]*models.Course, error) {
+	query := `
+        SELECT id, name, description, instructor_id
+        FROM courses
+        WHERE name ILIKE $1 OR description ILIKE $1;
+    `
+
+	rows, err := r.db.Query(ctx, query, "%"+keyword+"%")
 	if err != nil {
 		return nil, err
 	}
