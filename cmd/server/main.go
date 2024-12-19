@@ -2,31 +2,41 @@ package main
 
 import (
 	"GoEdu/internal/config"
+	"GoEdu/internal/logger"
 	"GoEdu/internal/middleware"
 	"GoEdu/internal/repository"
 	"GoEdu/internal/service"
 	"GoEdu/proto"
-	"log"
 	"net"
 
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
 func main() {
+	zapLogger, err := logger.NewLogger()
+	if err != nil {
+		panic("Не удалось инициализировать логгер: " + err.Error())
+	}
+	defer zapLogger.Sync()
+	zapLogger.Info("Инициализация сервера")
+
 	loader := &config.EnvConfigLoader{}
 	cfg := config.NewConfig(loader)
 
+	zapLogger.Info("Настройка подключения к базе данных")
 	dbConfig := repository.Config{
 		ConnectionString: cfg.DatabaseURL,
 	}
 	dbpool, err := repository.NewDBPool(dbConfig)
 	if err != nil {
-		log.Fatalf("Не удалось подключиться к базе данных: %v", err)
+		zapLogger.Fatal("Не удалось подключиться к базе данных", zap.Error(err))
 	}
 	defer dbpool.Close()
+	zapLogger.Info("Успешное подключение к базе данных")
 
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(middleware.AuthInterceptor([]byte(cfg.JWTSecretKey))),
+		grpc.UnaryInterceptor(middleware.AuthInterceptor([]byte(cfg.JWTSecretKey), zapLogger)),
 	)
 
 	// Репозитории
@@ -38,12 +48,12 @@ func main() {
 	reviewRepo := repository.NewReviewRepository(dbpool)
 
 	// Сервисы
-	enrollmentService := service.NewEnrollmentService(enrollmentRepo)
-	educationService := service.NewEducationService(courseRepo)
-	studentService := service.NewStudentService(studentRepo, cfg)
-	lectureService := service.NewLectureService(lectureRepo)
-	instructorService := service.NewInstructorService(instructorRepo, cfg)
-	reviewService := service.NewReviewService(reviewRepo)
+	enrollmentService := service.NewEnrollmentService(enrollmentRepo, zapLogger)
+	educationService := service.NewEducationService(dbpool, courseRepo, zapLogger)
+	studentService := service.NewStudentService(studentRepo, cfg, zapLogger)
+	lectureService := service.NewLectureService(lectureRepo, zapLogger)
+	instructorService := service.NewInstructorService(instructorRepo, cfg, zapLogger)
+	reviewService := service.NewReviewService(reviewRepo, zapLogger)
 
 	// Регистрация сервисов
 	proto.RegisterEducationServiceServer(grpcServer, educationService)
@@ -53,14 +63,13 @@ func main() {
 	proto.RegisterInstructorServiceServer(grpcServer, instructorService)
 	proto.RegisterReviewServiceServer(grpcServer, reviewService)
 
-	// Запуск сервера
 	listener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {
-		log.Fatalf("Не удалось запустить сервер: %v", err)
+		zapLogger.Fatal("Не удалось запустить сервер", zap.Error(err))
 	}
 
-	log.Printf("gRPC сервер запущен на :%s\n", cfg.GRPCPort)
+	zapLogger.Info("gRPC сервер запущен", zap.String("порт", cfg.GRPCPort))
 	if err := grpcServer.Serve(listener); err != nil {
-		log.Fatalf("Ошибка запуска сервера: %v", err)
+		zapLogger.Fatal("Ошибка запуска сервера", zap.Error(err))
 	}
 }

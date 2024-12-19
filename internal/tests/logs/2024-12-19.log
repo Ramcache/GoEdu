@@ -1,0 +1,199 @@
+{"level":"INFO","time":"2024-12-19T14:46:01.335+0300","caller":"tests/education_test.go:35","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T14:46:01.346+0300","caller":"tests/education_test.go:46","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"FATAL","time":"2024-12-19T14:46:01.348+0300","caller":"tests/education_test.go:50","msg":"Не удалось запустить сервер","error":"listen tcp :50051: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted."}
+{"level":"INFO","time":"2024-12-19T14:46:19.752+0300","caller":"tests/education_test.go:35","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T14:46:19.761+0300","caller":"tests/education_test.go:46","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T14:46:20.019+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T14:46:20.025+0300","caller":"service/education_service.go:47","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T14:46:20.035+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T14:46:20.035+0300","caller":"service/education_service.go:31","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T14:46:20.035+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T14:46:20.039+0300","caller":"service/education_service.go:43","msg":"Ошибка при создании курса","error":"курс с таким названием уже существует"}
+{"level":"INFO","time":"2024-12-19T14:46:20.040+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T14:46:20.041+0300","caller":"service/education_service.go:43","msg":"Ошибка при создании курса","error":"ОШИБКА: новая строка в отношении \"courses\" нарушает ограничение-проверку \"courses_name_not_empty\" (SQLSTATE 23514)"}
+{"level":"INFO","time":"2024-12-19T14:46:20.042+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T14:46:20.042+0300","caller":"service/education_service.go:43","msg":"Ошибка при создании курса","error":"ОШИБКА: новая строка в отношении \"courses\" нарушает ограничение-проверку \"courses_description_not_empty\" (SQLSTATE 23514)"}
+{"level":"INFO","time":"2024-12-19T14:50:53.985+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T14:50:53.998+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T14:51:05.573+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T14:51:05.586+0300","caller":"service/education_service.go:47","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T14:51:05.597+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T14:51:05.597+0300","caller":"service/education_service.go:31","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T14:51:05.597+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T14:51:05.602+0300","caller":"service/education_service.go:43","msg":"Ошибка при создании курса","error":"курс с таким названием уже существует"}
+{"level":"INFO","time":"2024-12-19T14:51:05.603+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T14:51:05.604+0300","caller":"service/education_service.go:43","msg":"Ошибка при создании курса","error":"ОШИБКА: новая строка в отношении \"courses\" нарушает ограничение-проверку \"courses_name_not_empty\" (SQLSTATE 23514)"}
+{"level":"INFO","time":"2024-12-19T14:51:05.606+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T14:51:05.607+0300","caller":"service/education_service.go:43","msg":"Ошибка при создании курса","error":"ОШИБКА: новая строка в отношении \"courses\" нарушает ограничение-проверку \"courses_description_not_empty\" (SQLSTATE 23514)"}
+{"level":"INFO","time":"2024-12-19T14:55:19.081+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T14:55:19.092+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T14:55:30.605+0300","caller":"service/education_service.go:30","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T14:55:30.615+0300","caller":"service/education_service.go:66","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T14:56:16.688+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T14:56:16.699+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T14:56:28.272+0300","caller":"service/education_service.go:30","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T14:56:28.277+0300","caller":"service/education_service.go:66","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T14:56:28.285+0300","caller":"service/education_service.go:30","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T14:56:28.285+0300","caller":"service/education_service.go:33","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T14:56:28.286+0300","caller":"service/education_service.go:30","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T14:56:28.290+0300","caller":"service/education_service.go:62","msg":"Ошибка при создании курса","error":"курс с таким названием уже существует"}
+{"level":"INFO","time":"2024-12-19T14:56:28.291+0300","caller":"service/education_service.go:30","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T14:56:28.291+0300","caller":"service/education_service.go:38","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T14:56:28.292+0300","caller":"service/education_service.go:30","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T14:56:28.292+0300","caller":"service/education_service.go:43","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T14:56:48.055+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T14:56:48.063+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T14:56:59.526+0300","caller":"service/education_service.go:30","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T14:56:59.531+0300","caller":"service/education_service.go:66","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:01:15.425+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:01:15.434+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:01:26.883+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:01:26.889+0300","caller":"service/education_service.go:62","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:02:08.469+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:02:08.476+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:02:19.912+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:02:19.917+0300","caller":"service/education_service.go:62","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:06:59.227+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:06:59.234+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:07:10.705+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:07:10.711+0300","caller":"service/education_service.go:67","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:08:21.500+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:08:21.512+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:08:32.948+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:08:32.955+0300","caller":"service/education_service.go:67","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:08:32.964+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T15:08:32.964+0300","caller":"service/education_service.go:32","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T15:08:32.964+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T15:08:32.965+0300","caller":"service/education_service.go:62","msg":"Ошибка при создании курса","error":"курс с таким названием уже существует"}
+{"level":"INFO","time":"2024-12-19T15:08:32.966+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:08:32.966+0300","caller":"service/education_service.go:37","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T15:08:32.966+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:08:32.966+0300","caller":"service/education_service.go:42","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T15:10:40.657+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:10:40.665+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:10:52.128+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:10:52.134+0300","caller":"service/education_service.go:67","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:10:52.137+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T15:10:52.137+0300","caller":"service/education_service.go:32","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T15:10:52.137+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T15:10:52.138+0300","caller":"service/education_service.go:62","msg":"Ошибка при создании курса","error":"курс с таким названием уже существует"}
+{"level":"INFO","time":"2024-12-19T15:10:52.139+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:10:52.140+0300","caller":"service/education_service.go:37","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T15:10:52.140+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:10:52.140+0300","caller":"service/education_service.go:42","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T15:11:39.864+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:11:39.872+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:11:51.337+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:11:51.344+0300","caller":"service/education_service.go:67","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:16:23.742+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:16:23.750+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:16:35.291+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:16:35.299+0300","caller":"service/education_service.go:68","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:16:35.305+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T15:16:35.305+0300","caller":"service/education_service.go:32","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T15:16:35.306+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:18:44.231+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:18:44.244+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:18:55.827+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:18:55.834+0300","caller":"service/education_service.go:68","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:18:55.836+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T15:18:55.837+0300","caller":"service/education_service.go:31","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T15:18:55.837+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:18:55.838+0300","caller":"service/education_service.go:60","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-19T15:18:55.839+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:18:55.839+0300","caller":"service/education_service.go:36","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T15:18:55.840+0300","caller":"service/education_service.go:28","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:18:55.840+0300","caller":"service/education_service.go:41","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T15:20:40.781+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:20:40.790+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:20:52.232+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:20:52.238+0300","caller":"service/education_service.go:67","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:20:52.241+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T15:20:52.241+0300","caller":"service/education_service.go:32","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T15:20:52.242+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:20:52.243+0300","caller":"service/education_service.go:55","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-19T15:20:52.244+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:20:52.244+0300","caller":"service/education_service.go:37","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T15:20:52.245+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:20:52.245+0300","caller":"service/education_service.go:42","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T15:28:47.260+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:28:47.269+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:28:58.745+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:29:41.276+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:29:41.287+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:29:52.759+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:32:20.252+0300","caller":"tests/education_test.go:41","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:32:20.267+0300","caller":"tests/education_test.go:52","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"FATAL","time":"2024-12-19T15:32:30.272+0300","caller":"tests/education_test.go:78","msg":"Не удалось запустить сервер за 10 секунд"}
+{"level":"INFO","time":"2024-12-19T15:32:39.718+0300","caller":"tests/education_test.go:41","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:32:39.726+0300","caller":"tests/education_test.go:52","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"FATAL","time":"2024-12-19T15:32:49.728+0300","caller":"tests/education_test.go:78","msg":"Не удалось запустить сервер за 10 секунд"}
+{"level":"INFO","time":"2024-12-19T15:33:39.355+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:33:39.370+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:33:50.972+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:33:50.979+0300","caller":"service/education_service.go:67","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:33:50.983+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T15:33:50.983+0300","caller":"service/education_service.go:32","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T15:33:50.984+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:33:50.985+0300","caller":"service/education_service.go:55","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-19T15:33:50.986+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:33:50.986+0300","caller":"service/education_service.go:37","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T15:33:50.987+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:33:50.987+0300","caller":"service/education_service.go:42","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T15:34:11.702+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:34:11.714+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:34:23.267+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:36:00.993+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:36:01.006+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:36:12.564+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:37:51.443+0300","caller":"tests/education_test.go:41","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:37:51.455+0300","caller":"tests/education_test.go:52","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:38:04.000+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:38:34.717+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T15:38:34.726+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T15:38:46.301+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T15:38:46.306+0300","caller":"service/education_service.go:67","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T15:38:46.308+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T15:38:46.308+0300","caller":"service/education_service.go:32","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T15:38:46.309+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:38:46.310+0300","caller":"service/education_service.go:55","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-19T15:38:46.310+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:38:46.310+0300","caller":"service/education_service.go:37","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T15:38:46.311+0300","caller":"service/education_service.go:29","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T15:38:46.311+0300","caller":"service/education_service.go:42","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T16:08:08.805+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T16:08:08.815+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T16:08:20.283+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T16:08:20.450+0300","caller":"service/education_service.go:79","msg":"Не удалось зафиксировать транзакцию","error":"tx is closed"}
+{"level":"INFO","time":"2024-12-19T16:08:20.452+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T16:08:20.452+0300","caller":"service/education_service.go:36","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T16:08:20.453+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:08:20.456+0300","caller":"service/education_service.go:66","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-19T16:08:20.458+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:08:20.458+0300","caller":"service/education_service.go:41","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T16:08:20.458+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:08:20.458+0300","caller":"service/education_service.go:46","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T16:10:20.656+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T16:10:20.668+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T16:10:32.273+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"ERROR","time":"2024-12-19T16:10:32.481+0300","caller":"service/education_service.go:90","msg":"Не удалось зафиксировать транзакцию","error":"tx is closed"}
+{"level":"INFO","time":"2024-12-19T16:10:32.482+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T16:10:32.482+0300","caller":"service/education_service.go:37","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T16:10:32.483+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:10:32.487+0300","caller":"service/education_service.go:76","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-19T16:10:32.488+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:10:32.488+0300","caller":"service/education_service.go:42","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T16:10:32.489+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:10:32.489+0300","caller":"service/education_service.go:47","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-19T16:13:11.794+0300","caller":"tests/education_test.go:40","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-19T16:13:11.803+0300","caller":"tests/education_test.go:51","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-19T16:13:23.270+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-19T16:13:23.438+0300","caller":"service/education_service.go:88","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-19T16:13:23.446+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-19T16:13:23.446+0300","caller":"service/education_service.go:36","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-19T16:13:23.447+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:13:23.451+0300","caller":"service/education_service.go:71","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-19T16:13:23.452+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:13:23.452+0300","caller":"service/education_service.go:41","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-19T16:13:23.452+0300","caller":"service/education_service.go:33","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-19T16:13:23.452+0300","caller":"service/education_service.go:46","msg":"Пустое описание курса"}

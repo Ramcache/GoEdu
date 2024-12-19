@@ -11,7 +11,7 @@ import (
 )
 
 type CourseRepository interface {
-	CreateCourse(ctx context.Context, course *models.Course) (int, error)
+	CreateCourse(ctx context.Context, course *models.Course, tx pgx.Tx) (int, error)
 	GetAllCourses(ctx context.Context) ([]*models.Course, error)
 	GetCourseByID(ctx context.Context, id int64) (*models.Course, error)
 	UpdateCourse(ctx context.Context, id int64, name, description string) (*models.Course, error)
@@ -29,14 +29,14 @@ func NewCourseRepository(db *pgxpool.Pool) CourseRepository {
 	return &courseRepository{db: db}
 }
 
-func (r *courseRepository) CreateCourse(ctx context.Context, course *models.Course) (int, error) {
+func (r *courseRepository) CreateCourse(ctx context.Context, course *models.Course, tx pgx.Tx) (int, error) {
 	query := `
         INSERT INTO courses (name, description, instructor_id)
         VALUES ($1, $2, $3)
         RETURNING id;
     `
 	var id int
-	err := r.db.QueryRow(ctx, query, course.Name, course.Description, course.InstructorID).Scan(&id)
+	err := tx.QueryRow(ctx, query, course.Name, course.Description, course.InstructorID).Scan(&id)
 
 	if err != nil {
 		var pgErr *pgconn.PgError

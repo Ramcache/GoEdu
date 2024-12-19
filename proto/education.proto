@@ -2,54 +2,121 @@ syntax = "proto3";
 
 package education;
 
-option go_package = "/proto;proto";
+option go_package = "GoEdu/proto;proto";
 
+// Service for managing courses in the education system.
 service EducationService {
+
+
+  // Retrieves all available courses.
   rpc GetCourses (Empty) returns (CourseList);
+
+  // Retrieves a specific course by its ID.
   rpc GetCourseByID (CourseIDRequest) returns (Course);
+
+  // Creates a new course.
   rpc CreateCourse (NewCourseRequest) returns (Course);
+
+  // Updates an existing course.
   rpc UpdateCourse (UpdateCourseRequest) returns (Course);
+
+  // Deletes a course by its ID.
   rpc DeleteCourse (CourseIDRequest) returns (Empty);
+
+  // Searches for courses by keyword.
   rpc SearchCourses (SearchRequest) returns (CourseList);
 }
 
+// Service for managing students.
 service StudentService {
+  // Registers a new student.
   rpc RegisterStudent (RegisterStudentRequest) returns (Student);
+
+  // Authenticates a student.
   rpc LoginStudent (LoginRequest) returns (AuthResponse);
+
+  // Retrieves the profile of a student.
   rpc GetStudentProfile (StudentIDRequest) returns (Student);
+
+  // Updates the profile of a student.
   rpc UpdateStudentProfile (UpdateStudentRequest) returns (Student);
 }
 
+// Service for managing enrollments.
 service EnrollmentService {
+  // Enrolls a student in a course.
   rpc EnrollStudent (EnrollmentRequest) returns (Empty);
+
+  // Retrieves all students in a course.
   rpc GetStudentsByCourse (CourseIDRequest) returns (StudentList);
+
+  // Retrieves all courses for a student.
   rpc GetCoursesByStudent (StudentIDRequest) returns (CourseList);
+
+  // Unenrolls a student from a course.
   rpc UnEnrollStudent (EnrollmentRequest) returns (Empty);
 }
 
+// Service for managing lectures in courses.
 service LectureService {
+  // Adds a lecture to a course.
   rpc AddLectureToCourse (LectureRequest) returns (Lecture);
+
+  // Retrieves all lectures in a course.
   rpc GetLecturesByCourse (CourseIDRequest) returns (LectureList);
+
+  // Retrieves the content of a specific lecture.
   rpc GetLectureContent (LectureIDRequest) returns (LectureContent);
+
+  // Updates an existing lecture.
   rpc UpdateLecture (UpdateLectureRequest) returns (Lecture);
+
+  // Deletes a lecture by its ID.
   rpc DeleteLecture (LectureIDRequest) returns (Empty);
+
+  // Marks a lecture as completed by a student.
   rpc MarkLectureAsCompleted (LectureCompletionRequest) returns (Empty);
+
+  // Retrieves the progress of a student in a course.
   rpc GetCourseProgress (CourseProgressRequest) returns (CourseProgress);
+
+  // Retrieves recommended courses for a student.
   rpc GetRecommendedCourses (StudentIDRequest) returns (CourseList);
 }
 
+// Service for managing instructors.
 service InstructorService {
+  // Registers a new instructor.
   rpc RegisterInstructor (RegisterInstructorRequest) returns (Instructor);
+
+  // Retrieves all courses managed by an instructor.
   rpc GetCoursesByInstructor (InstructorIDRequest) returns (CourseList);
 }
 
-service ReviewService{
+// Service for managing reviews for courses.
+service ReviewService {
+  // Adds a review to a course.
   rpc AddReviewToCourse (ReviewRequest) returns (Empty);
+
+  // Retrieves all reviews for a course.
   rpc GetReviewsByCourse (CourseIDRequest) returns (ReviewList);
 }
 
+// Health check service to monitor server status.
+service HealthService {
+  // Checks the health of the server.
+  rpc Check (Empty) returns (HealthCheckResponse);
+}
+
+// Common message for empty responses.
 message Empty {}
 
+// Message for health check response.
+message HealthCheckResponse {
+  bool status = 1; // True if healthy, false otherwise.
+}
+
+// Course-related messages.
 message Course {
   int64 id = 1;
   string name = 2;
@@ -61,7 +128,7 @@ message CourseList {
   repeated Course courses = 1;
 }
 
-message CourseIDRequest{
+message CourseIDRequest {
   int64 course_id = 1;
 }
 
@@ -77,6 +144,7 @@ message UpdateCourseRequest {
   string description = 3;
 }
 
+// Student-related messages.
 message RegisterStudentRequest {
   string name = 1;
   string email = 2;
@@ -113,6 +181,7 @@ message UpdateStudentRequest {
   string password = 4;
 }
 
+// Enrollment-related messages.
 message EnrollmentRequest {
   int64 student_id = 1;
   int64 course_id = 2;
@@ -122,6 +191,7 @@ message StudentList {
   repeated Student students = 1;
 }
 
+// Lecture-related messages.
 message LectureRequest {
   int64 course_id = 1;
   string title = 2;
@@ -172,6 +242,7 @@ message CourseProgress {
   int32 completed_percent = 3;
 }
 
+// Instructor-related messages.
 message RegisterInstructorRequest {
   string name = 1;
   string email = 2;
@@ -189,6 +260,7 @@ message InstructorIDRequest {
   int64 instructor_id = 1;
 }
 
+// Review-related messages.
 message ReviewRequest {
   int64 student_id = 1;
   int64 course_id = 2;
@@ -209,6 +281,7 @@ message ReviewList {
   repeated Review reviews = 1;
 }
 
+// Search-related messages.
 message SearchRequest {
   string keyword = 1;
 }
