@@ -19,13 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	EducationService_GetCourses_FullMethodName               = "/education.EducationService/GetCourses"
-	EducationService_GetCourseByID_FullMethodName            = "/education.EducationService/GetCourseByID"
-	EducationService_CreateCourse_FullMethodName             = "/education.EducationService/CreateCourse"
-	EducationService_UpdateCourse_FullMethodName             = "/education.EducationService/UpdateCourse"
-	EducationService_DeleteCourse_FullMethodName             = "/education.EducationService/DeleteCourse"
-	EducationService_CreateCourseByInstructor_FullMethodName = "/education.EducationService/CreateCourseByInstructor"
-	EducationService_SearchCourses_FullMethodName            = "/education.EducationService/SearchCourses"
+	EducationService_GetCourses_FullMethodName    = "/education.EducationService/GetCourses"
+	EducationService_GetCourseByID_FullMethodName = "/education.EducationService/GetCourseByID"
+	EducationService_CreateCourse_FullMethodName  = "/education.EducationService/CreateCourse"
+	EducationService_UpdateCourse_FullMethodName  = "/education.EducationService/UpdateCourse"
+	EducationService_DeleteCourse_FullMethodName  = "/education.EducationService/DeleteCourse"
+	EducationService_SearchCourses_FullMethodName = "/education.EducationService/SearchCourses"
 )
 
 // EducationServiceClient is the client API for EducationService service.
@@ -37,7 +36,6 @@ type EducationServiceClient interface {
 	CreateCourse(ctx context.Context, in *NewCourseRequest, opts ...grpc.CallOption) (*Course, error)
 	UpdateCourse(ctx context.Context, in *UpdateCourseRequest, opts ...grpc.CallOption) (*Course, error)
 	DeleteCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*Empty, error)
-	CreateCourseByInstructor(ctx context.Context, in *InstructorCourseRequest, opts ...grpc.CallOption) (*Course, error)
 	SearchCourses(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*CourseList, error)
 }
 
@@ -99,16 +97,6 @@ func (c *educationServiceClient) DeleteCourse(ctx context.Context, in *CourseIDR
 	return out, nil
 }
 
-func (c *educationServiceClient) CreateCourseByInstructor(ctx context.Context, in *InstructorCourseRequest, opts ...grpc.CallOption) (*Course, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Course)
-	err := c.cc.Invoke(ctx, EducationService_CreateCourseByInstructor_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *educationServiceClient) SearchCourses(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*CourseList, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CourseList)
@@ -128,7 +116,6 @@ type EducationServiceServer interface {
 	CreateCourse(context.Context, *NewCourseRequest) (*Course, error)
 	UpdateCourse(context.Context, *UpdateCourseRequest) (*Course, error)
 	DeleteCourse(context.Context, *CourseIDRequest) (*Empty, error)
-	CreateCourseByInstructor(context.Context, *InstructorCourseRequest) (*Course, error)
 	SearchCourses(context.Context, *SearchRequest) (*CourseList, error)
 	mustEmbedUnimplementedEducationServiceServer()
 }
@@ -154,9 +141,6 @@ func (UnimplementedEducationServiceServer) UpdateCourse(context.Context, *Update
 }
 func (UnimplementedEducationServiceServer) DeleteCourse(context.Context, *CourseIDRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCourse not implemented")
-}
-func (UnimplementedEducationServiceServer) CreateCourseByInstructor(context.Context, *InstructorCourseRequest) (*Course, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateCourseByInstructor not implemented")
 }
 func (UnimplementedEducationServiceServer) SearchCourses(context.Context, *SearchRequest) (*CourseList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchCourses not implemented")
@@ -272,24 +256,6 @@ func _EducationService_DeleteCourse_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EducationService_CreateCourseByInstructor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstructorCourseRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(EducationServiceServer).CreateCourseByInstructor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: EducationService_CreateCourseByInstructor_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EducationServiceServer).CreateCourseByInstructor(ctx, req.(*InstructorCourseRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _EducationService_SearchCourses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SearchRequest)
 	if err := dec(in); err != nil {
@@ -334,10 +300,6 @@ var EducationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCourse",
 			Handler:    _EducationService_DeleteCourse_Handler,
-		},
-		{
-			MethodName: "CreateCourseByInstructor",
-			Handler:    _EducationService_CreateCourseByInstructor_Handler,
 		},
 		{
 			MethodName: "SearchCourses",

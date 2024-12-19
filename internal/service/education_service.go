@@ -21,20 +21,26 @@ func NewEducationService(courseRepo repository.CourseRepository) *EducationServi
 }
 
 func (s *EducationService) CreateCourse(ctx context.Context, req *proto.NewCourseRequest) (*proto.Course, error) {
+	if req.InstructorId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "ID преподавателя должен быть указан")
+	}
+
 	course := &models.Course{
-		Name:        req.Name,
-		Description: req.Description,
+		Name:         req.Name,
+		Description:  req.Description,
+		InstructorID: req.InstructorId,
 	}
 
 	id, err := s.courseRepo.CreateCourse(ctx, course)
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "Ошибка при создании курса: %v", err)
 	}
 
 	return &proto.Course{
-		Id:          int64(id),
-		Name:        course.Name,
-		Description: course.Description,
+		Id:           int64(id),
+		Name:         course.Name,
+		Description:  course.Description,
+		InstructorId: course.InstructorID,
 	}, nil
 }
 
@@ -101,30 +107,6 @@ func (s *EducationService) DeleteCourse(ctx context.Context, req *proto.CourseID
 	}
 
 	return &proto.Empty{}, nil
-}
-
-func (s *EducationService) CreateCourseByInstructor(ctx context.Context, req *proto.InstructorCourseRequest) (*proto.Course, error) {
-	if req.InstructorId == 0 || req.Name == "" || req.Description == "" {
-		return nil, status.Errorf(codes.InvalidArgument, "ID преподавателя, название и описание курса должны быть указаны")
-	}
-
-	course := &models.Course{
-		Name:         req.Name,
-		Description:  req.Description,
-		InstructorID: req.InstructorId,
-	}
-
-	courseID, err := s.courseRepo.CreateCourse(ctx, course)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Ошибка при создании курса: %v", err)
-	}
-
-	return &proto.Course{
-		Id:           int64(courseID),
-		Name:         req.Name,
-		Description:  req.Description,
-		InstructorId: req.InstructorId,
-	}, nil
 }
 
 func (s *EducationService) GetCoursesByInstructor(ctx context.Context, req *proto.InstructorIDRequest) (*proto.CourseList, error) {

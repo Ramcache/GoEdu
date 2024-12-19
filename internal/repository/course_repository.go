@@ -4,7 +4,9 @@ import (
 	"GoEdu/internal/models"
 	"context"
 	"errors"
+	"fmt"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -29,20 +31,32 @@ func NewCourseRepository(db *pgxpool.Pool) CourseRepository {
 
 func (r *courseRepository) CreateCourse(ctx context.Context, course *models.Course) (int, error) {
 	query := `
-        INSERT INTO courses (name, description)
-        VALUES ($1, $2)
+        INSERT INTO courses (name, description, instructor_id)
+        VALUES ($1, $2, $3)
         RETURNING id;
     `
 	var id int
-	err := r.db.QueryRow(ctx, query, course.Name, course.Description).Scan(&id)
+	err := r.db.QueryRow(ctx, query, course.Name, course.Description, course.InstructorID).Scan(&id)
+
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			switch pgErr.Code {
+			case "23503":
+				return 0, fmt.Errorf("преподаватель с ID %d не существует", course.InstructorID)
+			case "23505":
+				return 0, fmt.Errorf("курс с таким названием уже существует")
+			}
+		}
 		return 0, err
 	}
+
 	return id, nil
 }
 
 func (r *courseRepository) GetAllCourses(ctx context.Context) ([]*models.Course, error) {
-	query := `SELECT id, name, description FROM courses;`
+	query := `SELECT id, name, description, instructor_id FROM courses;`
+
 	rows, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
@@ -52,10 +66,9 @@ func (r *courseRepository) GetAllCourses(ctx context.Context) ([]*models.Course,
 	var courses []*models.Course
 	for rows.Next() {
 		var course models.Course
-		if err := rows.Scan(&course.ID, &course.Name, &course.Description); err != nil {
+		if err := rows.Scan(&course.ID, &course.Name, &course.Description, &course.InstructorID); err != nil {
 			return nil, err
 		}
-		courses = append(courses, &course)
 	}
 	return courses, nil
 }

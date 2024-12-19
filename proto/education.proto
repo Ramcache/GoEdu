@@ -4,14 +4,12 @@ package education;
 
 option go_package = "/proto;proto";
 
-
 service EducationService {
   rpc GetCourses (Empty) returns (CourseList);
   rpc GetCourseByID (CourseIDRequest) returns (Course);
   rpc CreateCourse (NewCourseRequest) returns (Course);
   rpc UpdateCourse (UpdateCourseRequest) returns (Course);
   rpc DeleteCourse (CourseIDRequest) returns (Empty);
-  rpc CreateCourseByInstructor (InstructorCourseRequest) returns (Course);
   rpc SearchCourses (SearchRequest) returns (CourseList);
 }
 
@@ -70,6 +68,7 @@ message CourseIDRequest{
 message NewCourseRequest {
   string name = 1;
   string description = 2;
+  int64 instructor_id = 3;
 }
 
 message UpdateCourseRequest {
@@ -103,7 +102,6 @@ message AuthResponse {
   string token = 4;
 }
 
-
 message StudentIDRequest {
   int64 id = 1;
 }
@@ -123,7 +121,6 @@ message EnrollmentRequest {
 message StudentList {
   repeated Student students = 1;
 }
-
 
 message LectureRequest {
   int64 course_id = 1;
@@ -188,13 +185,6 @@ message Instructor {
   string token = 4;
 }
 
-
-message InstructorCourseRequest {
-  int64 instructor_id = 1;
-  string name = 2;
-  string description = 3;
-}
-
 message InstructorIDRequest {
   int64 instructor_id = 1;
 }
@@ -222,4 +212,3 @@ message ReviewList {
 message SearchRequest {
   string keyword = 1;
 }
-
