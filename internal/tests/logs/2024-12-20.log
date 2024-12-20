@@ -210,3 +210,49 @@
 {"level":"WARN","time":"2024-12-20T13:50:10.534+0300","caller":"service/education_service.go:230","msg":"Пустое ключевое слово для поиска"}
 {"level":"INFO","time":"2024-12-20T13:50:10.536+0300","caller":"service/education_service.go:227","msg":"Поиск курсов","keyword":"Python"}
 {"level":"INFO","time":"2024-12-20T13:50:10.536+0300","caller":"service/education_service.go:250","msg":"Курсы успешно найдены","count":0}
+{"level":"INFO","time":"2024-12-20T13:57:44.071+0300","caller":"tests/educations_test.go:44","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T13:57:44.085+0300","caller":"tests/educations_test.go:55","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T13:58:58.936+0300","caller":"tests/educations_test.go:44","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T13:58:58.951+0300","caller":"tests/educations_test.go:55","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:03:51.079+0300","caller":"tests/educations_test.go:44","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:03:51.092+0300","caller":"tests/educations_test.go:55","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:06:26.376+0300","caller":"tests/educations_test.go:44","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:06:26.384+0300","caller":"tests/educations_test.go:55","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:06:37.839+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:06:37.846+0300","caller":"service/enrollments_service.go:40","msg":"Студент успешно записан на курс","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:06:37.856+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":0,"course_id":1}
+{"level":"WARN","time":"2024-12-20T14:06:37.856+0300","caller":"service/enrollments_service.go:30","msg":"Некорректные данные для записи на курс","student_id":0,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:06:37.857+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":0}
+{"level":"WARN","time":"2024-12-20T14:06:37.857+0300","caller":"service/enrollments_service.go:30","msg":"Некорректные данные для записи на курс","student_id":1,"course_id":0}
+{"level":"INFO","time":"2024-12-20T14:06:37.857+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":99}
+{"level":"ERROR","time":"2024-12-20T14:06:37.866+0300","caller":"service/enrollments_service.go:36","msg":"Ошибка при записи студента на курс","error":"ОШИБКА: INSERT или UPDATE в таблице \"enrollments\" нарушает ограничение внешнего ключа \"enrollments_course_id_fkey\" (SQLSTATE 23503)","student_id":1,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:06:37.866+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":99,"course_id":1}
+{"level":"ERROR","time":"2024-12-20T14:06:37.867+0300","caller":"service/enrollments_service.go:36","msg":"Ошибка при записи студента на курс","error":"ОШИБКА: INSERT или UPDATE в таблице \"enrollments\" нарушает ограничение внешнего ключа \"enrollments_student_id_fkey\" (SQLSTATE 23503)","student_id":99,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:14:39.452+0300","caller":"tests/main_test.go:43","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:14:39.467+0300","caller":"tests/main_test.go:54","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:14:40.019+0300","caller":"service/enrollments_service.go:45","msg":"Получение студентов по курсу","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:14:40.023+0300","caller":"service/enrollments_service.go:68","msg":"Студенты успешно получены","count":2,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:14:40.024+0300","caller":"service/enrollments_service.go:45","msg":"Получение студентов по курсу","course_id":99}
+{"level":"INFO","time":"2024-12-20T14:14:40.024+0300","caller":"service/enrollments_service.go:68","msg":"Студенты успешно получены","count":0,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:14:40.025+0300","caller":"service/enrollments_service.go:45","msg":"Получение студентов по курсу","course_id":0}
+{"level":"WARN","time":"2024-12-20T14:14:40.025+0300","caller":"service/enrollments_service.go:48","msg":"Некорректный ID курса","course_id":0}
+{"level":"INFO","time":"2024-12-20T14:16:44.697+0300","caller":"tests/main_test.go:43","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:16:44.706+0300","caller":"tests/main_test.go:54","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:16:45.054+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:16:45.058+0300","caller":"service/enrollments_service.go:86","msg":"Студент успешно удалён с курса","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:16:45.067+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":0,"course_id":1}
+{"level":"WARN","time":"2024-12-20T14:16:45.068+0300","caller":"service/enrollments_service.go:76","msg":"Некорректные данные для удаления с курса","student_id":0,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:16:45.068+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":1,"course_id":0}
+{"level":"WARN","time":"2024-12-20T14:16:45.068+0300","caller":"service/enrollments_service.go:76","msg":"Некорректные данные для удаления с курса","student_id":1,"course_id":0}
+{"level":"INFO","time":"2024-12-20T14:16:45.069+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":99,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:16:45.069+0300","caller":"service/enrollments_service.go:86","msg":"Студент успешно удалён с курса","student_id":99,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:16:45.070+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":1,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:16:45.070+0300","caller":"service/enrollments_service.go:86","msg":"Студент успешно удалён с курса","student_id":1,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:19:52.625+0300","caller":"tests/main_test.go:43","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:19:52.635+0300","caller":"tests/main_test.go:54","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:19:53.037+0300","caller":"service/enrollments_service.go:91","msg":"Получение курсов для студента","student_id":1}
+{"level":"INFO","time":"2024-12-20T14:19:53.041+0300","caller":"service/enrollments_service.go:113","msg":"Курсы успешно получены","count":2,"student_id":1}
+{"level":"INFO","time":"2024-12-20T14:19:53.042+0300","caller":"service/enrollments_service.go:91","msg":"Получение курсов для студента","student_id":99}
+{"level":"INFO","time":"2024-12-20T14:19:53.046+0300","caller":"service/enrollments_service.go:113","msg":"Курсы успешно получены","count":0,"student_id":99}
+{"level":"INFO","time":"2024-12-20T14:19:53.046+0300","caller":"service/enrollments_service.go:91","msg":"Получение курсов для студента","student_id":0}
+{"level":"WARN","time":"2024-12-20T14:19:53.046+0300","caller":"service/enrollments_service.go:94","msg":"Некорректный ID студента","student_id":0}
