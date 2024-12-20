@@ -508,3 +508,31 @@
 {"level":"INFO","time":"2024-12-20T15:19:53.648+0300","caller":"service/review_service.go:70","msg":"Отзывы успешно получены","count":0,"course_id":99}
 {"level":"INFO","time":"2024-12-20T15:19:53.648+0300","caller":"service/review_service.go:45","msg":"Получение отзывов для курса","course_id":0}
 {"level":"WARN","time":"2024-12-20T15:19:53.648+0300","caller":"service/review_service.go:48","msg":"Некорректный ID курса","course_id":0}
+{"level":"INFO","time":"2024-12-20T15:26:01.656+0300","caller":"tests/main_test.go:48","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:26:01.666+0300","caller":"tests/main_test.go:59","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:26:02.074+0300","caller":"service/student_service.go:33","msg":"Регистрация студента началась","email":"student1@domain.com"}
+{"level":"WARN","time":"2024-12-20T15:26:02.076+0300","caller":"service/student_service.go:37","msg":"Студент с таким email уже существует","email":"student1@domain.com"}
+{"level":"INFO","time":"2024-12-20T15:26:02.077+0300","caller":"service/student_service.go:33","msg":"Регистрация студента началась","email":"student1@domain.com"}
+{"level":"WARN","time":"2024-12-20T15:26:02.078+0300","caller":"service/student_service.go:37","msg":"Студент с таким email уже существует","email":"student1@domain.com"}
+{"level":"INFO","time":"2024-12-20T15:26:02.131+0300","caller":"service/student_service.go:75","msg":"Авторизация студента началась","email":"student1@domain.com"}
+{"level":"WARN","time":"2024-12-20T15:26:02.213+0300","caller":"service/student_service.go:85","msg":"Неверный пароль","email":"student1@domain.com"}
+{"level":"INFO","time":"2024-12-20T15:26:02.214+0300","caller":"service/student_service.go:75","msg":"Авторизация студента началась","email":"student1@domain.com"}
+{"level":"WARN","time":"2024-12-20T15:26:02.297+0300","caller":"service/student_service.go:85","msg":"Неверный пароль","email":"student1@domain.com"}
+{"level":"INFO","time":"2024-12-20T15:26:02.299+0300","caller":"service/student_service.go:75","msg":"Авторизация студента началась","email":"unknown@domain.com"}
+{"level":"WARN","time":"2024-12-20T15:26:02.301+0300","caller":"service/student_service.go:79","msg":"Студент не найден","email":"unknown@domain.com"}
+{"level":"INFO","time":"2024-12-20T15:26:02.363+0300","caller":"service/student_service.go:105","msg":"Получение профиля студента","student_id":1}
+{"level":"INFO","time":"2024-12-20T15:26:02.365+0300","caller":"service/student_service.go:118","msg":"Профиль студента успешно получен","student_id":1}
+{"level":"INFO","time":"2024-12-20T15:26:02.367+0300","caller":"service/student_service.go:105","msg":"Получение профиля студента","student_id":99}
+{"level":"WARN","time":"2024-12-20T15:26:02.368+0300","caller":"service/student_service.go:114","msg":"Студент не найден","student_id":99}
+{"level":"INFO","time":"2024-12-20T15:26:02.452+0300","caller":"service/student_service.go:128","msg":"Обновление профиля студента","student_id":1}
+{"level":"INFO","time":"2024-12-20T15:26:02.459+0300","caller":"service/student_service.go:162","msg":"Профиль студента успешно обновлён","student_id":1}
+{"level":"INFO","time":"2024-12-20T15:26:02.460+0300","caller":"service/student_service.go:128","msg":"Обновление профиля студента","student_id":99}
+{"level":"WARN","time":"2024-12-20T15:26:02.461+0300","caller":"service/student_service.go:137","msg":"Студент не найден","student_id":99}
+{"level":"INFO","time":"2024-12-20T15:30:44.728+0300","caller":"tests/main_test.go:48","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:30:44.735+0300","caller":"tests/main_test.go:59","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:30:45.017+0300","caller":"service/student_service.go:75","msg":"Авторизация студента началась","email":"student1@domain.com"}
+{"level":"INFO","time":"2024-12-20T15:33:43.591+0300","caller":"tests/main_test.go:48","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:33:43.601+0300","caller":"tests/main_test.go:59","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:33:43.994+0300","caller":"service/student_service.go:75","msg":"Авторизация студента началась","email":"student1@domain.com"}
+{"level":"INFO","time":"2024-12-20T15:33:44.105+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":1,"email":"student1@domain.com","role":"student","expires_at":"2024-12-21T15:33:44.105+0300"}
+{"level":"INFO","time":"2024-12-20T15:33:44.105+0300","caller":"service/student_service.go:95","msg":"Студент успешно авторизован","student_id":1,"email":"student1@domain.com"}

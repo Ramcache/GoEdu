@@ -82,7 +82,7 @@ func (s *StudentService) LoginStudent(ctx context.Context, req *proto.LoginReque
 
 	err = bcrypt.CompareHashAndPassword([]byte(student.Password), []byte(req.Password))
 	if err != nil {
-		s.logger.Warn("Неверный пароль", zap.String("email", req.Email))
+		// Обработка ошибки, если пароль неверный
 		return nil, status.Errorf(codes.Unauthenticated, "Неверный пароль")
 	}
 
