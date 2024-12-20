@@ -486,3 +486,25 @@
 {"level":"ERROR","time":"2024-12-20T15:10:05.972+0300","caller":"service/lecture_service.go:175","msg":"Ошибка при отметке лекции как завершенной","error":"студент с ID 99 не найден","lecture_id":1,"student_id":99}
 {"level":"INFO","time":"2024-12-20T15:10:05.976+0300","caller":"service/lecture_service.go:166","msg":"Отметка лекции как завершенной","lecture_id":0,"student_id":0}
 {"level":"WARN","time":"2024-12-20T15:10:05.976+0300","caller":"service/lecture_service.go:169","msg":"Некорректные данные для отметки завершения лекции","lecture_id":0,"student_id":0}
+{"level":"INFO","time":"2024-12-20T15:17:12.874+0300","caller":"tests/main_test.go:47","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:17:12.887+0300","caller":"tests/main_test.go:58","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:17:13.372+0300","caller":"service/review_service.go:27","msg":"Добавление отзыва к курсу","student_id":1,"course_id":1,"rating":5}
+{"level":"INFO","time":"2024-12-20T15:17:13.376+0300","caller":"service/review_service.go:40","msg":"Отзыв успешно добавлен","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T15:17:13.376+0300","caller":"service/review_service.go:27","msg":"Добавление отзыва к курсу","student_id":1,"course_id":1,"rating":0}
+{"level":"WARN","time":"2024-12-20T15:17:13.376+0300","caller":"service/review_service.go:30","msg":"Некорректные данные для отзыва","student_id":1,"course_id":1,"rating":0}
+{"level":"INFO","time":"2024-12-20T15:17:13.377+0300","caller":"service/review_service.go:27","msg":"Добавление отзыва к курсу","student_id":1,"course_id":1,"rating":4}
+{"level":"INFO","time":"2024-12-20T15:17:13.378+0300","caller":"service/review_service.go:40","msg":"Отзыв успешно добавлен","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T15:17:13.379+0300","caller":"service/review_service.go:27","msg":"Добавление отзыва к курсу","student_id":0,"course_id":1,"rating":4}
+{"level":"WARN","time":"2024-12-20T15:17:13.379+0300","caller":"service/review_service.go:30","msg":"Некорректные данные для отзыва","student_id":0,"course_id":1,"rating":4}
+{"level":"INFO","time":"2024-12-20T15:17:32.717+0300","caller":"tests/main_test.go:47","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:17:32.725+0300","caller":"tests/main_test.go:58","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:18:47.620+0300","caller":"tests/main_test.go:47","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:18:47.632+0300","caller":"tests/main_test.go:58","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:19:53.332+0300","caller":"tests/main_test.go:47","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:19:53.339+0300","caller":"tests/main_test.go:58","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:19:53.642+0300","caller":"service/review_service.go:45","msg":"Получение отзывов для курса","course_id":1}
+{"level":"INFO","time":"2024-12-20T15:19:53.644+0300","caller":"service/review_service.go:70","msg":"Отзывы успешно получены","count":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T15:19:53.647+0300","caller":"service/review_service.go:45","msg":"Получение отзывов для курса","course_id":99}
+{"level":"INFO","time":"2024-12-20T15:19:53.648+0300","caller":"service/review_service.go:70","msg":"Отзывы успешно получены","count":0,"course_id":99}
+{"level":"INFO","time":"2024-12-20T15:19:53.648+0300","caller":"service/review_service.go:45","msg":"Получение отзывов для курса","course_id":0}
+{"level":"WARN","time":"2024-12-20T15:19:53.648+0300","caller":"service/review_service.go:48","msg":"Некорректный ID курса","course_id":0}
