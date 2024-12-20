@@ -201,3 +201,31 @@ func (s *LectureService) GetCourseProgress(ctx context.Context, req *proto.Cours
 		CompletedPercent: progress,
 	}, nil
 }
+
+func (s *LectureService) GetRecommendedCourses(ctx context.Context, req *proto.StudentIDRequest) (*proto.CourseList, error) {
+	s.logger.Info("Получение рекомендованных курсов", zap.Int64("student_id", req.Id))
+
+	if req.Id == 0 {
+		s.logger.Warn("Некорректный ID студента", zap.Int64("student_id", req.Id))
+		return nil, status.Errorf(codes.InvalidArgument, "ID студента должен быть указан")
+	}
+
+	courses, err := s.lectureRepo.GetRecommendedCourses(ctx, req.Id)
+	if err != nil {
+		s.logger.Error("Ошибка при получении рекомендованных курсов", zap.Error(err), zap.Int64("student_id", req.Id))
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении рекомендованных курсов: %v", err)
+	}
+
+	var grpcCourses []*proto.Course
+	for _, course := range courses {
+		grpcCourses = append(grpcCourses, &proto.Course{
+			Id:           course.ID,
+			Name:         course.Name,
+			Description:  course.Description,
+			InstructorId: course.InstructorID,
+		})
+	}
+
+	s.logger.Info("Рекомендованные курсы успешно получены", zap.Int("count", len(grpcCourses)), zap.Int64("student_id", req.Id))
+	return &proto.CourseList{Courses: grpcCourses}, nil
+}

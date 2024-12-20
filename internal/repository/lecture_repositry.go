@@ -18,6 +18,7 @@ type LectureRepository interface {
 	DeleteLecture(ctx context.Context, lectureID int64) error
 	MarkLectureAsCompleted(ctx context.Context, studentID, lectureID int64) error
 	GetCourseProgress(ctx context.Context, studentID, courseID int64) (int32, error)
+	GetRecommendedCourses(ctx context.Context, studentID int64) ([]*models.Course, error)
 }
 
 type lectureRepository struct {
@@ -173,4 +174,35 @@ func (r *lectureRepository) GetCourseProgress(ctx context.Context, studentID, co
 
 	progress := (float64(completedLectures) / float64(totalLectures)) * 100
 	return int32(progress), nil
+}
+
+func (r *lectureRepository) GetRecommendedCourses(ctx context.Context, studentID int64) ([]*models.Course, error) {
+	query := `
+        SELECT DISTINCT c.id, c.name, c.description, c.instructor_id
+        FROM courses c
+        WHERE c.id NOT IN (
+            SELECT e.course_id
+            FROM enrollments e
+            WHERE e.student_id = $1
+        )
+        ORDER BY RANDOM()
+        LIMIT 5;
+    `
+
+	rows, err := r.db.Query(ctx, query, studentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var courses []*models.Course
+	for rows.Next() {
+		var course models.Course
+		if err := rows.Scan(&course.ID, &course.Name, &course.Description, &course.InstructorID); err != nil {
+			return nil, err
+		}
+		courses = append(courses, &course)
+	}
+
+	return courses, nil
 }

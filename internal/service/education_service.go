@@ -223,34 +223,6 @@ func (s *EducationService) DeleteCourse(ctx context.Context, req *proto.CourseID
 	return &proto.Empty{}, nil
 }
 
-func (s *EducationService) GetCoursesByInstructor(ctx context.Context, req *proto.InstructorIDRequest) (*proto.CourseList, error) {
-	s.logger.Info("Получение курсов для преподавателя", zap.Int64("instructor_id", req.InstructorId))
-
-	if req.InstructorId == 0 {
-		s.logger.Warn("Некорректный ID преподавателя", zap.Int64("instructor_id", req.InstructorId))
-		return nil, status.Errorf(codes.InvalidArgument, "ID преподавателя должен быть указан")
-	}
-
-	courses, err := s.courseRepo.GetCoursesByInstructor(ctx, req.InstructorId)
-	if err != nil {
-		s.logger.Error("Ошибка при получении курсов", zap.Error(err), zap.Int64("instructor_id", req.InstructorId))
-		return nil, status.Errorf(codes.Internal, "Ошибка при получении курсов: %v", err)
-	}
-
-	var grpcCourses []*proto.Course
-	for _, course := range courses {
-		grpcCourses = append(grpcCourses, &proto.Course{
-			Id:           course.ID,
-			Name:         course.Name,
-			Description:  course.Description,
-			InstructorId: course.InstructorID,
-		})
-	}
-
-	s.logger.Info("Курсы успешно получены", zap.Int("count", len(grpcCourses)), zap.Int64("instructor_id", req.InstructorId))
-	return &proto.CourseList{Courses: grpcCourses}, nil
-}
-
 func (s *EducationService) SearchCourses(ctx context.Context, req *proto.SearchRequest) (*proto.CourseList, error) {
 	s.logger.Info("Поиск курсов", zap.String("keyword", req.Keyword))
 
@@ -276,33 +248,5 @@ func (s *EducationService) SearchCourses(ctx context.Context, req *proto.SearchR
 	}
 
 	s.logger.Info("Курсы успешно найдены", zap.Int("count", len(grpcCourses)))
-	return &proto.CourseList{Courses: grpcCourses}, nil
-}
-
-func (s *EducationService) GetRecommendedCourses(ctx context.Context, req *proto.StudentIDRequest) (*proto.CourseList, error) {
-	s.logger.Info("Получение рекомендованных курсов", zap.Int64("student_id", req.Id))
-
-	if req.Id == 0 {
-		s.logger.Warn("Некорректный ID студента", zap.Int64("student_id", req.Id))
-		return nil, status.Errorf(codes.InvalidArgument, "ID студента должен быть указан")
-	}
-
-	courses, err := s.courseRepo.GetRecommendedCourses(ctx, req.Id)
-	if err != nil {
-		s.logger.Error("Ошибка при получении рекомендованных курсов", zap.Error(err), zap.Int64("student_id", req.Id))
-		return nil, status.Errorf(codes.Internal, "Ошибка при получении рекомендованных курсов: %v", err)
-	}
-
-	var grpcCourses []*proto.Course
-	for _, course := range courses {
-		grpcCourses = append(grpcCourses, &proto.Course{
-			Id:           course.ID,
-			Name:         course.Name,
-			Description:  course.Description,
-			InstructorId: course.InstructorID,
-		})
-	}
-
-	s.logger.Info("Рекомендованные курсы успешно получены", zap.Int("count", len(grpcCourses)), zap.Int64("student_id", req.Id))
 	return &proto.CourseList{Courses: grpcCourses}, nil
 }

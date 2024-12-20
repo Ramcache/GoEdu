@@ -505,3 +505,79 @@ func TestDeleteCourse(t *testing.T) {
 		})
 	}
 }
+
+func TestSearchCourses(t *testing.T) {
+	ctx := context.Background()
+
+	_, err := db.Exec(ctx, "TRUNCATE TABLE courses, instructors RESTART IDENTITY CASCADE")
+	require.NoError(t, err, "Не удалось очистить таблицы")
+
+	_, err = db.Exec(ctx, "INSERT INTO instructors (id, name, email, password) VALUES ($1, $2, $3, $4)", 1, "Преподаватель", "instructor@domain.com", "securepassword")
+	require.NoError(t, err, "Не удалось добавить преподавателя")
+
+	_, err = db.Exec(ctx, "INSERT INTO courses (id, name, description, instructor_id) VALUES ($1, $2, $3, $4)", 1, "Go Basics", "Основы языка Go", 1)
+	require.NoError(t, err, "Не удалось добавить курс 1")
+
+	_, err = db.Exec(ctx, "INSERT INTO courses (id, name, description, instructor_id) VALUES ($1, $2, $3, $4)", 2, "Advanced Go", "Продвинутый курс по Go", 1)
+	require.NoError(t, err, "Не удалось добавить курс 2")
+
+	testCases := []struct {
+		Name          string
+		Request       *proto.SearchRequest
+		ExpectedCount int
+		ExpectedNames []string
+		ShouldError   bool
+		ExpectedCode  codes.Code
+	}{
+		{
+			Name:          "Поиск по ключевому слову 'Go'",
+			Request:       &proto.SearchRequest{Keyword: "Go"},
+			ExpectedCount: 2,
+			ExpectedNames: []string{"Go Basics", "Advanced Go"},
+			ShouldError:   false,
+		},
+		{
+			Name:          "Поиск по ключевому слову 'Basics'",
+			Request:       &proto.SearchRequest{Keyword: "Basics"},
+			ExpectedCount: 1,
+			ExpectedNames: []string{"Go Basics"},
+			ShouldError:   false,
+		},
+		{
+			Name:          "Поиск с пустым ключевым словом",
+			Request:       &proto.SearchRequest{Keyword: ""},
+			ExpectedCount: 0,
+			ShouldError:   true,
+			ExpectedCode:  codes.InvalidArgument,
+		},
+		{
+			Name:          "Поиск без совпадений",
+			Request:       &proto.SearchRequest{Keyword: "Python"},
+			ExpectedCount: 0,
+			ShouldError:   false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+			resp, err := client.SearchCourses(ctx, tc.Request)
+
+			if tc.ShouldError {
+				require.Error(t, err, "Ожидалась ошибка, но её не было")
+				st, ok := status.FromError(err)
+				require.True(t, ok, "Ошибка не является статусной")
+				assert.Equal(t, tc.ExpectedCode, st.Code(), "Некорректный код ошибки")
+				t.Logf("Полученный код ошибки: %v", st.Code())
+				return
+			}
+
+			require.NoError(t, err, "Ошибка вызова SearchCourses")
+			assert.NotNil(t, resp, "Ответ должен быть непустым")
+			assert.Len(t, resp.Courses, tc.ExpectedCount, "Некорректное количество найденных курсов")
+
+			for i, course := range resp.Courses {
+				assert.Equal(t, tc.ExpectedNames[i], course.Name, "Название курса не совпадает")
+			}
+		})
+	}
+}
