@@ -315,3 +315,174 @@
 {"level":"INFO","time":"2024-12-20T14:34:59.627+0300","caller":"service/instructor_service.go:100","msg":"Курсы успешно получены","count":1,"instructor_id":1}
 {"level":"INFO","time":"2024-12-20T14:34:59.629+0300","caller":"service/instructor_service.go:77","msg":"Получение курсов для преподавателя","instructor_id":0}
 {"level":"WARN","time":"2024-12-20T14:34:59.629+0300","caller":"service/instructor_service.go:80","msg":"Некорректный ID преподавателя","instructor_id":0}
+{"level":"INFO","time":"2024-12-20T14:48:05.000+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:48:05.014+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:48:05.433+0300","caller":"service/lecture_service.go:30","msg":"Добавление лекции к курсу","course_id":1,"title":"Лекция 1"}
+{"level":"INFO","time":"2024-12-20T14:48:05.438+0300","caller":"service/lecture_service.go:49","msg":"Лекция успешно добавлена","lecture_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:48:05.439+0300","caller":"service/lecture_service.go:30","msg":"Добавление лекции к курсу","course_id":1,"title":""}
+{"level":"WARN","time":"2024-12-20T14:48:05.439+0300","caller":"service/lecture_service.go:33","msg":"Некорректные данные для добавления лекции","course_id":1,"title":""}
+{"level":"INFO","time":"2024-12-20T14:49:00.897+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:49:00.911+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:49:01.308+0300","caller":"service/education_service.go:34","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:01.319+0300","caller":"service/education_service.go:89","msg":"Курс успешно создан","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:01.333+0300","caller":"service/education_service.go:34","msg":"Создание курса","name":"Тестовый курс 2","instructor_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:01.333+0300","caller":"service/education_service.go:37","msg":"Некорректный ID преподавателя"}
+{"level":"INFO","time":"2024-12-20T14:49:01.334+0300","caller":"service/education_service.go:34","msg":"Создание курса","name":"Тестовый курс","instructor_id":1}
+{"level":"WARN","time":"2024-12-20T14:49:01.344+0300","caller":"service/education_service.go:72","msg":"Курс с таким названием уже существует","name":"Тестовый курс"}
+{"level":"INFO","time":"2024-12-20T14:49:01.345+0300","caller":"service/education_service.go:34","msg":"Создание курса","name":"","instructor_id":1}
+{"level":"WARN","time":"2024-12-20T14:49:01.345+0300","caller":"service/education_service.go:42","msg":"Пустое название курса"}
+{"level":"INFO","time":"2024-12-20T14:49:01.346+0300","caller":"service/education_service.go:34","msg":"Создание курса","name":"Курс без описания","instructor_id":1}
+{"level":"WARN","time":"2024-12-20T14:49:01.346+0300","caller":"service/education_service.go:47","msg":"Пустое описание курса"}
+{"level":"INFO","time":"2024-12-20T14:49:01.452+0300","caller":"service/education_service.go:99","msg":"Получение всех курсов"}
+{"level":"INFO","time":"2024-12-20T14:49:01.454+0300","caller":"service/education_service.go:107","msg":"Курсы успешно получены","count":2}
+{"level":"INFO","time":"2024-12-20T14:49:01.551+0300","caller":"service/education_service.go:122","msg":"Получение курса по ID","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:01.552+0300","caller":"service/education_service.go:135","msg":"Курс успешно получен","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:01.554+0300","caller":"service/education_service.go:122","msg":"Получение курса по ID","course_id":99}
+{"level":"WARN","time":"2024-12-20T14:49:01.554+0300","caller":"service/education_service.go:131","msg":"Курс не найден","course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:01.955+0300","caller":"service/education_service.go:196","msg":"Курс успешно обновлен","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:01.955+0300","caller":"service/education_service.go:172","msg":"Транзакция успешно завершена"}
+{"level":"WARN","time":"2024-12-20T14:49:01.958+0300","caller":"service/education_service.go:182","msg":"Курс не найден","course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:01.959+0300","caller":"service/education_service.go:172","msg":"Транзакция успешно завершена"}
+{"level":"WARN","time":"2024-12-20T14:49:01.959+0300","caller":"service/education_service.go:153","msg":"Пустое имя курса","course_id":1}
+{"level":"WARN","time":"2024-12-20T14:49:01.960+0300","caller":"service/education_service.go:157","msg":"Пустое описание курса","course_id":1}
+{"level":"WARN","time":"2024-12-20T14:49:01.961+0300","caller":"service/education_service.go:189","msg":"Курс с таким названием уже существует","name":"Курс 2"}
+{"level":"ERROR","time":"2024-12-20T14:49:01.962+0300","caller":"service/education_service.go:169","msg":"Транзакция откатилась из-за ошибки","error":"duplicate name: no rows in result set"}
+{"level":"INFO","time":"2024-12-20T14:49:01.964+0300","caller":"service/education_service.go:196","msg":"Курс успешно обновлен","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:01.964+0300","caller":"service/education_service.go:172","msg":"Транзакция успешно завершена"}
+{"level":"WARN","time":"2024-12-20T14:49:01.966+0300","caller":"service/education_service.go:149","msg":"Слишком длинное имя курса","course_id":1,"name":"\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"}
+{"level":"INFO","time":"2024-12-20T14:49:01.973+0300","caller":"service/education_service.go:196","msg":"Курс успешно обновлен","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:01.973+0300","caller":"service/education_service.go:172","msg":"Транзакция успешно завершена"}
+{"level":"WARN","time":"2024-12-20T14:49:01.975+0300","caller":"service/education_service.go:145","msg":"Некорректный ID курса","course_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.064+0300","caller":"service/education_service.go:205","msg":"Удаление курса","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.068+0300","caller":"service/education_service.go:222","msg":"Курс успешно удален","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.068+0300","caller":"service/education_service.go:205","msg":"Удаление курса","course_id":99}
+{"level":"WARN","time":"2024-12-20T14:49:02.069+0300","caller":"service/education_service.go:218","msg":"Курс не найден","course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.069+0300","caller":"service/education_service.go:205","msg":"Удаление курса","course_id":-1}
+{"level":"WARN","time":"2024-12-20T14:49:02.069+0300","caller":"service/education_service.go:210","msg":"Некорректный ID курса","course_id":-1}
+{"level":"INFO","time":"2024-12-20T14:49:02.070+0300","caller":"service/education_service.go:205","msg":"Удаление курса","course_id":-1}
+{"level":"WARN","time":"2024-12-20T14:49:02.070+0300","caller":"service/education_service.go:210","msg":"Некорректный ID курса","course_id":-1}
+{"level":"INFO","time":"2024-12-20T14:49:02.136+0300","caller":"service/education_service.go:227","msg":"Поиск курсов","keyword":"Go"}
+{"level":"INFO","time":"2024-12-20T14:49:02.139+0300","caller":"service/education_service.go:250","msg":"Курсы успешно найдены","count":2}
+{"level":"INFO","time":"2024-12-20T14:49:02.140+0300","caller":"service/education_service.go:227","msg":"Поиск курсов","keyword":"Basics"}
+{"level":"INFO","time":"2024-12-20T14:49:02.140+0300","caller":"service/education_service.go:250","msg":"Курсы успешно найдены","count":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.140+0300","caller":"service/education_service.go:227","msg":"Поиск курсов","keyword":""}
+{"level":"WARN","time":"2024-12-20T14:49:02.140+0300","caller":"service/education_service.go:230","msg":"Пустое ключевое слово для поиска"}
+{"level":"INFO","time":"2024-12-20T14:49:02.142+0300","caller":"service/education_service.go:227","msg":"Поиск курсов","keyword":"Python"}
+{"level":"INFO","time":"2024-12-20T14:49:02.142+0300","caller":"service/education_service.go:250","msg":"Курсы успешно найдены","count":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.218+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.220+0300","caller":"service/enrollments_service.go:40","msg":"Студент успешно записан на курс","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.222+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":0,"course_id":1}
+{"level":"WARN","time":"2024-12-20T14:49:02.222+0300","caller":"service/enrollments_service.go:30","msg":"Некорректные данные для записи на курс","student_id":0,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.222+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.222+0300","caller":"service/enrollments_service.go:30","msg":"Некорректные данные для записи на курс","student_id":1,"course_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.223+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":99}
+{"level":"ERROR","time":"2024-12-20T14:49:02.225+0300","caller":"service/enrollments_service.go:36","msg":"Ошибка при записи студента на курс","error":"ОШИБКА: INSERT или UPDATE в таблице \"enrollments\" нарушает ограничение внешнего ключа \"enrollments_course_id_fkey\" (SQLSTATE 23503)","student_id":1,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.226+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":99,"course_id":1}
+{"level":"ERROR","time":"2024-12-20T14:49:02.226+0300","caller":"service/enrollments_service.go:36","msg":"Ошибка при записи студента на курс","error":"ОШИБКА: INSERT или UPDATE в таблице \"enrollments\" нарушает ограничение внешнего ключа \"enrollments_student_id_fkey\" (SQLSTATE 23503)","student_id":99,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.296+0300","caller":"service/enrollments_service.go:45","msg":"Получение студентов по курсу","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.299+0300","caller":"service/enrollments_service.go:68","msg":"Студенты успешно получены","count":2,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.300+0300","caller":"service/enrollments_service.go:45","msg":"Получение студентов по курсу","course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.300+0300","caller":"service/enrollments_service.go:68","msg":"Студенты успешно получены","count":0,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.300+0300","caller":"service/enrollments_service.go:45","msg":"Получение студентов по курсу","course_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.300+0300","caller":"service/enrollments_service.go:48","msg":"Некорректный ID курса","course_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.365+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.366+0300","caller":"service/enrollments_service.go:86","msg":"Студент успешно удалён с курса","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.367+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":0,"course_id":1}
+{"level":"WARN","time":"2024-12-20T14:49:02.367+0300","caller":"service/enrollments_service.go:76","msg":"Некорректные данные для удаления с курса","student_id":0,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.368+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":1,"course_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.368+0300","caller":"service/enrollments_service.go:76","msg":"Некорректные данные для удаления с курса","student_id":1,"course_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.368+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":99,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.369+0300","caller":"service/enrollments_service.go:86","msg":"Студент успешно удалён с курса","student_id":99,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.369+0300","caller":"service/enrollments_service.go:73","msg":"Удаление студента с курса","student_id":1,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.370+0300","caller":"service/enrollments_service.go:86","msg":"Студент успешно удалён с курса","student_id":1,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.443+0300","caller":"service/enrollments_service.go:91","msg":"Получение курсов для студента","student_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.444+0300","caller":"service/enrollments_service.go:113","msg":"Курсы успешно получены","count":2,"student_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.444+0300","caller":"service/enrollments_service.go:91","msg":"Получение курсов для студента","student_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.445+0300","caller":"service/enrollments_service.go:113","msg":"Курсы успешно получены","count":0,"student_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.445+0300","caller":"service/enrollments_service.go:91","msg":"Получение курсов для студента","student_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.445+0300","caller":"service/enrollments_service.go:94","msg":"Некорректный ID студента","student_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.593+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:49:02.593+0300"}
+{"level":"INFO","time":"2024-12-20T14:49:02.593+0300","caller":"service/instructor_service.go:66","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor2@domain.com"}
+{"level":"WARN","time":"2024-12-20T14:49:02.594+0300","caller":"service/instructor_service.go:39","msg":"Преподаватель с таким email уже существует","email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:49:02.662+0300","caller":"service/instructor_service.go:77","msg":"Получение курсов для преподавателя","instructor_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.663+0300","caller":"service/instructor_service.go:100","msg":"Курсы успешно получены","count":1,"instructor_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.664+0300","caller":"service/instructor_service.go:77","msg":"Получение курсов для преподавателя","instructor_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.664+0300","caller":"service/instructor_service.go:80","msg":"Некорректный ID преподавателя","instructor_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.727+0300","caller":"service/lecture_service.go:30","msg":"Добавление лекции к курсу","course_id":1,"title":"Лекция 1"}
+{"level":"INFO","time":"2024-12-20T14:49:02.729+0300","caller":"service/lecture_service.go:49","msg":"Лекция успешно добавлена","lecture_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.730+0300","caller":"service/lecture_service.go:30","msg":"Добавление лекции к курсу","course_id":1,"title":""}
+{"level":"WARN","time":"2024-12-20T14:49:02.730+0300","caller":"service/lecture_service.go:33","msg":"Некорректные данные для добавления лекции","course_id":1,"title":""}
+{"level":"INFO","time":"2024-12-20T14:49:02.786+0300","caller":"service/lecture_service.go:59","msg":"Получение лекций для курса","course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.786+0300","caller":"service/lecture_service.go:82","msg":"Лекции успешно получены","count":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.787+0300","caller":"service/lecture_service.go:59","msg":"Получение лекций для курса","course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.787+0300","caller":"service/lecture_service.go:82","msg":"Лекции успешно получены","count":0,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.787+0300","caller":"service/lecture_service.go:59","msg":"Получение лекций для курса","course_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.787+0300","caller":"service/lecture_service.go:62","msg":"Некорректный ID курса","course_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.807+0300","caller":"service/lecture_service.go:144","msg":"Удаление лекции","lecture_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.809+0300","caller":"service/lecture_service.go:161","msg":"Лекция успешно удалена","lecture_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.809+0300","caller":"service/lecture_service.go:144","msg":"Удаление лекции","lecture_id":99}
+{"level":"WARN","time":"2024-12-20T14:49:02.809+0300","caller":"service/lecture_service.go:154","msg":"Лекция не найдена","lecture_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.810+0300","caller":"service/lecture_service.go:144","msg":"Удаление лекции","lecture_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.810+0300","caller":"service/lecture_service.go:147","msg":"Некорректный ID лекции","lecture_id":0}
+{"level":"INFO","time":"2024-12-20T14:49:02.834+0300","caller":"service/lecture_service.go:87","msg":"Получение содержания лекции","lecture_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.835+0300","caller":"service/lecture_service.go:105","msg":"Содержание лекции успешно получено","lecture_id":1}
+{"level":"INFO","time":"2024-12-20T14:49:02.835+0300","caller":"service/lecture_service.go:87","msg":"Получение содержания лекции","lecture_id":99}
+{"level":"WARN","time":"2024-12-20T14:49:02.836+0300","caller":"service/lecture_service.go:101","msg":"Лекция не найдена","lecture_id":99}
+{"level":"INFO","time":"2024-12-20T14:49:02.836+0300","caller":"service/lecture_service.go:87","msg":"Получение содержания лекции","lecture_id":0}
+{"level":"WARN","time":"2024-12-20T14:49:02.836+0300","caller":"service/lecture_service.go:90","msg":"Некорректный ID лекции","lecture_id":0}
+{"level":"INFO","time":"2024-12-20T14:57:06.081+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:57:06.090+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:57:45.343+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:57:45.355+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:57:45.726+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":1,"student_id":1}
+{"level":"INFO","time":"2024-12-20T14:57:45.741+0300","caller":"service/lecture_service.go:197","msg":"Прогресс успешно получен","course_id":1,"student_id":1,"completed_percent":100}
+{"level":"INFO","time":"2024-12-20T14:57:45.742+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":99,"student_id":1}
+{"level":"ERROR","time":"2024-12-20T14:57:45.742+0300","caller":"service/lecture_service.go:193","msg":"Ошибка при получении прогресса","error":"в курсе нет лекций","course_id":99,"student_id":1}
+{"level":"INFO","time":"2024-12-20T14:57:45.743+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":1,"student_id":0}
+{"level":"WARN","time":"2024-12-20T14:57:45.743+0300","caller":"service/lecture_service.go:187","msg":"Некорректные данные для получения прогресса курса","course_id":1,"student_id":0}
+{"level":"INFO","time":"2024-12-20T14:57:45.743+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":0,"student_id":1}
+{"level":"WARN","time":"2024-12-20T14:57:45.743+0300","caller":"service/lecture_service.go:187","msg":"Некорректные данные для получения прогресса курса","course_id":0,"student_id":1}
+{"level":"INFO","time":"2024-12-20T14:59:32.825+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:59:32.835+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:00:19.859+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:00:19.872+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:00:20.255+0300","caller":"service/lecture_service.go:206","msg":"Получение рекомендованных курсов","student_id":1}
+{"level":"ERROR","time":"2024-12-20T15:00:20.262+0300","caller":"service/lecture_service.go:215","msg":"Ошибка при получении рекомендованных курсов","error":"ОШИБКА: в конструкции SELECT DISTINCT выражения ORDER BY должны быть в списке выборки (SQLSTATE 42P10)","student_id":1}
+{"level":"INFO","time":"2024-12-20T15:00:20.264+0300","caller":"service/lecture_service.go:206","msg":"Получение рекомендованных курсов","student_id":0}
+{"level":"WARN","time":"2024-12-20T15:00:20.264+0300","caller":"service/lecture_service.go:209","msg":"Некорректный ID студента","student_id":0}
+{"level":"INFO","time":"2024-12-20T15:05:11.920+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:05:11.933+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:05:12.331+0300","caller":"service/lecture_service.go:206","msg":"Получение рекомендованных курсов","student_id":1}
+{"level":"INFO","time":"2024-12-20T15:05:12.339+0300","caller":"service/lecture_service.go:229","msg":"Рекомендованные курсы успешно получены","count":2,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:05:12.340+0300","caller":"service/lecture_service.go:206","msg":"Получение рекомендованных курсов","student_id":0}
+{"level":"WARN","time":"2024-12-20T15:05:12.341+0300","caller":"service/lecture_service.go:209","msg":"Некорректный ID студента","student_id":0}
+{"level":"INFO","time":"2024-12-20T15:05:20.738+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:05:20.752+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:05:21.112+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":1,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:05:21.121+0300","caller":"service/lecture_service.go:197","msg":"Прогресс успешно получен","course_id":1,"student_id":1,"completed_percent":100}
+{"level":"INFO","time":"2024-12-20T15:05:21.123+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":99,"student_id":1}
+{"level":"ERROR","time":"2024-12-20T15:05:21.123+0300","caller":"service/lecture_service.go:193","msg":"Ошибка при получении прогресса","error":"в курсе нет лекций","course_id":99,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:05:21.125+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":1,"student_id":0}
+{"level":"WARN","time":"2024-12-20T15:05:21.125+0300","caller":"service/lecture_service.go:187","msg":"Некорректные данные для получения прогресса курса","course_id":1,"student_id":0}
+{"level":"INFO","time":"2024-12-20T15:05:21.125+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":0,"student_id":1}
+{"level":"WARN","time":"2024-12-20T15:05:21.125+0300","caller":"service/lecture_service.go:187","msg":"Некорректные данные для получения прогресса курса","course_id":0,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:09:35.240+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:09:35.251+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:09:35.582+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":1,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:09:35.585+0300","caller":"service/lecture_service.go:197","msg":"Прогресс успешно получен","course_id":1,"student_id":1,"completed_percent":50}
+{"level":"INFO","time":"2024-12-20T15:09:35.586+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":99,"student_id":1}
+{"level":"ERROR","time":"2024-12-20T15:09:35.588+0300","caller":"service/lecture_service.go:193","msg":"Ошибка при получении прогресса","error":"в курсе нет лекций","course_id":99,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:09:35.589+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":1,"student_id":0}
+{"level":"WARN","time":"2024-12-20T15:09:35.589+0300","caller":"service/lecture_service.go:187","msg":"Некорректные данные для получения прогресса курса","course_id":1,"student_id":0}
+{"level":"INFO","time":"2024-12-20T15:09:35.589+0300","caller":"service/lecture_service.go:184","msg":"Получение прогресса курса","course_id":0,"student_id":1}
+{"level":"WARN","time":"2024-12-20T15:09:35.589+0300","caller":"service/lecture_service.go:187","msg":"Некорректные данные для получения прогресса курса","course_id":0,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:10:05.464+0300","caller":"tests/main_test.go:46","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T15:10:05.510+0300","caller":"tests/main_test.go:57","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T15:10:05.963+0300","caller":"service/lecture_service.go:166","msg":"Отметка лекции как завершенной","lecture_id":1,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:10:05.969+0300","caller":"service/lecture_service.go:179","msg":"Лекция успешно отмечена как завершенная","lecture_id":1,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:10:05.969+0300","caller":"service/lecture_service.go:166","msg":"Отметка лекции как завершенной","lecture_id":99,"student_id":1}
+{"level":"ERROR","time":"2024-12-20T15:10:05.970+0300","caller":"service/lecture_service.go:175","msg":"Ошибка при отметке лекции как завершенной","error":"лекция с ID 99 не найдена","lecture_id":99,"student_id":1}
+{"level":"INFO","time":"2024-12-20T15:10:05.971+0300","caller":"service/lecture_service.go:166","msg":"Отметка лекции как завершенной","lecture_id":1,"student_id":99}
+{"level":"ERROR","time":"2024-12-20T15:10:05.972+0300","caller":"service/lecture_service.go:175","msg":"Ошибка при отметке лекции как завершенной","error":"студент с ID 99 не найден","lecture_id":1,"student_id":99}
+{"level":"INFO","time":"2024-12-20T15:10:05.976+0300","caller":"service/lecture_service.go:166","msg":"Отметка лекции как завершенной","lecture_id":0,"student_id":0}
+{"level":"WARN","time":"2024-12-20T15:10:05.976+0300","caller":"service/lecture_service.go:169","msg":"Некорректные данные для отметки завершения лекции","lecture_id":0,"student_id":0}

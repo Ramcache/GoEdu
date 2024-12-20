@@ -164,7 +164,8 @@ func (r *lectureRepository) GetCourseProgress(ctx context.Context, studentID, co
 	}
 
 	err = r.db.QueryRow(ctx, `
-        SELECT COUNT(*) FROM lecture_completions lc
+        SELECT COUNT(DISTINCT lc.lecture_id)
+        FROM lecture_completions lc
         JOIN lectures l ON lc.lecture_id = l.id
         WHERE lc.student_id = $1 AND l.course_id = $2;
     `, studentID, courseID).Scan(&completedLectures)
@@ -180,12 +181,9 @@ func (r *lectureRepository) GetRecommendedCourses(ctx context.Context, studentID
 	query := `
         SELECT DISTINCT c.id, c.name, c.description, c.instructor_id
         FROM courses c
-        WHERE c.id NOT IN (
-            SELECT e.course_id
-            FROM enrollments e
-            WHERE e.student_id = $1
-        )
-        ORDER BY RANDOM()
+        LEFT JOIN enrollments e ON c.id = e.course_id AND e.student_id = $1
+        WHERE e.student_id IS NULL
+        ORDER BY c.name
         LIMIT 5;
     `
 
@@ -203,6 +201,5 @@ func (r *lectureRepository) GetRecommendedCourses(ctx context.Context, studentID
 		}
 		courses = append(courses, &course)
 	}
-
 	return courses, nil
 }

@@ -24,6 +24,7 @@ var (
 	clientEducation   proto.EducationServiceClient
 	clientEnrollments proto.EnrollmentServiceClient
 	clientInstructor  proto.InstructorServiceClient
+	clientLecture     proto.LectureServiceClient
 	server            *grpc.Server
 	db                *pgxpool.Pool
 	zapLogger         *zap.Logger
@@ -71,10 +72,15 @@ func TestMain(m *testing.M) {
 	instructorRepo := repository.NewInstructorRepository(db)
 	instructorService := service.NewInstructorService(instructorRepo, cfg, zapLogger)
 
+	lectureRepo := repository.NewLectureRepository(db)
+	lectureService := service.NewLectureService(lectureRepo, zapLogger)
+
 	server = grpc.NewServer()
 	proto.RegisterEducationServiceServer(server, educationService)
 	proto.RegisterEnrollmentServiceServer(server, enrollmentService)
 	proto.RegisterInstructorServiceServer(server, instructorService)
+	proto.RegisterLectureServiceServer(server, lectureService)
+
 	go func() {
 		if err := server.Serve(listener); err != nil {
 			zapLogger.Fatal("Ошибка сервера", zap.Error(err))
@@ -95,6 +101,7 @@ func TestMain(m *testing.M) {
 	clientEducation = proto.NewEducationServiceClient(conn)
 	clientEnrollments = proto.NewEnrollmentServiceClient(conn)
 	clientInstructor = proto.NewInstructorServiceClient(conn)
+	clientLecture = proto.NewLectureServiceClient(conn)
 
 	code := m.Run()
 
