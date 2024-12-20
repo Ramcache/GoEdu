@@ -1,4 +1,4 @@
-package tests
+package service
 
 import (
 	"GoEdu/internal/config"
@@ -16,7 +16,6 @@ import (
 
 	"GoEdu/internal/logger"
 	"GoEdu/internal/repository"
-	"GoEdu/internal/service"
 	"GoEdu/proto"
 )
 
@@ -66,22 +65,22 @@ func TestMain(m *testing.M) {
 	cfg := config.NewConfig(loader)
 
 	courseRepo := repository.NewCourseRepository(db)
-	educationService := service.NewEducationService(db, courseRepo, zapLogger)
+	educationService := NewEducationService(db, courseRepo, zapLogger)
 
 	enrollmentRepo := repository.NewEnrollmentRepository(db)
-	enrollmentService := service.NewEnrollmentService(enrollmentRepo, zapLogger)
+	enrollmentService := NewEnrollmentService(enrollmentRepo, zapLogger)
 
 	instructorRepo := repository.NewInstructorRepository(db)
-	instructorService := service.NewInstructorService(instructorRepo, cfg, zapLogger)
+	instructorService := NewInstructorService(instructorRepo, cfg, zapLogger)
 
 	lectureRepo := repository.NewLectureRepository(db)
-	lectureService := service.NewLectureService(lectureRepo, zapLogger)
+	lectureService := NewLectureService(lectureRepo, zapLogger)
 
 	reviewRepo := repository.NewReviewRepository(db)
-	reviewService := service.NewReviewService(reviewRepo, zapLogger)
+	reviewService := NewReviewService(reviewRepo, zapLogger)
 
 	studentRepo := repository.NewStudentRepository(db)
-	studentService := service.NewStudentService(studentRepo, cfg, zapLogger)
+	studentService := NewStudentService(studentRepo, cfg, zapLogger)
 
 	server = grpc.NewServer()
 	proto.RegisterEducationServiceServer(server, educationService)

@@ -1,4 +1,4 @@
-package tests
+package service
 
 import (
 	"GoEdu/proto"
@@ -27,12 +27,12 @@ func TestRegisterStudent(t *testing.T) {
 			Name: "Успешная регистрация студента",
 			Request: &proto.RegisterStudentRequest{
 				Name:     "Студент 1",
-				Email:    "student1@domain.com",
+				Email:    "student1_unique@domain.com",
 				Password: "securepassword",
 			},
 			Expected: &proto.Student{
 				Name:  "Студент 1",
-				Email: "student1@domain.com",
+				Email: "student1_unique@domain.com",
 			},
 			ShouldError: false,
 		},
