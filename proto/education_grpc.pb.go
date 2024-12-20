@@ -30,12 +30,20 @@ const (
 // EducationServiceClient is the client API for EducationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Service for managing courses in the education system.
 type EducationServiceClient interface {
+	// Retrieves all available courses.
 	GetCourses(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CourseList, error)
+	// Retrieves a specific course by its ID.
 	GetCourseByID(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*Course, error)
+	// Creates a new course.
 	CreateCourse(ctx context.Context, in *NewCourseRequest, opts ...grpc.CallOption) (*Course, error)
+	// Updates an existing course.
 	UpdateCourse(ctx context.Context, in *UpdateCourseRequest, opts ...grpc.CallOption) (*Course, error)
+	// Deletes a course by its ID.
 	DeleteCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Searches for courses by keyword.
 	SearchCourses(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*CourseList, error)
 }
 
@@ -110,12 +118,20 @@ func (c *educationServiceClient) SearchCourses(ctx context.Context, in *SearchRe
 // EducationServiceServer is the server API for EducationService service.
 // All implementations must embed UnimplementedEducationServiceServer
 // for forward compatibility.
+//
+// Service for managing courses in the education system.
 type EducationServiceServer interface {
+	// Retrieves all available courses.
 	GetCourses(context.Context, *Empty) (*CourseList, error)
+	// Retrieves a specific course by its ID.
 	GetCourseByID(context.Context, *CourseIDRequest) (*Course, error)
+	// Creates a new course.
 	CreateCourse(context.Context, *NewCourseRequest) (*Course, error)
+	// Updates an existing course.
 	UpdateCourse(context.Context, *UpdateCourseRequest) (*Course, error)
+	// Deletes a course by its ID.
 	DeleteCourse(context.Context, *CourseIDRequest) (*Empty, error)
+	// Searches for courses by keyword.
 	SearchCourses(context.Context, *SearchRequest) (*CourseList, error)
 	mustEmbedUnimplementedEducationServiceServer()
 }
@@ -320,10 +336,16 @@ const (
 // StudentServiceClient is the client API for StudentService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Service for managing students.
 type StudentServiceClient interface {
+	// Registers a new student.
 	RegisterStudent(ctx context.Context, in *RegisterStudentRequest, opts ...grpc.CallOption) (*Student, error)
+	// Authenticates a student.
 	LoginStudent(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
+	// Retrieves the profile of a student.
 	GetStudentProfile(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*Student, error)
+	// Updates the profile of a student.
 	UpdateStudentProfile(ctx context.Context, in *UpdateStudentRequest, opts ...grpc.CallOption) (*Student, error)
 }
 
@@ -378,10 +400,16 @@ func (c *studentServiceClient) UpdateStudentProfile(ctx context.Context, in *Upd
 // StudentServiceServer is the server API for StudentService service.
 // All implementations must embed UnimplementedStudentServiceServer
 // for forward compatibility.
+//
+// Service for managing students.
 type StudentServiceServer interface {
+	// Registers a new student.
 	RegisterStudent(context.Context, *RegisterStudentRequest) (*Student, error)
+	// Authenticates a student.
 	LoginStudent(context.Context, *LoginRequest) (*AuthResponse, error)
+	// Retrieves the profile of a student.
 	GetStudentProfile(context.Context, *StudentIDRequest) (*Student, error)
+	// Updates the profile of a student.
 	UpdateStudentProfile(context.Context, *UpdateStudentRequest) (*Student, error)
 	mustEmbedUnimplementedStudentServiceServer()
 }
@@ -536,10 +564,16 @@ const (
 // EnrollmentServiceClient is the client API for EnrollmentService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Service for managing enrollments.
 type EnrollmentServiceClient interface {
+	// Enrolls a student in a course.
 	EnrollStudent(ctx context.Context, in *EnrollmentRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Retrieves all students in a course.
 	GetStudentsByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*StudentList, error)
+	// Retrieves all courses for a student.
 	GetCoursesByStudent(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*CourseList, error)
+	// Unenrolls a student from a course.
 	UnEnrollStudent(ctx context.Context, in *EnrollmentRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
@@ -594,10 +628,16 @@ func (c *enrollmentServiceClient) UnEnrollStudent(ctx context.Context, in *Enrol
 // EnrollmentServiceServer is the server API for EnrollmentService service.
 // All implementations must embed UnimplementedEnrollmentServiceServer
 // for forward compatibility.
+//
+// Service for managing enrollments.
 type EnrollmentServiceServer interface {
+	// Enrolls a student in a course.
 	EnrollStudent(context.Context, *EnrollmentRequest) (*Empty, error)
+	// Retrieves all students in a course.
 	GetStudentsByCourse(context.Context, *CourseIDRequest) (*StudentList, error)
+	// Retrieves all courses for a student.
 	GetCoursesByStudent(context.Context, *StudentIDRequest) (*CourseList, error)
+	// Unenrolls a student from a course.
 	UnEnrollStudent(context.Context, *EnrollmentRequest) (*Empty, error)
 	mustEmbedUnimplementedEnrollmentServiceServer()
 }
@@ -756,14 +796,24 @@ const (
 // LectureServiceClient is the client API for LectureService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Service for managing lectures in courses.
 type LectureServiceClient interface {
+	// Adds a lecture to a course.
 	AddLectureToCourse(ctx context.Context, in *LectureRequest, opts ...grpc.CallOption) (*Lecture, error)
+	// Retrieves all lectures in a course.
 	GetLecturesByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*LectureList, error)
+	// Retrieves the content of a specific lecture.
 	GetLectureContent(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*LectureContent, error)
+	// Updates an existing lecture.
 	UpdateLecture(ctx context.Context, in *UpdateLectureRequest, opts ...grpc.CallOption) (*Lecture, error)
+	// Deletes a lecture by its ID.
 	DeleteLecture(ctx context.Context, in *LectureIDRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Marks a lecture as completed by a student.
 	MarkLectureAsCompleted(ctx context.Context, in *LectureCompletionRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Retrieves the progress of a student in a course.
 	GetCourseProgress(ctx context.Context, in *CourseProgressRequest, opts ...grpc.CallOption) (*CourseProgress, error)
+	// Retrieves recommended courses for a student.
 	GetRecommendedCourses(ctx context.Context, in *StudentIDRequest, opts ...grpc.CallOption) (*CourseList, error)
 }
 
@@ -858,14 +908,24 @@ func (c *lectureServiceClient) GetRecommendedCourses(ctx context.Context, in *St
 // LectureServiceServer is the server API for LectureService service.
 // All implementations must embed UnimplementedLectureServiceServer
 // for forward compatibility.
+//
+// Service for managing lectures in courses.
 type LectureServiceServer interface {
+	// Adds a lecture to a course.
 	AddLectureToCourse(context.Context, *LectureRequest) (*Lecture, error)
+	// Retrieves all lectures in a course.
 	GetLecturesByCourse(context.Context, *CourseIDRequest) (*LectureList, error)
+	// Retrieves the content of a specific lecture.
 	GetLectureContent(context.Context, *LectureIDRequest) (*LectureContent, error)
+	// Updates an existing lecture.
 	UpdateLecture(context.Context, *UpdateLectureRequest) (*Lecture, error)
+	// Deletes a lecture by its ID.
 	DeleteLecture(context.Context, *LectureIDRequest) (*Empty, error)
+	// Marks a lecture as completed by a student.
 	MarkLectureAsCompleted(context.Context, *LectureCompletionRequest) (*Empty, error)
+	// Retrieves the progress of a student in a course.
 	GetCourseProgress(context.Context, *CourseProgressRequest) (*CourseProgress, error)
+	// Retrieves recommended courses for a student.
 	GetRecommendedCourses(context.Context, *StudentIDRequest) (*CourseList, error)
 	mustEmbedUnimplementedLectureServiceServer()
 }
@@ -1118,8 +1178,12 @@ const (
 // InstructorServiceClient is the client API for InstructorService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Service for managing instructors.
 type InstructorServiceClient interface {
+	// Registers a new instructor.
 	RegisterInstructor(ctx context.Context, in *RegisterInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
+	// Retrieves all courses managed by an instructor.
 	GetCoursesByInstructor(ctx context.Context, in *InstructorIDRequest, opts ...grpc.CallOption) (*CourseList, error)
 }
 
@@ -1154,8 +1218,12 @@ func (c *instructorServiceClient) GetCoursesByInstructor(ctx context.Context, in
 // InstructorServiceServer is the server API for InstructorService service.
 // All implementations must embed UnimplementedInstructorServiceServer
 // for forward compatibility.
+//
+// Service for managing instructors.
 type InstructorServiceServer interface {
+	// Registers a new instructor.
 	RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error)
+	// Retrieves all courses managed by an instructor.
 	GetCoursesByInstructor(context.Context, *InstructorIDRequest) (*CourseList, error)
 	mustEmbedUnimplementedInstructorServiceServer()
 }
@@ -1258,8 +1326,12 @@ const (
 // ReviewServiceClient is the client API for ReviewService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Service for managing reviews for courses.
 type ReviewServiceClient interface {
+	// Adds a review to a course.
 	AddReviewToCourse(ctx context.Context, in *ReviewRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Retrieves all reviews for a course.
 	GetReviewsByCourse(ctx context.Context, in *CourseIDRequest, opts ...grpc.CallOption) (*ReviewList, error)
 }
 
@@ -1294,8 +1366,12 @@ func (c *reviewServiceClient) GetReviewsByCourse(ctx context.Context, in *Course
 // ReviewServiceServer is the server API for ReviewService service.
 // All implementations must embed UnimplementedReviewServiceServer
 // for forward compatibility.
+//
+// Service for managing reviews for courses.
 type ReviewServiceServer interface {
+	// Adds a review to a course.
 	AddReviewToCourse(context.Context, *ReviewRequest) (*Empty, error)
+	// Retrieves all reviews for a course.
 	GetReviewsByCourse(context.Context, *CourseIDRequest) (*ReviewList, error)
 	mustEmbedUnimplementedReviewServiceServer()
 }
@@ -1384,6 +1460,114 @@ var ReviewService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetReviewsByCourse",
 			Handler:    _ReviewService_GetReviewsByCourse_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/education.proto",
+}
+
+const (
+	HealthService_Check_FullMethodName = "/education.HealthService/Check"
+)
+
+// HealthServiceClient is the client API for HealthService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Health check service to monitor server status.
+type HealthServiceClient interface {
+	// Checks the health of the server.
+	Check(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*HealthCheckResponse, error)
+}
+
+type healthServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewHealthServiceClient(cc grpc.ClientConnInterface) HealthServiceClient {
+	return &healthServiceClient{cc}
+}
+
+func (c *healthServiceClient) Check(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HealthCheckResponse)
+	err := c.cc.Invoke(ctx, HealthService_Check_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// HealthServiceServer is the server API for HealthService service.
+// All implementations must embed UnimplementedHealthServiceServer
+// for forward compatibility.
+//
+// Health check service to monitor server status.
+type HealthServiceServer interface {
+	// Checks the health of the server.
+	Check(context.Context, *Empty) (*HealthCheckResponse, error)
+	mustEmbedUnimplementedHealthServiceServer()
+}
+
+// UnimplementedHealthServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedHealthServiceServer struct{}
+
+func (UnimplementedHealthServiceServer) Check(context.Context, *Empty) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
+}
+func (UnimplementedHealthServiceServer) mustEmbedUnimplementedHealthServiceServer() {}
+func (UnimplementedHealthServiceServer) testEmbeddedByValue()                       {}
+
+// UnsafeHealthServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to HealthServiceServer will
+// result in compilation errors.
+type UnsafeHealthServiceServer interface {
+	mustEmbedUnimplementedHealthServiceServer()
+}
+
+func RegisterHealthServiceServer(s grpc.ServiceRegistrar, srv HealthServiceServer) {
+	// If the following call pancis, it indicates UnimplementedHealthServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&HealthService_ServiceDesc, srv)
+}
+
+func _HealthService_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HealthServiceServer).Check(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HealthService_Check_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HealthServiceServer).Check(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// HealthService_ServiceDesc is the grpc.ServiceDesc for HealthService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var HealthService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "education.HealthService",
+	HandlerType: (*HealthServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Check",
+			Handler:    _HealthService_Check_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

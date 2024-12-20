@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package education;
 
-option go_package = "GoEdu/proto;proto";
+option go_package = "/proto;proto";
 
 // Service for managing courses in the education system.
 service EducationService {
