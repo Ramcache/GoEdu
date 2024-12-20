@@ -125,15 +125,28 @@ func (r *courseRepository) UpdateCourse(ctx context.Context, tx pgx.Tx, id int64
 }
 
 func (r *courseRepository) DeleteCourse(ctx context.Context, id int64) (bool, error) {
-	query := `DELETE FROM courses WHERE id = $1;`
+	if id <= 0 {
+		return false, fmt.Errorf("invalid course ID: %d", id)
+	}
 
-	commandTag, err := r.db.Exec(ctx, query, id)
+	tx, err := r.db.Begin(ctx)
+	if err != nil {
+		return false, err
+	}
+	defer tx.Rollback(ctx)
+
+	query := `DELETE FROM courses WHERE id = $1;`
+	commandTag, err := tx.Exec(ctx, query, id)
 	if err != nil {
 		return false, err
 	}
 
 	if commandTag.RowsAffected() == 0 {
 		return false, nil
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return false, err
 	}
 
 	return true, nil

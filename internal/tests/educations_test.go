@@ -2,7 +2,6 @@ package tests
 
 import (
 	"context"
-	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -36,7 +35,12 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic("Не удалось инициализировать логгер: " + err.Error())
 	}
-	defer zapLogger.Sync()
+	defer func(zapLogger *zap.Logger) {
+		err := zapLogger.Sync()
+		if err != nil {
+			zapLogger.Error("Ошибка при завершении логгера", zap.Error(err))
+		}
+	}(zapLogger)
 	zapLogger.Info("Инициализация тестов")
 
 	if err := godotenv.Load("../../.env"); err != nil {
@@ -103,10 +107,6 @@ func TestCreateCourse(t *testing.T) {
 
 	_, err = db.Exec(ctx, "INSERT INTO instructors (id, name, email, password) VALUES ($1, $2, $3, $4)", 1, "Тестовый преподаватель", "test@instructor.com", "securepassword")
 	require.NoError(t, err, "Не удалось добавить преподавателя")
-
-	tx, err := db.BeginTx(ctx, pgx.TxOptions{})
-	require.NoError(t, err, "Не удалось начать транзакцию")
-	defer tx.Rollback(ctx)
 
 	testCases := []CreateCourseTestCase{
 		{
@@ -435,6 +435,73 @@ func TestUpdateCourse(t *testing.T) {
 			require.NoError(t, err, "Ошибка проверки данных в базе")
 			assert.Equal(t, tc.ExpectedName, name, "Название курса в базе не совпадает")
 			assert.Equal(t, tc.ExpectedDesc, description, "Описание курса в базе не совпадает")
+		})
+	}
+}
+
+func TestDeleteCourse(t *testing.T) {
+	ctx := context.Background()
+
+	_, err := db.Exec(ctx, "TRUNCATE TABLE courses, instructors RESTART IDENTITY CASCADE")
+	require.NoError(t, err, "Не удалось очистить таблицы")
+
+	_, err = db.Exec(ctx, "INSERT INTO instructors (id, name, email, password) VALUES ($1, $2, $3, $4)", 1, "Преподаватель", "instructor@domain.com", "securepassword")
+	require.NoError(t, err, "Не удалось добавить преподавателя")
+
+	_, err = db.Exec(ctx, "INSERT INTO courses (id, name, description, instructor_id) VALUES ($1, $2, $3, $4)", 1, "Курс 1", "Описание курса 1", 1)
+	require.NoError(t, err, "Не удалось добавить курс")
+
+	testCases := []struct {
+		Name         string
+		Request      *proto.CourseIDRequest
+		ShouldError  bool
+		ExpectedCode codes.Code
+	}{
+		{
+			Name:        "Успешное удаление курса",
+			Request:     &proto.CourseIDRequest{CourseId: 1},
+			ShouldError: false,
+		},
+		{
+			Name:         "Курс не найден",
+			Request:      &proto.CourseIDRequest{CourseId: 99},
+			ShouldError:  true,
+			ExpectedCode: codes.NotFound,
+		},
+		{
+			Name:         "Ошибка в базе данных",
+			Request:      &proto.CourseIDRequest{CourseId: -1},
+			ShouldError:  true,
+			ExpectedCode: codes.InvalidArgument,
+		},
+		{
+			Name:         "Некорректный ID курса",
+			Request:      &proto.CourseIDRequest{CourseId: -1},
+			ShouldError:  true,
+			ExpectedCode: codes.InvalidArgument,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+			resp, err := client.DeleteCourse(ctx, tc.Request)
+
+			if tc.ShouldError {
+				require.Error(t, err, "Ожидалась ошибка, но её не было")
+				st, ok := status.FromError(err)
+				require.True(t, ok, "Ошибка не является статусной")
+				assert.Equal(t, tc.ExpectedCode, st.Code(), "Некорректный код ошибки")
+				t.Logf("Полученный код ошибки: %v", st.Code())
+				return
+			}
+
+			require.NoError(t, err, "Ошибка вызова DeleteCourse")
+			assert.NotNil(t, resp, "Ответ должен быть непустым")
+
+			var count int
+			err = db.QueryRow(ctx, "SELECT COUNT(*) FROM courses WHERE id = $1", tc.Request.CourseId).Scan(&count)
+			require.NoError(t, err, "Ошибка проверки данных в базе")
+			assert.Equal(t, 0, count, "Курс не был удалён из базы")
 		})
 	}
 }

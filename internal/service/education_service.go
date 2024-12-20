@@ -206,6 +206,10 @@ func (s *EducationService) DeleteCourse(ctx context.Context, req *proto.CourseID
 
 	deleted, err := s.courseRepo.DeleteCourse(ctx, req.CourseId)
 	if err != nil {
+		if strings.Contains(err.Error(), "invalid course ID") {
+			s.logger.Warn("Некорректный ID курса", zap.Int64("course_id", req.CourseId))
+			return nil, status.Errorf(codes.InvalidArgument, "Некорректный ID курса: %v", err)
+		}
 		s.logger.Error("Ошибка при удалении курса", zap.Error(err), zap.Int64("course_id", req.CourseId))
 		return nil, status.Errorf(codes.Internal, "Ошибка при удалении курса: %v", err)
 	}
