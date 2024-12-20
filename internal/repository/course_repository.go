@@ -8,13 +8,14 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"log"
 )
 
 type CourseRepository interface {
 	CreateCourse(ctx context.Context, course *models.Course, tx pgx.Tx) (int, error)
 	GetAllCourses(ctx context.Context) ([]*models.Course, error)
 	GetCourseByID(ctx context.Context, id int64) (*models.Course, error)
-	UpdateCourse(ctx context.Context, id int64, name, description string) (*models.Course, error)
+	UpdateCourse(ctx context.Context, tx pgx.Tx, id int64, name, description string) (*models.Course, error)
 	DeleteCourse(ctx context.Context, id int64) (bool, error)
 	GetCoursesByInstructor(ctx context.Context, instructorID int64) ([]*models.Course, error)
 	SearchCourses(ctx context.Context, keyword string) ([]*models.Course, error)
@@ -69,7 +70,11 @@ func (r *courseRepository) GetAllCourses(ctx context.Context) ([]*models.Course,
 		if err := rows.Scan(&course.ID, &course.Name, &course.Description, &course.InstructorID); err != nil {
 			return nil, err
 		}
+		courses = append(courses, &course)
 	}
+
+	log.Printf("Количество курсов в базе: %d", len(courses))
+
 	return courses, nil
 }
 
@@ -88,8 +93,18 @@ func (r *courseRepository) GetCourseByID(ctx context.Context, id int64) (*models
 	return &course, nil
 }
 
-func (r *courseRepository) UpdateCourse(ctx context.Context, id int64, name, description string) (*models.Course, error) {
-	query := `
+func (r *courseRepository) UpdateCourse(ctx context.Context, tx pgx.Tx, id int64, name, description string) (*models.Course, error) {
+	var existingID int64
+	queryCheck := "SELECT id FROM courses WHERE name = $1 AND id != $2"
+	err := tx.QueryRow(ctx, queryCheck, name, id).Scan(&existingID)
+
+	if err == nil {
+		return nil, fmt.Errorf("duplicate name: %w", pgx.ErrNoRows)
+	} else if err != pgx.ErrNoRows {
+		return nil, err
+	}
+
+	queryUpdate := `
         UPDATE courses
         SET name = $1, description = $2
         WHERE id = $3
@@ -97,15 +112,12 @@ func (r *courseRepository) UpdateCourse(ctx context.Context, id int64, name, des
     `
 
 	var course models.Course
-	err := r.db.QueryRow(ctx, query, name, description, id).Scan(
+	err = tx.QueryRow(ctx, queryUpdate, name, description, id).Scan(
 		&course.ID,
 		&course.Name,
 		&course.Description,
 	)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, nil
-		}
 		return nil, err
 	}
 

@@ -5,6 +5,7 @@ import (
 	"GoEdu/internal/repository"
 	"GoEdu/proto"
 	"context"
+	"errors"
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -103,6 +104,8 @@ func (s *EducationService) GetCourses(ctx context.Context, req *proto.Empty) (*p
 		return nil, status.Errorf(codes.Internal, "Ошибка при получении курсов: %v", err)
 	}
 
+	s.logger.Info("Курсы успешно получены", zap.Int("count", len(courses)))
+
 	var grpcCourses []*proto.Course
 	for _, c := range courses {
 		grpcCourses = append(grpcCourses, &proto.Course{
@@ -112,7 +115,6 @@ func (s *EducationService) GetCourses(ctx context.Context, req *proto.Empty) (*p
 		})
 	}
 
-	s.logger.Info("Курсы успешно получены", zap.Int("count", len(grpcCourses)))
 	return &proto.CourseList{Courses: grpcCourses}, nil
 }
 
@@ -139,17 +141,56 @@ func (s *EducationService) GetCourseByID(ctx context.Context, req *proto.CourseI
 }
 
 func (s *EducationService) UpdateCourse(ctx context.Context, req *proto.UpdateCourseRequest) (*proto.Course, error) {
-	s.logger.Info("Обновление курса", zap.Int64("course_id", req.Id))
-
-	updatedCourse, err := s.courseRepo.UpdateCourse(ctx, req.Id, req.Name, req.Description)
-	if err != nil {
-		s.logger.Error("Ошибка при обновлении курса", zap.Error(err), zap.Int64("course_id", req.Id))
-		return nil, status.Errorf(codes.Internal, "Ошибка при обновлении курса: %v", err)
+	if req.Id <= 0 {
+		s.logger.Warn("Некорректный ID курса", zap.Int64("course_id", req.Id))
+		return nil, status.Errorf(codes.InvalidArgument, "Некорректный ID курса")
+	}
+	if len(req.Name) > 255 {
+		s.logger.Warn("Слишком длинное имя курса", zap.Int64("course_id", req.Id), zap.String("name", req.Name))
+		return nil, status.Errorf(codes.InvalidArgument, "Слишком длинное имя курса")
+	}
+	if req.Name == "" {
+		s.logger.Warn("Пустое имя курса", zap.Int64("course_id", req.Id))
+		return nil, status.Errorf(codes.InvalidArgument, "Имя курса не может быть пустым")
+	}
+	if req.Description == "" {
+		s.logger.Warn("Пустое описание курса", zap.Int64("course_id", req.Id))
+		return nil, status.Errorf(codes.InvalidArgument, "Описание курса не может быть пустым")
 	}
 
-	if updatedCourse == nil {
+	tx, err := s.db.BeginTx(ctx, pgx.TxOptions{})
+	if err != nil {
+		s.logger.Error("Не удалось начать транзакцию", zap.Error(err))
+		return nil, status.Errorf(codes.Internal, "Не удалось начать транзакцию: %v", err)
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback(ctx)
+			s.logger.Error("Транзакция откатилась из-за ошибки", zap.Error(err))
+		} else {
+			tx.Commit(ctx)
+			s.logger.Info("Транзакция успешно завершена")
+		}
+	}()
+
+	course, err := s.courseRepo.GetCourseByID(ctx, req.Id)
+	if err != nil {
+		s.logger.Error("Ошибка при получении курса", zap.Error(err), zap.Int64("course_id", req.Id))
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении курса: %v", err)
+	}
+	if course == nil {
 		s.logger.Warn("Курс не найден", zap.Int64("course_id", req.Id))
 		return nil, status.Errorf(codes.NotFound, "Курс с ID %d не найден", req.Id)
+	}
+
+	updatedCourse, err := s.courseRepo.UpdateCourse(ctx, tx, req.Id, req.Name, req.Description)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			s.logger.Warn("Курс с таким названием уже существует", zap.String("name", req.Name))
+			return nil, status.Errorf(codes.AlreadyExists, "Курс с таким названием уже существует")
+		}
+		s.logger.Error("Ошибка при обновлении курса", zap.Error(err), zap.Int64("course_id", req.Id))
+		return nil, status.Errorf(codes.Internal, "Ошибка при обновлении курса: %v", err)
 	}
 
 	s.logger.Info("Курс успешно обновлен", zap.Int64("course_id", updatedCourse.ID))
