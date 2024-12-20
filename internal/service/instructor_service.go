@@ -7,7 +7,6 @@ import (
 	"GoEdu/internal/repository"
 	"GoEdu/proto"
 	"context"
-
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
@@ -30,12 +29,16 @@ func NewInstructorService(repo repository.InstructorRepository, cfg *config.Conf
 }
 
 func (s *InstructorService) RegisterInstructor(ctx context.Context, req *proto.RegisterInstructorRequest) (*proto.Instructor, error) {
-	existingInstructor, _ := s.repo.GetInstructorByEmail(ctx, req.Email)
+	existingInstructor, err := s.repo.GetInstructorByEmail(ctx, req.Email)
+	if err != nil {
+		s.logger.Error("Ошибка при проверке существующего email", zap.Error(err))
+		return nil, status.Errorf(codes.Internal, "Ошибка при проверке существующего email: %v", err)
+	}
+
 	if existingInstructor != nil {
 		s.logger.Warn("Преподаватель с таким email уже существует", zap.String("email", req.Email))
 		return nil, status.Errorf(codes.AlreadyExists, "Преподаватель с таким email уже существует")
 	}
-
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		s.logger.Error("Ошибка при хэшировании пароля", zap.Error(err))

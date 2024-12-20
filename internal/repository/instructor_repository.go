@@ -3,6 +3,8 @@ package repository
 import (
 	"GoEdu/internal/models"
 	"context"
+	"errors"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -39,6 +41,9 @@ func (r *instructorRepository) GetInstructorByEmail(ctx context.Context, email s
 	var instructor models.Instructor
 	err := r.db.QueryRow(ctx, query, email).Scan(&instructor.ID, &instructor.Name, &instructor.Email, &instructor.Password)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
 		return nil, err
 	}
 	return &instructor, nil

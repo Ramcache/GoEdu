@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"GoEdu/internal/config"
 	"context"
 	"log"
 	"net"
@@ -22,6 +23,7 @@ import (
 var (
 	clientEducation   proto.EducationServiceClient
 	clientEnrollments proto.EnrollmentServiceClient
+	clientInstructor  proto.InstructorServiceClient
 	server            *grpc.Server
 	db                *pgxpool.Pool
 	zapLogger         *zap.Logger
@@ -57,6 +59,8 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		zapLogger.Fatal("Не удалось запустить сервер", zap.Error(err))
 	}
+	loader := &config.EnvConfigLoader{}
+	cfg := config.NewConfig(loader)
 
 	courseRepo := repository.NewCourseRepository(db)
 	educationService := service.NewEducationService(db, courseRepo, zapLogger)
@@ -64,10 +68,13 @@ func TestMain(m *testing.M) {
 	enrollmentRepo := repository.NewEnrollmentRepository(db)
 	enrollmentService := service.NewEnrollmentService(enrollmentRepo, zapLogger)
 
+	instructorRepo := repository.NewInstructorRepository(db)
+	instructorService := service.NewInstructorService(instructorRepo, cfg, zapLogger)
+
 	server = grpc.NewServer()
 	proto.RegisterEducationServiceServer(server, educationService)
 	proto.RegisterEnrollmentServiceServer(server, enrollmentService)
-
+	proto.RegisterInstructorServiceServer(server, instructorService)
 	go func() {
 		if err := server.Serve(listener); err != nil {
 			zapLogger.Fatal("Ошибка сервера", zap.Error(err))
@@ -87,6 +94,7 @@ func TestMain(m *testing.M) {
 
 	clientEducation = proto.NewEducationServiceClient(conn)
 	clientEnrollments = proto.NewEnrollmentServiceClient(conn)
+	clientInstructor = proto.NewInstructorServiceClient(conn)
 
 	code := m.Run()
 

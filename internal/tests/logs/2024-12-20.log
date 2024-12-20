@@ -256,3 +256,62 @@
 {"level":"INFO","time":"2024-12-20T14:19:53.046+0300","caller":"service/enrollments_service.go:113","msg":"Курсы успешно получены","count":0,"student_id":99}
 {"level":"INFO","time":"2024-12-20T14:19:53.046+0300","caller":"service/enrollments_service.go:91","msg":"Получение курсов для студента","student_id":0}
 {"level":"WARN","time":"2024-12-20T14:19:53.046+0300","caller":"service/enrollments_service.go:94","msg":"Некорректный ID студента","student_id":0}
+{"level":"INFO","time":"2024-12-20T14:29:32.024+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:29:32.039+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:29:32.740+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":1,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:29:32.739+0300"}
+{"level":"INFO","time":"2024-12-20T14:29:32.740+0300","caller":"service/instructor_service.go:63","msg":"Преподаватель успешно зарегистрирован","instructor_id":1,"email":"instructor2@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:29:32.845+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor1@domain.com","role":"instructor","expires_at":"2024-12-21T14:29:32.845+0300"}
+{"level":"INFO","time":"2024-12-20T14:29:32.845+0300","caller":"service/instructor_service.go:63","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:30:32.011+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:30:32.023+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:30:32.445+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:30:32.451+0300","caller":"service/enrollments_service.go:40","msg":"Студент успешно записан на курс","student_id":1,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:30:32.460+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":0,"course_id":1}
+{"level":"WARN","time":"2024-12-20T14:30:32.460+0300","caller":"service/enrollments_service.go:30","msg":"Некорректные данные для записи на курс","student_id":0,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:30:32.461+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":0}
+{"level":"WARN","time":"2024-12-20T14:30:32.461+0300","caller":"service/enrollments_service.go:30","msg":"Некорректные данные для записи на курс","student_id":1,"course_id":0}
+{"level":"INFO","time":"2024-12-20T14:30:32.462+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":1,"course_id":99}
+{"level":"ERROR","time":"2024-12-20T14:30:32.471+0300","caller":"service/enrollments_service.go:36","msg":"Ошибка при записи студента на курс","error":"ОШИБКА: INSERT или UPDATE в таблице \"enrollments\" нарушает ограничение внешнего ключа \"enrollments_course_id_fkey\" (SQLSTATE 23503)","student_id":1,"course_id":99}
+{"level":"INFO","time":"2024-12-20T14:30:32.472+0300","caller":"service/enrollments_service.go:27","msg":"Запись студента на курс","student_id":99,"course_id":1}
+{"level":"ERROR","time":"2024-12-20T14:30:32.473+0300","caller":"service/enrollments_service.go:36","msg":"Ошибка при записи студента на курс","error":"ОШИБКА: INSERT или UPDATE в таблице \"enrollments\" нарушает ограничение внешнего ключа \"enrollments_student_id_fkey\" (SQLSTATE 23503)","student_id":99,"course_id":1}
+{"level":"INFO","time":"2024-12-20T14:30:39.610+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:30:39.619+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:30:39.958+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":1,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:30:39.958+0300"}
+{"level":"INFO","time":"2024-12-20T14:30:39.958+0300","caller":"service/instructor_service.go:70","msg":"Преподаватель успешно зарегистрирован","instructor_id":1,"email":"instructor2@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:30:40.030+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor1@domain.com","role":"instructor","expires_at":"2024-12-21T14:30:40.030+0300"}
+{"level":"INFO","time":"2024-12-20T14:30:40.031+0300","caller":"service/instructor_service.go:70","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:31:26.229+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:31:26.240+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:31:26.722+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":1,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:31:26.720+0300"}
+{"level":"INFO","time":"2024-12-20T14:31:26.722+0300","caller":"service/instructor_service.go:70","msg":"Преподаватель успешно зарегистрирован","instructor_id":1,"email":"instructor2@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:31:26.824+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor1@domain.com","role":"instructor","expires_at":"2024-12-21T14:31:26.824+0300"}
+{"level":"INFO","time":"2024-12-20T14:31:26.824+0300","caller":"service/instructor_service.go:70","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:31:59.065+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:31:59.078+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:31:59.551+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":1,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:31:59.551+0300"}
+{"level":"INFO","time":"2024-12-20T14:31:59.551+0300","caller":"service/instructor_service.go:67","msg":"Преподаватель успешно зарегистрирован","instructor_id":1,"email":"instructor2@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:31:59.655+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor1@domain.com","role":"instructor","expires_at":"2024-12-21T14:31:59.655+0300"}
+{"level":"INFO","time":"2024-12-20T14:31:59.655+0300","caller":"service/instructor_service.go:67","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:32:47.343+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:32:47.356+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:32:47.870+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":1,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:32:47.870+0300"}
+{"level":"INFO","time":"2024-12-20T14:32:47.870+0300","caller":"service/instructor_service.go:67","msg":"Преподаватель успешно зарегистрирован","instructor_id":1,"email":"instructor2@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:32:47.985+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor1@domain.com","role":"instructor","expires_at":"2024-12-21T14:32:47.984+0300"}
+{"level":"INFO","time":"2024-12-20T14:32:47.985+0300","caller":"service/instructor_service.go:67","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:33:09.958+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:33:09.966+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:33:10.388+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":1,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:33:10.388+0300"}
+{"level":"INFO","time":"2024-12-20T14:33:10.388+0300","caller":"service/instructor_service.go:66","msg":"Преподаватель успешно зарегистрирован","instructor_id":1,"email":"instructor2@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:33:10.466+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor1@domain.com","role":"instructor","expires_at":"2024-12-21T14:33:10.466+0300"}
+{"level":"INFO","time":"2024-12-20T14:33:10.466+0300","caller":"service/instructor_service.go:66","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:34:34.811+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:34:34.819+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:34:35.156+0300","caller":"middleware/auth_middleware.go:121","msg":"JWT-токен успешно сгенерирован","user_id":2,"email":"instructor2@domain.com","role":"instructor","expires_at":"2024-12-21T14:34:35.156+0300"}
+{"level":"INFO","time":"2024-12-20T14:34:35.157+0300","caller":"service/instructor_service.go:66","msg":"Преподаватель успешно зарегистрирован","instructor_id":2,"email":"instructor2@domain.com"}
+{"level":"WARN","time":"2024-12-20T14:34:35.158+0300","caller":"service/instructor_service.go:39","msg":"Преподаватель с таким email уже существует","email":"instructor1@domain.com"}
+{"level":"INFO","time":"2024-12-20T14:34:59.171+0300","caller":"tests/main_test.go:45","msg":"Инициализация тестов"}
+{"level":"INFO","time":"2024-12-20T14:34:59.181+0300","caller":"tests/main_test.go:56","msg":"Успешное подключение к базе данных для тестов"}
+{"level":"INFO","time":"2024-12-20T14:34:59.623+0300","caller":"service/instructor_service.go:77","msg":"Получение курсов для преподавателя","instructor_id":1}
+{"level":"INFO","time":"2024-12-20T14:34:59.627+0300","caller":"service/instructor_service.go:100","msg":"Курсы успешно получены","count":1,"instructor_id":1}
+{"level":"INFO","time":"2024-12-20T14:34:59.629+0300","caller":"service/instructor_service.go:77","msg":"Получение курсов для преподавателя","instructor_id":0}
+{"level":"WARN","time":"2024-12-20T14:34:59.629+0300","caller":"service/instructor_service.go:80","msg":"Некорректный ID преподавателя","instructor_id":0}
