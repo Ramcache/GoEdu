@@ -69,7 +69,7 @@ func (s *EnrollmentService) GetStudentsByCourse(ctx context.Context, req *proto.
 	return &proto.StudentList{Students: grpcStudents}, nil
 }
 
-func (s *EnrollmentService) UnEnrollStudent(ctx context.Context, req *proto.EnrollmentRequest) (*proto.Empty, error) {
+func (s *EnrollmentService) UnEnrollStudent(ctx context.Context, req *proto.UnEnrollRequest) (*proto.Empty, error) {
 	s.logger.Info("Удаление студента с курса", zap.Int64("student_id", req.StudentId), zap.Int64("course_id", req.CourseId))
 
 	if req.StudentId == 0 || req.CourseId == 0 {

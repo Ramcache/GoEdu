@@ -186,35 +186,35 @@ func TestUnEnrollStudent(t *testing.T) {
 
 	testCases := []struct {
 		Name         string
-		Request      *proto.EnrollmentRequest
+		Request      *proto.UnEnrollRequest
 		ShouldError  bool
 		ExpectedCode codes.Code
 	}{
 		{
 			Name:        "Успешное удаление студента с курса",
-			Request:     &proto.EnrollmentRequest{StudentId: 1, CourseId: 1},
+			Request:     &proto.UnEnrollRequest{StudentId: 1, CourseId: 1},
 			ShouldError: false,
 		},
 		{
 			Name:         "Некорректный ID студента",
-			Request:      &proto.EnrollmentRequest{StudentId: 0, CourseId: 1},
+			Request:      &proto.UnEnrollRequest{StudentId: 0, CourseId: 1},
 			ShouldError:  true,
 			ExpectedCode: codes.InvalidArgument,
 		},
 		{
 			Name:         "Некорректный ID курса",
-			Request:      &proto.EnrollmentRequest{StudentId: 1, CourseId: 0},
+			Request:      &proto.UnEnrollRequest{StudentId: 1, CourseId: 0},
 			ShouldError:  true,
 			ExpectedCode: codes.InvalidArgument,
 		},
 		{
 			Name:        "Попытка удалить несуществующего студента с курса",
-			Request:     &proto.EnrollmentRequest{StudentId: 99, CourseId: 1},
+			Request:     &proto.UnEnrollRequest{StudentId: 99, CourseId: 1},
 			ShouldError: false,
 		},
 		{
 			Name:        "Попытка удалить студента с несуществующего курса",
-			Request:     &proto.EnrollmentRequest{StudentId: 1, CourseId: 99},
+			Request:     &proto.UnEnrollRequest{StudentId: 1, CourseId: 99},
 			ShouldError: false,
 		},
 	}
