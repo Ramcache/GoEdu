@@ -1,287 +1,412 @@
 syntax = "proto3";
 
-package education;
+package GoEdu;
+
+import "google/api/annotations.proto";
 
 option go_package = "/proto;proto";
 
-// Service for managing courses in the education system.
+// Сервис для управления курсами в системе образования.
 service EducationService {
+  // Получить список всех курсов.
+  rpc GetCourses (Empty) returns (CourseList) {
+    option (google.api.http) = {
+      get: "/v1/courses"
+    };
+  }
 
+  // Получить информацию о курсе по ID.
+  rpc GetCourseByID (CourseIDRequest) returns (Course) {
+    option (google.api.http) = {
+      get: "/v1/courses/{course_id}"
+    };
+  }
 
-  // Retrieves all available courses.
-  rpc GetCourses (Empty) returns (CourseList);
+  // Создать новый курс.
+  rpc CreateCourse (NewCourseRequest) returns (Course) {
+    option (google.api.http) = {
+      post: "/v1/courses"
+      body: "*"
+    };
+  }
 
-  // Retrieves a specific course by its ID.
-  rpc GetCourseByID (CourseIDRequest) returns (Course);
+  // Обновить существующий курс.
+  rpc UpdateCourse (UpdateCourseRequest) returns (Course) {
+    option (google.api.http) = {
+      put: "/v1/courses/{id}"
+      body: "*"
+    };
+  }
 
-  // Creates a new course.
-  rpc CreateCourse (NewCourseRequest) returns (Course);
+  // Удалить курс по ID.
+  rpc DeleteCourse (CourseIDRequest) returns (Empty) {
+    option (google.api.http) = {
+      delete: "/v1/courses/{course_id}"
+    };
+  }
 
-  // Updates an existing course.
-  rpc UpdateCourse (UpdateCourseRequest) returns (Course);
-
-  // Deletes a course by its ID.
-  rpc DeleteCourse (CourseIDRequest) returns (Empty);
-
-  // Searches for courses by keyword.
-  rpc SearchCourses (SearchRequest) returns (CourseList);
+  // Поиск курсов по ключевому слову.
+  rpc SearchCourses (SearchRequest) returns (CourseList) {
+    option (google.api.http) = {
+      get: "/v1/courses/search"
+    };
+  }
 }
 
-// Service for managing students.
+// Сервис для управления студентами.
 service StudentService {
-  // Registers a new student.
-  rpc RegisterStudent (RegisterStudentRequest) returns (Student);
+  // Регистрация нового студента.
+  rpc RegisterStudent (RegisterStudentRequest) returns (Student) {
+    option (google.api.http) = {
+      post: "/v1/students/register"
+      body: "*"
+    };
+  }
 
-  // Authenticates a student.
-  rpc LoginStudent (LoginRequest) returns (AuthResponse);
+  // Авторизация студента.
+  rpc LoginStudent (LoginRequest) returns (AuthResponse) {
+    option (google.api.http) = {
+      post: "/v1/students/login"
+      body: "*"
+    };
+  }
 
-  // Retrieves the profile of a student.
-  rpc GetStudentProfile (StudentIDRequest) returns (Student);
+  // Получить профиль студента по ID.
+  rpc GetStudentProfile (StudentIDRequest) returns (Student) {
+    option (google.api.http) = {
+      get: "/v1/students/{id}"
+    };
+  }
 
-  // Updates the profile of a student.
-  rpc UpdateStudentProfile (UpdateStudentRequest) returns (Student);
+  // Обновить профиль студента.
+  rpc UpdateStudentProfile (UpdateStudentRequest) returns (Student) {
+    option (google.api.http) = {
+      put: "/v1/students/{id}"
+      body: "*"
+    };
+  }
 }
 
-// Service for managing enrollments.
+// Сервис для управления записями на курсы.
 service EnrollmentService {
-  // Enrolls a student in a course.
-  rpc EnrollStudent (EnrollmentRequest) returns (Empty);
+  // Записать студента на курс.
+  rpc EnrollStudent (EnrollmentRequest) returns (Empty) {
+    option (google.api.http) = {
+      post: "/v1/enrollments"
+      body: "*"
+    };
+  }
 
-  // Retrieves all students in a course.
-  rpc GetStudentsByCourse (CourseIDRequest) returns (StudentList);
+  // Получить список студентов, записанных на курс.
+  rpc GetStudentsByCourse (CourseIDRequest) returns (StudentList) {
+    option (google.api.http) = {
+      get: "/v1/courses/{course_id}/students"
+    };
+  }
 
-  // Retrieves all courses for a student.
-  rpc GetCoursesByStudent (StudentIDRequest) returns (CourseList);
+  // Получить список курсов, на которые записан студент.
+  rpc GetCoursesByStudent (StudentIDRequest) returns (CourseList) {
+    option (google.api.http) = {
+      get: "/v1/students/{id}/courses"
+    };
+  }
 
-  // Unenrolls a student from a course.
-  rpc UnEnrollStudent (EnrollmentRequest) returns (Empty);
+  // Отписать студента от курса.
+  rpc UnEnrollStudent (UnEnrollRequest) returns (Empty) {
+    option (google.api.http) = {
+      delete: "/v1/enrollments/{student_id}/{course_id}"
+    };
+  }
 }
 
-// Service for managing lectures in courses.
+// Сервис для управления лекциями в курсах.
 service LectureService {
-  // Adds a lecture to a course.
-  rpc AddLectureToCourse (LectureRequest) returns (Lecture);
+  // Добавить лекцию в курс.
+  rpc AddLectureToCourse (LectureRequest) returns (Lecture) {
+    option (google.api.http) = {
+      post: "/v1/courses/{course_id}/lectures"
+      body: "*"
+    };
+  }
 
-  // Retrieves all lectures in a course.
-  rpc GetLecturesByCourse (CourseIDRequest) returns (LectureList);
+  // Получить список лекций по ID курса.
+  rpc GetLecturesByCourse (CourseIDRequest) returns (LectureList) {
+    option (google.api.http) = {
+      get: "/v1/courses/{course_id}/lectures"
+    };
+  }
 
-  // Retrieves the content of a specific lecture.
-  rpc GetLectureContent (LectureIDRequest) returns (LectureContent);
+  // Получить содержание лекции по ID.
+  rpc GetLectureContent (LectureIDRequest) returns (LectureContent) {
+    option (google.api.http) = {
+      get: "/v1/lectures/{lecture_id}/content"
+    };
+  }
 
-  // Updates an existing lecture.
-  rpc UpdateLecture (UpdateLectureRequest) returns (Lecture);
+  // Обновить лекцию.
+  rpc UpdateLecture (UpdateLectureRequest) returns (Lecture) {
+    option (google.api.http) = {
+      put: "/v1/lectures/{id}"
+      body: "*"
+    };
+  }
 
-  // Deletes a lecture by its ID.
-  rpc DeleteLecture (LectureIDRequest) returns (Empty);
+  // Удалить лекцию по ID.
+  rpc DeleteLecture (LectureIDRequest) returns (Empty) {
+    option (google.api.http) = {
+      delete: "/v1/lectures/{lecture_id}"
+    };
+  }
 
-  // Marks a lecture as completed by a student.
-  rpc MarkLectureAsCompleted (LectureCompletionRequest) returns (Empty);
+  // Отметить лекцию как завершенную.
+  rpc MarkLectureAsCompleted (LectureCompletionRequest) returns (Empty) {
+    option (google.api.http) = {
+      post: "/v1/lectures/{lecture_id}/complete"
+      body: "*"
+    };
+  }
 
-  // Retrieves the progress of a student in a course.
-  rpc GetCourseProgress (CourseProgressRequest) returns (CourseProgress);
+  // Получить прогресс по курсу для студента.
+  rpc GetCourseProgress (CourseProgressRequest) returns (CourseProgress) {
+    option (google.api.http) = {
+      get: "/v1/courses/{course_id}/progress"
+    };
+  }
 
-  // Retrieves recommended courses for a student.
-  rpc GetRecommendedCourses (StudentIDRequest) returns (CourseList);
+  // Получить рекомендованные курсы для студента.
+  rpc GetRecommendedCourses (StudentIDRequest) returns (CourseList) {
+    option (google.api.http) = {
+      get: "/v1/students/{id}/recommendations"
+    };
+  }
 }
 
-// Service for managing instructors.
+// Сервис для управления преподавателями.
 service InstructorService {
-  // Registers a new instructor.
-  rpc RegisterInstructor (RegisterInstructorRequest) returns (Instructor);
+  // Регистрация нового преподавателя.
+  rpc RegisterInstructor (RegisterInstructorRequest) returns (Instructor) {
+    option (google.api.http) = {
+      post: "/v1/instructors/register"
+      body: "*"
+    };
+  }
 
-  // Retrieves all courses managed by an instructor.
-  rpc GetCoursesByInstructor (InstructorIDRequest) returns (CourseList);
+  // Получить список курсов преподавателя по ID.
+  rpc GetCoursesByInstructor (InstructorIDRequest) returns (CourseList) {
+    option (google.api.http) = {
+      get: "/v1/instructors/{instructor_id}/courses"
+    };
+  }
 }
 
-// Service for managing reviews for courses.
+// Сервис для управления отзывами к курсам.
 service ReviewService {
-  // Adds a review to a course.
-  rpc AddReviewToCourse (ReviewRequest) returns (Empty);
+  // Добавить отзыв к курсу.
+  rpc AddReviewToCourse (ReviewRequest) returns (Empty) {
+    option (google.api.http) = {
+      post: "/v1/courses/{course_id}/reviews"
+      body: "*"
+    };
+  }
 
-  // Retrieves all reviews for a course.
-  rpc GetReviewsByCourse (CourseIDRequest) returns (ReviewList);
+  // Получить список отзывов к курсу по ID.
+  rpc GetReviewsByCourse (CourseIDRequest) returns (ReviewList) {
+    option (google.api.http) = {
+      get: "/v1/courses/{course_id}/reviews"
+    };
+  }
 }
 
-// Health check service to monitor server status.
+// Сервис для проверки работоспособности сервера.
 service HealthService {
-  // Checks the health of the server.
-  rpc Check (Empty) returns (HealthCheckResponse);
+  // Проверка состояния сервера.
+  rpc Check (Empty) returns (HealthCheckResponse) {
+    option (google.api.http) = {
+      get: "/health"
+    };
+  }
 }
 
-// Common message for empty responses.
+// Сообщение для пустых ответов.
 message Empty {}
 
-// Message for health check response.
-message HealthCheckResponse {
-  bool status = 1; // True if healthy, false otherwise.
+// Запрос для удаления записи студента с курса.
+message UnEnrollRequest {
+  int64 student_id = 1; // ID студента.
+  int64 course_id = 2; // ID курса.
 }
 
-// Course-related messages.
+// Ответ для проверки состояния сервера.
+message HealthCheckResponse {
+  bool status = 1; // true, если сервер работает.
+}
+
+// Сообщения, связанные с курсами.
 message Course {
-  int64 id = 1;
-  string name = 2;
-  string description = 3;
-  int64 instructor_id = 4;
+  int64 id = 1; // ID курса.
+  string name = 2; // Название курса.
+  string description = 3; // Описание курса.
+  int64 instructor_id = 4; // ID преподавателя.
 }
 
 message CourseList {
-  repeated Course courses = 1;
+  repeated Course courses = 1; // Список курсов.
 }
 
 message CourseIDRequest {
-  int64 course_id = 1;
+  int64 course_id = 1; // ID курса.
 }
 
 message NewCourseRequest {
-  string name = 1;
-  string description = 2;
-  int64 instructor_id = 3;
+  string name = 1; // Название нового курса.
+  string description = 2; // Описание нового курса.
+  int64 instructor_id = 3; // ID преподавателя.
 }
 
 message UpdateCourseRequest {
-  int64 id = 1;
-  string name = 2;
-  string description = 3;
+  int64 id = 1; // ID курса для обновления.
+  string name = 2; // Новое название курса.
+  string description = 3; // Новое описание курса.
 }
 
-// Student-related messages.
+// Сообщения, связанные с регистрацией студентов.
 message RegisterStudentRequest {
-  string name = 1;
-  string email = 2;
-  string password = 3;
+  string name = 1; // Имя студента.
+  string email = 2; // Email студента.
+  string password = 3; // Пароль студента.
 }
 
 message Student {
-  int64 id = 1;
-  string name = 2;
-  string email = 3;
-  string token = 4;
+  int64 id = 1; // ID студента.
+  string name = 2; // Имя студента.
+  string email = 3; // Email студента.
+  string token = 4; // Токен авторизации студента.
 }
 
 message LoginRequest {
-  string email = 1;
-  string password = 2;
+  string email = 1; // Email для входа.
+  string password = 2; // Пароль для входа.
 }
 
 message AuthResponse {
-  int64 id = 1;
-  string name = 2;
-  string email = 3;
-  string token = 4;
+  int64 id = 1; // ID студента.
+  string name = 2; // Имя студента.
+  string email = 3; // Email студента.
+  string token = 4; // Токен авторизации.
 }
 
 message StudentIDRequest {
-  int64 id = 1;
+  int64 id = 1; // ID студента.
 }
 
 message UpdateStudentRequest {
-  int64 id = 1;
-  string name = 2;
-  string email = 3;
-  string password = 4;
+  int64 id = 1; // ID студента для обновления.
+  string name = 2; // Новое имя студента.
+  string email = 3; // Новый email студента.
+  string password = 4; // Новый пароль студента.
 }
 
-// Enrollment-related messages.
+// Сообщения для управления записями.
 message EnrollmentRequest {
-  int64 student_id = 1;
-  int64 course_id = 2;
+  int64 student_id = 1; // ID студента.
+  int64 course_id = 2; // ID курса.
 }
 
 message StudentList {
-  repeated Student students = 1;
+  repeated Student students = 1; // Список студентов.
 }
 
-// Lecture-related messages.
+// Сообщения для управления лекциями.
 message LectureRequest {
-  int64 course_id = 1;
-  string title = 2;
-  string content = 3;
+  int64 course_id = 1; // ID курса, к которому относится лекция.
+  string title = 2; // Название лекции.
+  string content = 3; // Содержание лекции.
 }
 
 message Lecture {
-  int64 id = 1;
-  int64 course_id = 2;
-  string title = 3;
-  string content = 4;
+  int64 id = 1; // ID лекции.
+  int64 course_id = 2; // ID курса.
+  string title = 3; // Название лекции.
+  string content = 4; // Содержание лекции.
 }
 
 message LectureList {
-  repeated Lecture lectures = 1;
+  repeated Lecture lectures = 1; // Список лекций.
 }
 
 message LectureIDRequest {
-  int64 lecture_id = 1;
+  int64 lecture_id = 1; // ID лекции.
 }
 
 message LectureContent {
-  int64 id = 1;
-  int64 course_id = 2;
-  string title = 3;
-  string content = 4;
+  int64 id = 1; // ID лекции.
+  int64 course_id = 2; // ID курса.
+  string title = 3; // Название лекции.
+  string content = 4; // Содержание лекции.
 }
 
 message UpdateLectureRequest {
-  int64 id = 1;
-  string title = 2;
-  string content = 3;
+  int64 id = 1; // ID лекции для обновления.
+  string title = 2; // Новое название лекции.
+  string content = 3; // Новое содержание лекции.
 }
 
 message LectureCompletionRequest {
-  int64 student_id = 1;
-  int64 lecture_id = 2;
+  int64 student_id = 1; // ID студента.
+  int64 lecture_id = 2; // ID лекции.
 }
 
 message CourseProgressRequest {
-  int64 student_id = 1;
-  int64 course_id = 2;
+  int64 student_id = 1; // ID студента.
+  int64 course_id = 2; // ID курса.
 }
 
 message CourseProgress {
-  int64 course_id = 1;
-  int64 student_id = 2;
-  int32 completed_percent = 3;
+  int64 course_id = 1; // ID курса.
+  int64 student_id = 2; // ID студента.
+  int32 completed_percent = 3; // Процент завершения курса.
 }
 
-// Instructor-related messages.
+// Сообщения для регистрации преподавателей.
 message RegisterInstructorRequest {
-  string name = 1;
-  string email = 2;
-  string password = 3;
+  string name = 1; // Имя преподавателя.
+  string email = 2; // Email преподавателя.
+  string password = 3; // Пароль преподавателя.
 }
 
 message Instructor {
-  int64 id = 1;
-  string name = 2;
-  string email = 3;
-  string token = 4;
+  int64 id = 1; // ID преподавателя.
+  string name = 2; // Имя преподавателя.
+  string email = 3; // Email преподавателя.
+  string token = 4; // Токен авторизации преподавателя.
 }
 
 message InstructorIDRequest {
-  int64 instructor_id = 1;
+  int64 instructor_id = 1; // ID преподавателя.
 }
 
-// Review-related messages.
+// Сообщения для управления отзывами.
 message ReviewRequest {
-  int64 student_id = 1;
-  int64 course_id = 2;
-  string comment = 3;
-  int32 rating = 4;
+  int64 student_id = 1; // ID студента.
+  int64 course_id = 2; // ID курса.
+  string comment = 3; // Текст отзыва.
+  int32 rating = 4; // Оценка (рейтинг).
 }
 
 message Review {
-  int64 id = 1;
-  int64 student_id = 2;
-  int64 course_id = 3;
-  string comment = 4;
-  int32 rating = 5;
-  string created_at = 6;
+  int64 id = 1; // ID отзыва.
+  int64 student_id = 2; // ID студента.
+  int64 course_id = 3; // ID курса.
+  string comment = 4; // Текст отзыва.
+  int32 rating = 5; // Оценка.
+  string created_at = 6; // Дата создания отзыва.
 }
 
 message ReviewList {
-  repeated Review reviews = 1;
+  repeated Review reviews = 1; // Список отзывов.
 }
 
-// Search-related messages.
+// Сообщения для поиска.
 message SearchRequest {
-  string keyword = 1;
+  string keyword = 1; // Ключевое слово для поиска.
 }

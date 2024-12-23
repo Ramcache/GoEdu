@@ -7,6 +7,7 @@ import (
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func NewLogger() (*zap.Logger, error) {
@@ -16,12 +17,15 @@ func NewLogger() (*zap.Logger, error) {
 		return nil, fmt.Errorf("не удалось создать директорию для логов: %w", err)
 	}
 
-	logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return nil, fmt.Errorf("не удалось открыть файл логов: %w", err)
+	logRotation := &lumberjack.Logger{
+		Filename:   logFilePath,
+		MaxSize:    10,
+		MaxBackups: 3,
+		MaxAge:     30,
+		Compress:   true,
 	}
 
-	writeSyncer := zapcore.AddSync(logFile)
+	writeSyncer := zapcore.AddSync(logRotation)
 
 	encoderConfig := zapcore.EncoderConfig{
 		TimeKey:      "time",
