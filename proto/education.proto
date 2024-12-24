@@ -183,6 +183,21 @@ service LectureService {
 
 // Сервис для управления преподавателями.
 service InstructorService {
+
+  // Получение преподавателя по ID
+  rpc GetInstructorByID(GetInstructorRequest) returns (Instructor) {
+    option (google.api.http) = {
+      get: "/v1/instructors/{id}"
+    };
+  }
+
+  // Обновление данных преподавателя
+  rpc UpdateInstructor(UpdateInstructorRequest) returns (Instructor) {
+    option (google.api.http) = {
+      patch: "/v1/instructors/{id}"
+      body: "*"
+    };
+  }
   // Регистрация нового преподавателя.
   rpc RegisterInstructor (RegisterInstructorRequest) returns (Instructor) {
     option (google.api.http) = {
@@ -417,3 +432,21 @@ message SearchRequest {
   string keyword = 1; // Ключевое слово для поиска.
 }
 
+// Сообщения для управления преподавателями.
+message UpdateInstructorRequest {
+  int64 id = 1;                // ID преподавателя
+  string name = 2;              // Новое имя (опционально)
+  string email = 3;             // Новый email (опционально)
+  string current_password = 4;  // Текущий пароль (для проверки при изменении пароля)
+  string new_password = 5;      // Новый пароль (опционально)
+}
+
+// Запрос для удаления преподавателя
+message DeleteInstructorRequest {
+  int64 id = 1;
+}
+
+// Запрос для получения преподавателя
+message GetInstructorRequest {
+  int64 id = 1;
+}

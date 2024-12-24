@@ -13,6 +13,8 @@ type InstructorRepository interface {
 	RegisterInstructor(ctx context.Context, instructor *models.Instructor) (int64, error)
 	GetInstructorByEmail(ctx context.Context, email string) (*models.Instructor, error)
 	GetCoursesByInstructor(ctx context.Context, instructorID int64) ([]*models.Course, error)
+	GetInstructorByID(ctx context.Context, id int64) (*models.Instructor, error)
+	UpdateInstructor(ctx context.Context, instructor *models.Instructor) error
 }
 
 type instructorRepository struct {
@@ -74,4 +76,40 @@ func (r *instructorRepository) GetCoursesByInstructor(ctx context.Context, instr
 	}
 
 	return courses, nil
+}
+
+func (r *instructorRepository) GetInstructorByID(ctx context.Context, id int64) (*models.Instructor, error) {
+	query := `SELECT id, name, email, password FROM instructors WHERE id = $1`
+
+	var instructor models.Instructor
+	err := r.db.QueryRow(ctx, query, id).Scan(
+		&instructor.ID,
+		&instructor.Name,
+		&instructor.Email,
+		&instructor.Password,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &instructor, nil
+}
+
+func (r *instructorRepository) UpdateInstructor(ctx context.Context, instructor *models.Instructor) error {
+	query := `
+		UPDATE instructors 
+		SET name = $1, email = $2, password = $3 
+		WHERE id = $4
+	`
+
+	commandTag, err := r.db.Exec(ctx, query, instructor.Name, instructor.Email, instructor.Password, instructor.ID)
+	if err != nil {
+		return err
+	}
+
+	if commandTag.RowsAffected() == 0 {
+		return errors.New("преподаватель не найден")
+	}
+
+	return nil
 }

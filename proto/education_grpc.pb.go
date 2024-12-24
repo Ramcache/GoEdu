@@ -1171,6 +1171,8 @@ var LectureService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
+	InstructorService_GetInstructorByID_FullMethodName      = "/GoEdu.InstructorService/GetInstructorByID"
+	InstructorService_UpdateInstructor_FullMethodName       = "/GoEdu.InstructorService/UpdateInstructor"
 	InstructorService_RegisterInstructor_FullMethodName     = "/GoEdu.InstructorService/RegisterInstructor"
 	InstructorService_LoginInstructor_FullMethodName        = "/GoEdu.InstructorService/LoginInstructor"
 	InstructorService_GetCoursesByInstructor_FullMethodName = "/GoEdu.InstructorService/GetCoursesByInstructor"
@@ -1182,6 +1184,10 @@ const (
 //
 // Сервис для управления преподавателями.
 type InstructorServiceClient interface {
+	// Получение преподавателя по ID
+	GetInstructorByID(ctx context.Context, in *GetInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
+	// Обновление данных преподавателя
+	UpdateInstructor(ctx context.Context, in *UpdateInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
 	// Регистрация нового преподавателя.
 	RegisterInstructor(ctx context.Context, in *RegisterInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
 	LoginInstructor(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
@@ -1195,6 +1201,26 @@ type instructorServiceClient struct {
 
 func NewInstructorServiceClient(cc grpc.ClientConnInterface) InstructorServiceClient {
 	return &instructorServiceClient{cc}
+}
+
+func (c *instructorServiceClient) GetInstructorByID(ctx context.Context, in *GetInstructorRequest, opts ...grpc.CallOption) (*Instructor, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Instructor)
+	err := c.cc.Invoke(ctx, InstructorService_GetInstructorByID_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instructorServiceClient) UpdateInstructor(ctx context.Context, in *UpdateInstructorRequest, opts ...grpc.CallOption) (*Instructor, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Instructor)
+	err := c.cc.Invoke(ctx, InstructorService_UpdateInstructor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *instructorServiceClient) RegisterInstructor(ctx context.Context, in *RegisterInstructorRequest, opts ...grpc.CallOption) (*Instructor, error) {
@@ -1233,6 +1259,10 @@ func (c *instructorServiceClient) GetCoursesByInstructor(ctx context.Context, in
 //
 // Сервис для управления преподавателями.
 type InstructorServiceServer interface {
+	// Получение преподавателя по ID
+	GetInstructorByID(context.Context, *GetInstructorRequest) (*Instructor, error)
+	// Обновление данных преподавателя
+	UpdateInstructor(context.Context, *UpdateInstructorRequest) (*Instructor, error)
 	// Регистрация нового преподавателя.
 	RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error)
 	LoginInstructor(context.Context, *LoginRequest) (*AuthResponse, error)
@@ -1248,6 +1278,12 @@ type InstructorServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedInstructorServiceServer struct{}
 
+func (UnimplementedInstructorServiceServer) GetInstructorByID(context.Context, *GetInstructorRequest) (*Instructor, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInstructorByID not implemented")
+}
+func (UnimplementedInstructorServiceServer) UpdateInstructor(context.Context, *UpdateInstructorRequest) (*Instructor, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateInstructor not implemented")
+}
 func (UnimplementedInstructorServiceServer) RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterInstructor not implemented")
 }
@@ -1276,6 +1312,42 @@ func RegisterInstructorServiceServer(s grpc.ServiceRegistrar, srv InstructorServ
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&InstructorService_ServiceDesc, srv)
+}
+
+func _InstructorService_GetInstructorByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInstructorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstructorServiceServer).GetInstructorByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InstructorService_GetInstructorByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstructorServiceServer).GetInstructorByID(ctx, req.(*GetInstructorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InstructorService_UpdateInstructor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateInstructorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstructorServiceServer).UpdateInstructor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InstructorService_UpdateInstructor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstructorServiceServer).UpdateInstructor(ctx, req.(*UpdateInstructorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _InstructorService_RegisterInstructor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -1339,6 +1411,14 @@ var InstructorService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "GoEdu.InstructorService",
 	HandlerType: (*InstructorServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetInstructorByID",
+			Handler:    _InstructorService_GetInstructorByID_Handler,
+		},
+		{
+			MethodName: "UpdateInstructor",
+			Handler:    _InstructorService_UpdateInstructor_Handler,
+		},
 		{
 			MethodName: "RegisterInstructor",
 			Handler:    _InstructorService_RegisterInstructor_Handler,

@@ -607,6 +607,77 @@
         ]
       }
     },
+    "/v1/instructors/{id}": {
+      "get": {
+        "summary": "Получение преподавателя по ID",
+        "operationId": "InstructorService_GetInstructorByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduInstructor"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "InstructorService"
+        ]
+      },
+      "patch": {
+        "summary": "Обновление данных преподавателя",
+        "operationId": "InstructorService_UpdateInstructor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduInstructor"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID преподавателя",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InstructorServiceUpdateInstructorBody"
+            }
+          }
+        ],
+        "tags": [
+          "InstructorService"
+        ]
+      }
+    },
     "/v1/instructors/{instructorId}/courses": {
       "get": {
         "summary": "Получить список курсов преподавателя по ID.",
@@ -1345,6 +1416,28 @@
           "description": "Список студентов."
         }
       }
+    },
+    "InstructorServiceUpdateInstructorBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Новое имя (опционально)"
+        },
+        "email": {
+          "type": "string",
+          "title": "Новый email (опционально)"
+        },
+        "currentPassword": {
+          "type": "string",
+          "title": "Текущий пароль (для проверки при изменении пароля)"
+        },
+        "newPassword": {
+          "type": "string",
+          "title": "Новый пароль (опционально)"
+        }
+      },
+      "description": "Сообщения для управления преподавателями."
     },
     "LectureServiceAddLectureToCourseBody": {
       "type": "object",
