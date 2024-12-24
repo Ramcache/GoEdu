@@ -7,6 +7,7 @@ import (
 	"GoEdu/internal/repository"
 	"GoEdu/proto"
 	"context"
+	"errors"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
@@ -99,4 +100,36 @@ func (s *InstructorService) GetCoursesByInstructor(ctx context.Context, req *pro
 
 	s.logger.Info("Курсы успешно получены", zap.Int("count", len(grpcCourses)), zap.Int64("instructor_id", req.InstructorId))
 	return &proto.CourseList{Courses: grpcCourses}, nil
+}
+
+func (s *InstructorService) LoginInstructor(ctx context.Context, req *proto.LoginRequest) (*proto.AuthResponse, error) {
+	instructor, err := s.repo.GetInstructorByEmail(ctx, req.Email)
+	if err != nil {
+		// Если преподаватель не найден, возвращаем codes.NotFound
+		if errors.Is(err, repository.ErrInstructorNotFound) {
+			return nil, status.Errorf(codes.NotFound, "Преподаватель не найден")
+		}
+		// Для любых других ошибок возвращаем codes.Internal
+		return nil, status.Errorf(codes.Internal, "Ошибка при получении данных преподавателя: %v", err)
+	}
+
+	// Проверяем пароль
+	if err := bcrypt.CompareHashAndPassword([]byte(instructor.Password), []byte(req.Password)); err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, "Неверный пароль")
+	}
+
+	// Генерируем JWT-токен
+	token, err := middleware.GenerateJWTToken(instructor.ID, instructor.Email, "instructor", []byte(s.cfg.JWTSecretKey), 24, s.logger)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Ошибка генерации токена")
+	}
+
+	// Логируем успешный вход
+	s.logger.Info("Профиль преподавателя успешно получен", zap.String("Email", req.Email))
+	return &proto.AuthResponse{
+		Id:    instructor.ID,
+		Name:  instructor.Name,
+		Email: instructor.Email,
+		Token: token,
+	}, nil
 }

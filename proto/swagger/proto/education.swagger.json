@@ -1,0 +1,1452 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/education.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "EducationService"
+    },
+    {
+      "name": "StudentService"
+    },
+    {
+      "name": "EnrollmentService"
+    },
+    {
+      "name": "LectureService"
+    },
+    {
+      "name": "InstructorService"
+    },
+    {
+      "name": "ReviewService"
+    },
+    {
+      "name": "HealthService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Проверка состояния сервера.",
+        "operationId": "HealthService_Check",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "HealthService"
+        ]
+      }
+    },
+    "/v1/courses": {
+      "get": {
+        "summary": "Получить список всех курсов.",
+        "operationId": "EducationService_GetCourses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourseList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "EducationService"
+        ]
+      },
+      "post": {
+        "summary": "Создать новый курс.",
+        "operationId": "EducationService_CreateCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GoEduNewCourseRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EducationService"
+        ]
+      }
+    },
+    "/v1/courses/search": {
+      "get": {
+        "summary": "Поиск курсов по ключевому слову.",
+        "operationId": "EducationService_SearchCourses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourseList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "keyword",
+            "description": "Ключевое слово для поиска.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "EducationService"
+        ]
+      }
+    },
+    "/v1/courses/{courseId}": {
+      "get": {
+        "summary": "Получить информацию о курсе по ID.",
+        "operationId": "EducationService_GetCourseByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "EducationService"
+        ]
+      },
+      "delete": {
+        "summary": "Удалить курс по ID.",
+        "operationId": "EducationService_DeleteCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "EducationService"
+        ]
+      }
+    },
+    "/v1/courses/{courseId}/lectures": {
+      "get": {
+        "summary": "Получить список лекций по ID курса.",
+        "operationId": "LectureService_GetLecturesByCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduLectureList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      },
+      "post": {
+        "summary": "Добавить лекцию в курс.",
+        "operationId": "LectureService_AddLectureToCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduLecture"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса, к которому относится лекция.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LectureServiceAddLectureToCourseBody"
+            }
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      }
+    },
+    "/v1/courses/{courseId}/progress": {
+      "get": {
+        "summary": "Получить прогресс по курсу для студента.",
+        "operationId": "LectureService_GetCourseProgress",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourseProgress"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "studentId",
+            "description": "ID студента.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      }
+    },
+    "/v1/courses/{courseId}/reviews": {
+      "get": {
+        "summary": "Получить список отзывов к курсу по ID.",
+        "operationId": "ReviewService_GetReviewsByCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduReviewList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ReviewService"
+        ]
+      },
+      "post": {
+        "summary": "Добавить отзыв к курсу.",
+        "operationId": "ReviewService_AddReviewToCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ReviewServiceAddReviewToCourseBody"
+            }
+          }
+        ],
+        "tags": [
+          "ReviewService"
+        ]
+      }
+    },
+    "/v1/courses/{courseId}/students": {
+      "get": {
+        "summary": "Получить список студентов, записанных на курс.",
+        "operationId": "EnrollmentService_GetStudentsByCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduStudentList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "EnrollmentService"
+        ]
+      }
+    },
+    "/v1/courses/{id}": {
+      "put": {
+        "summary": "Обновить существующий курс.",
+        "operationId": "EducationService_UpdateCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID курса для обновления.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EducationServiceUpdateCourseBody"
+            }
+          }
+        ],
+        "tags": [
+          "EducationService"
+        ]
+      }
+    },
+    "/v1/enrollments": {
+      "post": {
+        "summary": "Записать студента на курс.",
+        "operationId": "EnrollmentService_EnrollStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Сообщения для управления записями.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GoEduEnrollmentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EnrollmentService"
+        ]
+      }
+    },
+    "/v1/enrollments/{studentId}/{courseId}": {
+      "delete": {
+        "summary": "Отписать студента от курса.",
+        "operationId": "EnrollmentService_UnEnrollStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "studentId",
+            "description": "ID студента.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "courseId",
+            "description": "ID курса.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "EnrollmentService"
+        ]
+      }
+    },
+    "/v1/instructors/login": {
+      "post": {
+        "operationId": "InstructorService_LoginInstructor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduAuthResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GoEduLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "InstructorService"
+        ]
+      }
+    },
+    "/v1/instructors/register": {
+      "post": {
+        "summary": "Регистрация нового преподавателя.",
+        "operationId": "InstructorService_RegisterInstructor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduInstructor"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Сообщения для регистрации преподавателей.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GoEduRegisterInstructorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "InstructorService"
+        ]
+      }
+    },
+    "/v1/instructors/{instructorId}/courses": {
+      "get": {
+        "summary": "Получить список курсов преподавателя по ID.",
+        "operationId": "InstructorService_GetCoursesByInstructor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourseList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "instructorId",
+            "description": "ID преподавателя.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "InstructorService"
+        ]
+      }
+    },
+    "/v1/lectures/{id}": {
+      "put": {
+        "summary": "Обновить лекцию.",
+        "operationId": "LectureService_UpdateLecture",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduLecture"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID лекции для обновления.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LectureServiceUpdateLectureBody"
+            }
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      }
+    },
+    "/v1/lectures/{lectureId}": {
+      "delete": {
+        "summary": "Удалить лекцию по ID.",
+        "operationId": "LectureService_DeleteLecture",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lectureId",
+            "description": "ID лекции.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      }
+    },
+    "/v1/lectures/{lectureId}/complete": {
+      "post": {
+        "summary": "Отметить лекцию как завершенную.",
+        "operationId": "LectureService_MarkLectureAsCompleted",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lectureId",
+            "description": "ID лекции.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LectureServiceMarkLectureAsCompletedBody"
+            }
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      }
+    },
+    "/v1/lectures/{lectureId}/content": {
+      "get": {
+        "summary": "Получить содержание лекции по ID.",
+        "operationId": "LectureService_GetLectureContent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduLectureContent"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lectureId",
+            "description": "ID лекции.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      }
+    },
+    "/v1/students/login": {
+      "post": {
+        "summary": "Авторизация студента.",
+        "operationId": "StudentService_LoginStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduAuthResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GoEduLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "StudentService"
+        ]
+      }
+    },
+    "/v1/students/register": {
+      "post": {
+        "summary": "Регистрация нового студента.",
+        "operationId": "StudentService_RegisterStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduStudent"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Сообщения, связанные с регистрацией студентов.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GoEduRegisterStudentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "StudentService"
+        ]
+      }
+    },
+    "/v1/students/{id}": {
+      "get": {
+        "summary": "Получить профиль студента по ID.",
+        "operationId": "StudentService_GetStudentProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduStudent"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID студента.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "StudentService"
+        ]
+      },
+      "put": {
+        "summary": "Обновить профиль студента.",
+        "operationId": "StudentService_UpdateStudentProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduStudent"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID студента для обновления.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StudentServiceUpdateStudentProfileBody"
+            }
+          }
+        ],
+        "tags": [
+          "StudentService"
+        ]
+      }
+    },
+    "/v1/students/{id}/courses": {
+      "get": {
+        "summary": "Получить список курсов, на которые записан студент.",
+        "operationId": "EnrollmentService_GetCoursesByStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourseList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID студента.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "EnrollmentService"
+        ]
+      }
+    },
+    "/v1/students/{id}/recommendations": {
+      "get": {
+        "summary": "Получить рекомендованные курсы для студента.",
+        "operationId": "LectureService_GetRecommendedCourses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GoEduCourseList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID студента.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "LectureService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "EducationServiceUpdateCourseBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Новое название курса."
+        },
+        "description": {
+          "type": "string",
+          "description": "Новое описание курса."
+        }
+      }
+    },
+    "GoEduAuthResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email."
+        },
+        "token": {
+          "type": "string",
+          "description": "Токен авторизации."
+        }
+      }
+    },
+    "GoEduCourse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID курса."
+        },
+        "name": {
+          "type": "string",
+          "description": "Название курса."
+        },
+        "description": {
+          "type": "string",
+          "description": "Описание курса."
+        },
+        "instructorId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID преподавателя."
+        }
+      },
+      "description": "Сообщения, связанные с курсами."
+    },
+    "GoEduCourseList": {
+      "type": "object",
+      "properties": {
+        "courses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GoEduCourse"
+          },
+          "description": "Список курсов."
+        }
+      }
+    },
+    "GoEduCourseProgress": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID курса."
+        },
+        "studentId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID студента."
+        },
+        "completedPercent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Процент завершения курса."
+        }
+      }
+    },
+    "GoEduEmpty": {
+      "type": "object",
+      "description": "Сообщение для пустых ответов."
+    },
+    "GoEduEnrollmentRequest": {
+      "type": "object",
+      "properties": {
+        "studentId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID студента."
+        },
+        "courseId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID курса."
+        }
+      },
+      "description": "Сообщения для управления записями."
+    },
+    "GoEduHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "true, если сервер работает."
+        }
+      },
+      "description": "Ответ для проверки состояния сервера."
+    },
+    "GoEduInstructor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID преподавателя."
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя преподавателя."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email преподавателя."
+        },
+        "token": {
+          "type": "string",
+          "description": "Токен авторизации преподавателя."
+        }
+      }
+    },
+    "GoEduLecture": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID лекции."
+        },
+        "courseId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID курса."
+        },
+        "title": {
+          "type": "string",
+          "description": "Название лекции."
+        },
+        "content": {
+          "type": "string",
+          "description": "Содержание лекции."
+        }
+      }
+    },
+    "GoEduLectureContent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID лекции."
+        },
+        "courseId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID курса."
+        },
+        "title": {
+          "type": "string",
+          "description": "Название лекции."
+        },
+        "content": {
+          "type": "string",
+          "description": "Содержание лекции."
+        }
+      }
+    },
+    "GoEduLectureList": {
+      "type": "object",
+      "properties": {
+        "lectures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GoEduLecture"
+          },
+          "description": "Список лекций."
+        }
+      }
+    },
+    "GoEduLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email для входа."
+        },
+        "password": {
+          "type": "string",
+          "description": "Пароль для входа."
+        }
+      }
+    },
+    "GoEduNewCourseRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Название нового курса."
+        },
+        "description": {
+          "type": "string",
+          "description": "Описание нового курса."
+        },
+        "instructorId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID преподавателя."
+        }
+      }
+    },
+    "GoEduRegisterInstructorRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Имя преподавателя."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email преподавателя."
+        },
+        "password": {
+          "type": "string",
+          "description": "Пароль преподавателя."
+        }
+      },
+      "description": "Сообщения для регистрации преподавателей."
+    },
+    "GoEduRegisterStudentRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Имя студента."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email студента."
+        },
+        "password": {
+          "type": "string",
+          "description": "Пароль студента."
+        }
+      },
+      "description": "Сообщения, связанные с регистрацией студентов."
+    },
+    "GoEduReview": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID отзыва."
+        },
+        "studentId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID студента."
+        },
+        "courseId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID курса."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Текст отзыва."
+        },
+        "rating": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Оценка."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Дата создания отзыва."
+        }
+      }
+    },
+    "GoEduReviewList": {
+      "type": "object",
+      "properties": {
+        "reviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GoEduReview"
+          },
+          "description": "Список отзывов."
+        }
+      }
+    },
+    "GoEduStudent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID студента."
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя студента."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email студента."
+        },
+        "token": {
+          "type": "string",
+          "description": "Токен авторизации студента."
+        }
+      }
+    },
+    "GoEduStudentList": {
+      "type": "object",
+      "properties": {
+        "students": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GoEduStudent"
+          },
+          "description": "Список студентов."
+        }
+      }
+    },
+    "LectureServiceAddLectureToCourseBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Название лекции."
+        },
+        "content": {
+          "type": "string",
+          "description": "Содержание лекции."
+        }
+      },
+      "description": "Сообщения для управления лекциями."
+    },
+    "LectureServiceMarkLectureAsCompletedBody": {
+      "type": "object",
+      "properties": {
+        "studentId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID студента."
+        }
+      }
+    },
+    "LectureServiceUpdateLectureBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Новое название лекции."
+        },
+        "content": {
+          "type": "string",
+          "description": "Новое содержание лекции."
+        }
+      }
+    },
+    "ReviewServiceAddReviewToCourseBody": {
+      "type": "object",
+      "properties": {
+        "studentId": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID студента."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Текст отзыва."
+        },
+        "rating": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Оценка (рейтинг)."
+        }
+      },
+      "description": "Сообщения для управления отзывами."
+    },
+    "StudentServiceUpdateStudentProfileBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Новое имя студента."
+        },
+        "email": {
+          "type": "string",
+          "description": "Новый email студента."
+        },
+        "password": {
+          "type": "string",
+          "description": "Новый пароль студента."
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

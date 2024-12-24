@@ -4,7 +4,7 @@ package GoEdu;
 
 import "google/api/annotations.proto";
 
-option go_package = "/proto;proto";
+option go_package = "./proto;proto";
 
 // Сервис для управления курсами в системе образования.
 service EducationService {
@@ -190,6 +190,12 @@ service InstructorService {
       body: "*"
     };
   }
+  rpc LoginInstructor (LoginRequest) returns (AuthResponse) {
+    option (google.api.http) = {
+      post: "/v1/instructors/login"
+      body: "*"
+    };
+  }
 
   // Получить список курсов преподавателя по ID.
   rpc GetCoursesByInstructor (InstructorIDRequest) returns (CourseList) {
@@ -289,9 +295,9 @@ message LoginRequest {
 }
 
 message AuthResponse {
-  int64 id = 1; // ID студента.
-  string name = 2; // Имя студента.
-  string email = 3; // Email студента.
+  int64 id = 1; // ID.
+  string name = 2; // Имя.
+  string email = 3; // Email.
   string token = 4; // Токен авторизации.
 }
 
@@ -410,3 +416,4 @@ message ReviewList {
 message SearchRequest {
   string keyword = 1; // Ключевое слово для поиска.
 }
+

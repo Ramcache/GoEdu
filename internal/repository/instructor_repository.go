@@ -23,6 +23,8 @@ func NewInstructorRepository(db *pgxpool.Pool) InstructorRepository {
 	return &instructorRepository{db: db}
 }
 
+var ErrInstructorNotFound = errors.New("преподаватель не найден")
+
 func (r *instructorRepository) RegisterInstructor(ctx context.Context, instructor *models.Instructor) (int64, error) {
 	query := `
         INSERT INTO instructors (name, email, password)
@@ -42,7 +44,7 @@ func (r *instructorRepository) GetInstructorByEmail(ctx context.Context, email s
 	err := r.db.QueryRow(ctx, query, email).Scan(&instructor.ID, &instructor.Name, &instructor.Email, &instructor.Password)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, nil
+			return nil, ErrInstructorNotFound
 		}
 		return nil, err
 	}
