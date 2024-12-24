@@ -15,7 +15,7 @@
 <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
 <script>
   const ui = SwaggerUIBundle({
-    url: "http://localhost:8080/swagger/education.swagger.json", // Укажите путь к вашему Swagger JSON
+    url: "http://localhost:8080/swagger/education.swagger.json?timestamp=" + new Date().getTime(),
     dom_id: '#swagger-ui',
     presets: [
       SwaggerUIBundle.presets.apis,

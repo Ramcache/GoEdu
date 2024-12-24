@@ -1190,6 +1190,7 @@ type InstructorServiceClient interface {
 	UpdateInstructor(ctx context.Context, in *UpdateInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
 	// Регистрация нового преподавателя.
 	RegisterInstructor(ctx context.Context, in *RegisterInstructorRequest, opts ...grpc.CallOption) (*Instructor, error)
+	// Авторизация преподавателя.
 	LoginInstructor(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	// Получить список курсов преподавателя по ID.
 	GetCoursesByInstructor(ctx context.Context, in *InstructorIDRequest, opts ...grpc.CallOption) (*CourseList, error)
@@ -1265,6 +1266,7 @@ type InstructorServiceServer interface {
 	UpdateInstructor(context.Context, *UpdateInstructorRequest) (*Instructor, error)
 	// Регистрация нового преподавателя.
 	RegisterInstructor(context.Context, *RegisterInstructorRequest) (*Instructor, error)
+	// Авторизация преподавателя.
 	LoginInstructor(context.Context, *LoginRequest) (*AuthResponse, error)
 	// Получить список курсов преподавателя по ID.
 	GetCoursesByInstructor(context.Context, *InstructorIDRequest) (*CourseList, error)

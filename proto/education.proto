@@ -205,6 +205,8 @@ service InstructorService {
       body: "*"
     };
   }
+
+  // Авторизация преподавателя.
   rpc LoginInstructor (LoginRequest) returns (AuthResponse) {
     option (google.api.http) = {
       post: "/v1/instructors/login"
